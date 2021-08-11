@@ -87,7 +87,7 @@
 
 ### 二、装饰器
 
- 好了，别说了，看看吧，你刚刚那个`function(func)()()`不嫌恶心？直奔主题 ~ 什么是装饰器？有啥用~有多少中写法~
+ 好了，别说了，看看吧，你刚刚那个`function(func)()()`不嫌恶心？直奔主题 ~ 什么是装饰器？有啥用 ~ 有多少中写法~
 
  哈哈哈哈，那么接下来就聊聊简化方式嘛，先看个demo
 
@@ -113,7 +113,7 @@ if __name__ == '__main__':
 
 什么？？？？`func()()`还不够简单？？？看这个
 
-   ```python
+```python
 # PythonDocs/src/013.py
 
 def function(args):
@@ -131,7 +131,7 @@ def func():
 
 if __name__ == '__main__':
     func()  # function函数传递进来的是：<function func at 0x105dd5430>   我是func函数哦~
-   ```
+```
 
 1. 什么是装饰器？
 
