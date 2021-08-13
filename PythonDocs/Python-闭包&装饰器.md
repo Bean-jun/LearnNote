@@ -432,5 +432,129 @@ if __name__ == '__main__':
        # 哦豁~ 使用functools中的wraps修复即可
    ```
 
+4. 看看property装饰器咯~
+
+   方法2好像可以，但是看着好憋扭哦~，怎么办？？   哈哈哈哈，看
+   
+   ```python
+   # PythonDocs/src/017.py
+   
+   class People():
+       def __init__(self, name, age):
+           self.__name = name
+           self.__age = age
+   
+       def name(self):
+           return self.__name
+   
+       def age(self):
+           return self.__age
+   
+   
+   if __name__ == '__main__':
+       people = People("小明", 23)
+       try:
+           print(f"{people.__name}的年龄是{people.__age}")
+       except Exception as e:
+           print(e.args)
+       # 哦豁~，好像没法正常访问哎~那我们怎么办呢
+       # 1. 直接访问 对于私有属性可以使用    对象._类名__属性  不推荐
+       print(f"{people._People__name}的年龄是{people._People__age}")
+       # 2. 定义方法去访问
+       print(f"{people.name()}的年龄是{people.age()}")
+   ```
+   
+   方法2好像可以，但是看着好憋扭哦 ~ ，怎么办？？   哈哈哈哈，看~
+   
+   ```python
+   # PythonDocs/src/018.py
+   
+   class People():
+       def __init__(self, name, age):
+           self.__name = name
+           self.__age = age
+   
+       @property
+       def name(self):
+           return self.__name
+   
+       @property
+       def age(self):
+           return self.__age
+   
+   
+   if __name__ == '__main__':
+       people = People("小明", 23)
+       # 简单多了吧
+       print(f"{people.name}的年龄是{people.age}")
+   ```
+   
+   看看property的高级玩法 ~ 
+   
+   注意上面的我们可以直接使用了，那么可以设置值嘛 ~ 你可以试试，不行哦 ~  怎么办，我们以年龄为例，看~
+   
+   ```python
+   # PythonDocs/src/019.py
+   
+   class People():
+       def __init__(self, name, age):
+           self.name = name
+           self.__age = age
+   
+       @property
+       def age(self):
+           # 读取属性
+           return self.__age
+   
+       @age.setter
+       def age(self, val):
+           # 设置属性
+           self.__age = val
+   
+       @age.deleter
+       def age(self):
+           # 删除属性
+           del self.__age
+   
+   
+   if __name__ == '__main__':
+       people = People("小明", 23)
+       # 简单多了吧
+       people.age += 1
+       print(f"{people.name}的年龄是{people.age}")
+   ```
+   
+   不过还有一种写法，可以看看，都差不多~
+   
+   ```python
+   # PythonDocs/src/019.py
+   
+   class People():
+       def __init__(self, name, age):
+           self.name = name
+           self.__age = age
+   
+       def get_age(self):
+           # 读取属性
+           return self.__age
+   
+       def set_age(self, val):
+           # 设置属性
+           self.__age = val
+   
+       def del_age(self):
+           # 删除属性
+           del self.__age
+   
+       age = property(get_age, set_age, del_age)
+   
+   
+   if __name__ == '__main__':
+       people = People("小明", 23)
+       # 简单多了吧
+       people.age += 1
+       print(f"{people.name}的年龄是{people.age}")
+   ```
+   
    
 
