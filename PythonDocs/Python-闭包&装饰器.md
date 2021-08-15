@@ -527,7 +527,7 @@ if __name__ == '__main__':
    不过还有一种写法，可以看看，都差不多~
    
    ```python
-   # PythonDocs/src/019.py
+   # PythonDocs/src/020.py
    
    class People():
        def __init__(self, name, age):
