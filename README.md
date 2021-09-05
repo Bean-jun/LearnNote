@@ -6,38 +6,17 @@
 
 ### 一、快速笔记
 
-1. Python安装地址
+1. 常用工具
 
-   ```shell
-   # 去官网download
-   https://www.python.org
-   # 在华为镜像站download
-   https://repo.huaweicloud.com/python/
-   ```
+   > 工欲善其事必先利其器
 
-2. Python快速更换pip源
+   👉	[工具使用](ToolsDocs/工具集合.md)👈
 
-   ```shell
-   # 更新源到清华大学开源镜像站点
-   pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pip -U
-   pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-   ```
 
-3. Git下载
 
-   ```shell
-   # 官网
-   https://git-scm.com
-   # 华为源
-   https://repo.huaweicloud.com/git-for-windows/
-   https://repo.huaweicloud.com/git-for-macos/
-   ```
+2. 食用指南
 
-4. vscode下载
-
-   ```shell
-   https://code.visualstudio.com
-   ```
+   > 多练习, 反复练习, 多看看书
 
 
 
