@@ -60,9 +60,13 @@
 
 
 
-2. Http协议
+2. HTTP协议
 
+   HTTP超文本传输协议，它是基于TCP协议的应用层传输协议，简单来说就是客户端和服务端进行数据传输的一种规则。
 
+   👉	[基于Socket的HTTP协议实现](NetworkDocs/基于Socket的HTTP协议实现.md)👈
+
+ 
 
 3. WebSocket协议
 
