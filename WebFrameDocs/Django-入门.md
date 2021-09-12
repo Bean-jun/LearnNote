@@ -220,8 +220,8 @@
       根据给定格式转换日期为字符串：date
       格式： {{dateVal|date:'y-m-d'}}
       HTML转义：escape
-    - 问题：return render(request, 'myApp/index.html', {"code": "<h1>sunck is a very good man</h1>"})中的{{code}}
-      {{code}}里的code被当作<h1>sunck is a very good man</h1>显示，未经过渲染
+    - 问题：return render(request, 'myApp/index.html', {"code": "`<h1>sunck is a very good man</h1>`"})中的{{code}}
+      {{code}}里的code被当作`<h1>sunck is a very good man</h1>`显示，未经过渲染
       解决方法：
       {{code|safe}}
       或  {% autoescape off %}
@@ -463,7 +463,7 @@
         - 字段对象.remote_field.model  例如`email_obj.remote_field.model`
 
 ### 四、admin
-- 1. 注册模型，实现显示 
+1. 注册模型，实现显示 
   ```python
   from django.contrib import admin
   from book.models import Author
@@ -471,7 +471,7 @@
   admin.site.register(Author)
   ```
 
-- 2. 管理页显示
+2. 管理页显示
   - 使用管理类实现
 
       - 使用注册参数
