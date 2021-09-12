@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Websocket测试页面</title>
+</head>
+<body>
+<h1>websocket测试页面</h1>
+</body>
+<script type="application/javascript">
+    $(function () {
+        <!--创建ws对象-->
+        var ws = new WebSocket("ws://192.168.1.101:8888")
+
+        function send_msg(data) {
+            setInterval(function () {
+                ws.send(data)
+            }, 1000)
+        }
+
+        send_msg("dfgs")
+    })
+
+</script>
+</html>
