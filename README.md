@@ -73,3 +73,30 @@
    WebSocket 是一种在单个 TCP 连接上进行全双工通讯的协议，允许服务端主动向客户端推送数据。
 
    👉	[基于Socket的WebSocket协议实现](NetworkDocs/基于Socket的WebSocket协议实现.md)👈
+
+
+
+### 四、数据库
+
+1. MySQL
+
+
+
+2. Redis
+
+
+
+### 五、Web框架
+
+1. Django
+
+   Django是一个可以使Web开发工作愉快并且高效的Web开发框架。 使用Django，能够以最小的代价构建和维护高质量的Web应用。
+
+   👉	[入门使用](WebFrameDocs/Django-入门.md)👈
+
+
+
+2. Flask
+
+
+
