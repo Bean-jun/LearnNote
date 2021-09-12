@@ -159,20 +159,22 @@
                headers = "HTTP/1.1 200 OK\r\n"
    
                try:
-                   with open("TestFile" + ret, 'r', encoding='utf-8') as f:
+                   with open("TestFile" + ret, 'rb') as f:
                        content = f.read()
                except Exception as e:
                    print(e.args)
-                   content = ""
+                   content = b""
    
                if content:
                    headers += "Content-Disposition: attachment;filename={}\r\n\r\n".format(ret.strip("/"))
+                   headers = headers.encode("utf-8")
                    headers += content
                else:
                    headers += "content-type: text/html;charset=utf-8\r\n\r\n"
-                   headers += "文件不存在"
+                   headers = headers.encode("utf-8")
+                   headers += "文件不存在".encode("utf-8")
    
-               tcp_client.send(headers.encode("utf-8"))
+               tcp_client.send(headers)
    
            print("{}-请求响应完毕....".format(tcp_client))
    
