@@ -88,7 +88,7 @@
 
 ### 五、Web框架
 
-1. Django
+1. [Django](https://docs.djangoproject.com/) [中文文档](https://docs.djangoproject.com/zh-hans/)
 
    Django是一个可以使Web开发工作愉快并且高效的Web开发框架。 使用Django，能够以最小的代价构建和维护高质量的Web应用。
 
@@ -96,7 +96,7 @@
 
 
 
-2. Flask
+2. [Flask](https://flask.palletsprojects.com/) [中文文档](https://dormousehole.readthedocs.io/en/latest/)
 
 
 
