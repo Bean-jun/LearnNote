@@ -84,6 +84,10 @@
 
 2. Redis
 
+   Redis（Remote Dictionary Server )，即远程字典服务，支持网络、可基于内存亦可持久化的日志型、Key-Value型数据库。
+   
+   👉	[入门使用](DatabaseDocs/Redis-入门.md)👈
+
 
 
 ### 五、Web框架
