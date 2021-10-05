@@ -259,3 +259,105 @@ can continue to call methods on it.
 
 通过上述表达我们可以理解，其实这部分是一个简单版的流程，那么更细致的流程内容呢？我将会对`request`、`current_app`、`session`、`g`进行更细的分析。
 
+
+
+### 四、补充
+
+再分析`request`、`current_app`、`session`、`g`之前呢我们先做一点小的补充，然后再分析哦！
+
+1. 偏函数functools.partial，这个偏函数可以为：冻结某个函数的某个参数值而实现参数减少或避免传错参数的作用。
+
+   看例子，在下面的例子中，`func(2, 4)`和`f(4)`的结果是一致的，原理就在于`f = partial(func, 2)`将函数`func`的第一个参数冻结为`2`, 并重命名为`f`，在后面使用过程中，只需要传入一个值即可完成对原函数的调用。
+
+   ```python
+   from functools import partial
+   
+   
+   def func(a, b):
+       print(a + b)
+   
+   
+   if __name__ == '__main__':
+       func(2, 4)	# 6
+       f = partial(func, 2)
+       f(4)	# 6
+   ```
+
+2. 面向对象--私有字段
+
+   先来看一个栗子🌰
+
+   ```python
+   class F():
+   
+       def __init__(self):
+           self.A = 10
+           self._B = 20
+           self.__C = 30
+   
+   
+   if __name__ == '__main__':
+       f = F()
+       print(f.A)
+       print(f._B)
+       print(f.__C)
+   ```
+
+   看看结果
+
+   ```shell
+   10
+   20
+   Traceback (most recent call last):
+     File "/Users/bean/PycharmProjects/newSource/testClassSelf.py", line 13, in <module>
+       print(f.__C)
+   AttributeError: 'F' object has no attribute '__C'
+   ```
+
+   学过Java的小伙伴可能对公有、受保护的、私有有着比较的深刻的映象，在python中，我们分别使用不带下划线、带一个下划线、双下划线来表示。但是！但是！但是！在python中对于前两种没有啥约束力，这个可以直接使用，更多的还是大家遵守规范，不要随意使用即可。但第三种就真的没办法访问嘛？还真就不是，我们可以直接使用`_类名__字段`即可访问，但是劝大家不要这么做哦！看看栗子🌰吧~
+
+   ```python
+   class F():
+   
+       def __init__(self):
+           self.A = 10
+           self._B = 20
+           self.__C = 30
+   
+   
+   if __name__ == '__main__':
+       f = F()
+       print(f.A)
+       print(f._B)
+       print(f._F__C)
+   ```
+
+   再看看结果
+
+   ```shell
+   10
+   20
+   30
+   ```
+
+   没有问题啦，那么看看下面这个栗子吧~
+
+   ```python
+   class User():
+   
+       def __init__(self):
+           self._User__sex = "男"
+   
+       def __call__(self, *args, **kwargs):
+           print(self.__sex)
+   
+   
+   if __name__ == "__main__":
+       user = User()
+       user()
+   ```
+
+   这个结果是啥呢？没错，就是`男`，在这里掉了头，很有意思，若是有兴趣可以看看这篇文章。
+
+   [What is the meaning of single and double underscore before an object name](https://stackoverflow.com/questions/1301346/what-is-the-meaning-of-single-and-double-underscore-before-an-object-name)
+
