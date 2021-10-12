@@ -44,7 +44,7 @@
    
    👉	[生成器&迭代器&迭代对象](PythonDocs/Python-生成器&迭代器&迭代对象.md)👈
    
-   👉	[轻松理解元类](PythonDocs/Python-轻松理解元类.md)👈
+   👉	[理解元类](PythonDocs/Python-理解元类.md)👈
 
 
 
