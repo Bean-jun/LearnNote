@@ -24,24 +24,16 @@
 
 1. 基础点的内容
 
-   文章在PythonDocs目录下的Python基础语法部分，相关code见PythonDocs/src
-
-   涉及到Python的基本语法内容及使用，仅仅部分内容，需要学习更详细的知识点请结合`菜鸟教程`学习
-
    👉	[基础语法](PythonDocs/Python-基础语法.md)👈
 
 
 
 2. 高级点的内容
 
-   文章在PythonDocs目录下的Python高级干货部分，相关code见PythonDocs/src
-
-   主要涉及到Python的闭包、装饰器、上下文管理器、生成器、迭代器、迭代对象、线程、进程、协程部分的内容
-
    👉	[闭包&装饰器](PythonDocs/Python-闭包&装饰器.md)👈
-   
+
    👉	[上下文](PythonDocs/Python-上下文.md)👈
-   
+
    👉	[生成器&迭代器&迭代对象](PythonDocs/Python-生成器&迭代器&迭代对象.md)👈
    
    👉	[理解元类](PythonDocs/Python-理解元类.md)👈
@@ -89,12 +81,18 @@
    Redis（Remote Dictionary Server )，即远程字典服务，支持网络、可基于内存亦可持久化的日志型、Key-Value型数据库。
    
    👉	[入门使用](DatabaseDocs/Redis-入门.md)👈
+   
+   
+   
+3. MongoDB
 
 
 
 ### 五、Web框架
 
-1. [Django](https://docs.djangoproject.com/) [中文文档](https://docs.djangoproject.com/zh-hans/)
+   个人建议先学习Django和Flask后再学习其他框架.....
+
+1. [Django](https://docs.djangoproject.com/)     [中文文档](https://docs.djangoproject.com/zh-hans/)           推荐指数 ⭐️⭐️⭐️⭐️⭐️
 
    Django是一个可以使Web开发工作愉快并且高效的Web开发框架。 使用Django，能够以最小的代价构建和维护高质量的Web应用。
 
@@ -102,13 +100,33 @@
 
 
 
-2. [Flask](https://flask.palletsprojects.com/) [中文文档](https://dormousehole.readthedocs.io/en/latest/)
+2. [Flask](https://flask.palletsprojects.com/)    [中文文档](https://dormousehole.readthedocs.io/en/latest/)               推荐指数 ⭐️⭐️⭐️⭐️⭐️
 
    Flask是一个使用Python编写的轻量级 Web 应用框架。其WSGI工具箱采用 Werkzeug ，模板引擎则使用 Jinja2。
 
    👉	[入门使用](WebFrameDocs/Flask-入门.md)👈
    
    👉	[flask源码分析第一弹](WebFrameDocs/Flask-源码分析.md)👈
+   
+   
+
+3. [fastapi](https://fastapi.tiangolo.com/zh/tutorial/)    官方中文             推荐指数 ⭐️⭐️⭐️⭐️
+
+   FastAPI 是一个用于构建 API 的现代、快速（高性能）的 web 框架，使用 Python 3.6+ 并基于标准的 Python 类型提示。
+
+   
+
+4. [tornado](https://www.tornadoweb.org/en/stable/)    [中文文档](https://www.osgeo.cn/tornado/)           推荐指数 ⭐️⭐️⭐️⭐️
+
+   Tornado是一个python web框架和异步网络库，最初开发于 FriendFeed . 通过使用非阻塞网络I/O，Tornado可以扩展到数万个开放连接，使其非常适合 long polling， WebSockets以及其他需要与每个用户建立长期连接的应用程序。
+
+   - 图书推荐 [introduction to tornado](http://shouce.jb51.net/tornado/)       **大家有机会还是支持正版数据哦**
+
+   
+
+5. [aiohttp](https://docs.aiohttp.org/en/stable/)   [中文文档](https://www.bookstack.cn/books/aiohttp-chinese-documentation)               推荐指数 ⭐️⭐️⭐️
+
+   Asynchronous HTTP Client/Server for [asyncio](https://docs.aiohttp.org/en/stable/glossary.html#term-asyncio) and Python.
 
 
 
@@ -119,8 +137,8 @@
    一款非常简单、灵活、可靠的分布式系统，可用于处理大量消息，并且提供了一整套操作此系统的一系列工具
    
    👉	[入门使用](OtherDocs/celery使用.md)👈
-
-
+   
+   
 
 ### 七、遇见的BUG
 
