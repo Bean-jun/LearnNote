@@ -116,6 +116,8 @@
 
    FastAPI 是一个用于构建 API 的现代、快速（高性能）的 web 框架，使用 Python 3.6+ 并基于标准的 Python 类型提示。
 
+   👉	[基于fastAPI实现的文件对象存储](WebFrameDocs/src/demo/fileStorage.md)👈 【当前版本为0.1版，需要最新版的请点[这里](https://github.com/Bean-jun/fileStorage)】
+
    
 
 4. [tornado](https://www.tornadoweb.org/en/stable/)    [中文文档](https://www.osgeo.cn/tornado/)           推荐指数 ⭐️⭐️⭐️⭐️
