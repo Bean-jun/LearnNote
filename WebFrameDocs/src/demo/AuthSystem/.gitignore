@@ -1,0 +1,8 @@
+.vscode/
+.idea/
+.env/
+db.sqlite3
+*/migrations/*.py
+!*/migrations/__init__.py
+localSettings.py
+__pycache__

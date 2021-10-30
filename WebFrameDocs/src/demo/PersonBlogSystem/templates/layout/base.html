@@ -1,0 +1,171 @@
+{% load static %}
+{% load profile %}
+{% load category_navigate %}
+{% load current_visual_people %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
+          type="text/css" rel="stylesheet"/>
+    {#    <link rel="stylesheet" href="{% static 'plugin/bootstrap/css/bootstrap.min.css' %}">#}
+
+
+    <link href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-y/font-awesome/4.7.0/css/font-awesome.min.css"
+          type="text/css" rel="stylesheet"/>
+    {#    <link rel="stylesheet" href="{% static 'plugin/font-awesome/css/font-awesome.min.css' %}">#}
+
+
+    <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/jquery/3.4.1/jquery.min.js"
+            type="application/javascript"></script>
+    <script>window.jQuery || document.write('<script src="{% static 'js/jquery-3.6.0.min.js' %}" type="text/javascript"><\/script>')</script>
+    {#    <script type="text/javascript" src="{% static 'js/jquery-3.6.0.min.js' %}"></script>#}
+
+    <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/twitter-bootstrap/3.3.7/js/bootstrap.min.js"
+            type="application/javascript"></script>
+    <script>window.jQuery || document.write('<script src="{% static 'plugin/bootstrap/js/bootstrap.min.js' %}" type="text/javascript"><\/script>')</script>
+    {#    <script type="text/javascript" src="{% static 'plugin/bootstrap/js/bootstrap.min.js' %}"></script>#}
+
+    {% block js %}{% endblock js %}
+    {% block css %}{% endblock css %}
+    <style type="text/css">
+        .navbar {
+            border-radius: 0;
+        }
+
+        .user-image {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .footer {
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            line-height: 60px;
+            background-color: #333333;
+        }
+
+        #bs-example-navbar-collapse-1 > ul.nav.navbar-nav.navbar-right > li > a {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+    </style>
+    <script type="text/javascript">
+        $(function () {
+
+            // 设置页脚位置
+            var windowHeight = $(window).height();
+            var documentHeight = $(document).height();
+            console.log(windowHeight + ':' + documentHeight);
+            if (windowHeight + 23 >= documentHeight) {
+                $('.footer').css({'position': 'fixed', 'height': 60});
+            } else {
+                $('.footer').css({'position': 'absolute', 'height': 60});
+            }
+
+            // 设置页脚时间戳
+            function siteTime() {
+                var e = 36e5, t = 24 * e, n = new Date, r = n.getFullYear(), a = n.getMonth() + 1,
+                    i = n.getDate(), l = n.getHours(), m = n.getMinutes(), M = n.getSeconds(),
+                    n = Date.UTC("2021", "4", "23", "0", "0", "0"), i = Date.UTC(r, a, i, l, m, M) - n,
+                    l = Math.floor(i / 31536e6), m = Math.floor(i / t - 365 * l),
+                    M = Math.floor((i - (365 * l + m) * t) / e), n = Math.floor((i - (365 * l + m) * t - M * e) / 6e4);
+                Math.floor((i - (365 * l + m) * t - M * e - 6e4 * n) / 1e3);
+                document.getElementById("current-date").innerHTML = "本站已存活 " + l + " 年 " + m + " 天 " + M + " 小时 "
+            }
+            setInterval(siteTime, 1e3)
+
+        });
+    </script>
+    <title> {% block title %}{% endblock title %}</title>
+</head>
+
+<body style="position: relative;">
+
+{% block navbar %}
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'blog:index' %}">Home</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">  <!--修复下拉显示-->
+                {% category_navigate request %}
+                <ul class="nav navbar-nav navbar-right">
+                    {% if request.user %}
+                        {% if request.user.is_super %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    {#用户头像#}
+                                    {% user_profile request %}&nbsp;&nbsp;
+                                    {{ request.user.username|title }} <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'blog:editor' %}">添加文章</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{% url 'blog:profile' %}">个人中心</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{% url 'blog:logout' %}">退出</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    {#用户头像#}
+                                    {% user_profile request %}&nbsp;&nbsp;
+                                    {{ request.user.username|title }} <span
+                                        class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{% url 'blog:profile' %}">个人中心</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{% url 'blog:logout' %}">退出</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <li><a href="{% url 'blog:login' %}">登录</a></li>
+                        <li><a href="{% url 'blog:register' %}">注册</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock navbar %}
+
+
+<div class="container">
+
+    {% block content %}
+
+        {# 主题内容 #}
+
+    {% endblock content %}
+
+</div>
+{% block footer %}
+    {# 页脚 #}
+    <div class="footer">
+        <img src="{% static 'image/icp.png' %}" alt="备案徽章">
+        <a href="https://beian.miit.gov.cn" target="_blank">
+            鄂ICP备2021007126号
+        </a>
+        <span id="current-date" style="color: #f09393; margin-left: 100px"></span>
+        {% current_visual request %}
+    </div>
+{% endblock footer %}
+</body>
+</html>

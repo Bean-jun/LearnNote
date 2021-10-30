@@ -7,7 +7,7 @@
 1. 安装依赖
    
     ```shell
-   pip install -r requiremenst.txt
+   pip install -r requirements.txt
    ```
 2. 启动实例
    

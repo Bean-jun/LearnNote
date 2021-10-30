@@ -1,0 +1,156 @@
+{% extends 'layout/manage.html' %}
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'plugin/editor-md/css/editormd.preview.min.css' %}">
+    <style>
+        .panel-default{
+            margin-top: 10px;
+        }
+
+        {#让按钮向右偏移#}
+        .panel-default .panel-heading{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .title-list{
+            border-right: 1px solid #dddddd;
+            min-height: 500px;
+        }
+        .content{
+            border-left: 1px solid #dddddd;
+            min-height: 600px;
+            margin-left: -1px;
+        }
+        .panel-body{
+            padding: 0;
+        }
+        .title-list ul{
+            padding-left: 15px;
+        }
+        .title-list ul a{
+            display: block;
+            padding: 5px 0;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+<div class="container">
+    <div class="panel panel-default">
+          <div class="panel-heading">
+              <div><i class="fa fa-book" aria-hidden="true"></i> wiki文档</div>
+              <div class="function">
+                  {% if wiki_obj %}
+                  <a type="button" class="btn btn-warning btn-xs" href="{% url 'web:manage:wiki_modify' request.tracer.project.id wiki_obj.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> 修改</a>
+                  <a type="button" class="btn btn-danger btn-xs" href="{% url 'web:manage:wiki_delete' request.tracer.project.id wiki_obj.id %}"><i class="fa fa-times-circle" aria-hidden="true"></i> 删除</a>
+                  {% endif %}
+                  <a type="button" class="btn btn-success btn-xs" href="{% url 'web:manage:wiki_add' request.tracer.project.id %}"><i class="fa fa-plus-circle" aria-hidden="true"></i> 新建</a>
+              </div>
+          </div>
+          <div class="panel-body">
+
+              <div class="col-sm-3 title-list">
+
+                  <ul id="catalog">
+                      <!--
+                      <li id="1">
+                          <a href="#">目录1</a>
+                          <ul>
+                              <li><a href="#">子目录1</a></li>
+                              <li><a href="#">子目录1</a></li>
+                              <li><a href="#">子目录1</a></li>
+                          </ul>
+                      </li>
+                      <li>目录2</li>
+                      <li>目录3</li>
+                      <li id="4">
+                          <a href="#">目录4</a>
+                          <ul>
+                              <li><a href="#">子目录1</a></li>
+                              <li><a href="#">子目录1</a></li>
+                              <li><a href="#">子目录1</a></li>
+                          </ul>
+                      </li>
+                    -->
+                  </ul>
+
+              </div>
+              <div class="col-sm-9 content">
+                  {% if wiki_obj %}
+
+                      <!--Markdown设置-->
+                      <div id="previewMarkdown">
+                        <textarea>{{ wiki_obj.content }}</textarea>
+                      </div>
+
+                  {% else %}
+                    <div style="text-align: center; margin-top: 50px">
+                        <h4>《{{ request.tracer.project.name }}》wiki文档库</h4>
+                        <a href="{% url 'web:manage:wiki_add' request.tracer.project.id %}"><i class="fa fa-plus-circle" aria-hidden="true"></i> 新建文章</a>
+                    </div>
+                  {% endif %}
+              </div>
+
+          </div>
+        </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+    {# Markdown显示必用插件 #}
+    <script src="{% static 'plugin/editor-md/editormd.js' %}"></script>
+    <script src="{% static 'plugin/editor-md/lib/marked.min.js' %}"></script>
+    <script src="{% static 'plugin/editor-md/lib/prettify.min.js' %}"></script>
+    <script src="{% static 'plugin/editor-md/lib/raphael.min.js' %}"></script>
+    <script src="{% static 'plugin/editor-md/lib/underscore.min.js' %}"></script>
+    <script src="{% static 'plugin/editor-md/lib/sequence-diagram.min.js' %}"></script>
+    <script src="{% static 'plugin/editor-md/lib/flowchart.min.js' %}"></script>
+    <script src="{% static 'plugin/editor-md/lib/jquery.flowchart.min.js' %}"></script>
+
+
+    <script>
+    // 全局WIKI详细地址
+    var WIKI_DETAIL_URL = '{% url 'web:manage:wiki' request.tracer.project.id %}';
+    $(function (){
+        initCatalog();
+        previewMarkdown();
+    })
+    // 处理Markdown预览
+    function previewMarkdown(){
+        editormd.markdownToHTML('previewMarkdown', {
+            {#避免一些攻击#}
+            htmlDecode: 'style,script,iframe'
+        });
+    }
+
+    // 处理wiki目录
+    function initCatalog(){
+
+        $.ajax({
+            url: '{% url 'web:manage:wiki_catalog' request.tracer.project.id %}',
+            type: 'get',
+            dataType: "json"
+        }).done(function (data){
+            if (data.code === 200){
+                $.each(data.msg, function (k, v){
+                    var href = WIKI_DETAIL_URL + '?wiki_id=' + v.id;
+                    var li = $('<li>').attr('id', 'id_'+v.id).append($('<a>').attr('href', href).text(v.title)).append($('<ul>'));
+                    if (!v.parent_id){
+                        // 没有父目录
+                        $('#catalog').append(li);
+                    }else{
+                        // 有父目录
+                        $('#id_'+v.parent_id).children('ul').append(li);
+                    }
+                });
+            }else{
+                alert("获取项目目录失败,请刷新");
+            }
+        }).fail(function (){
+            console.log("网络超时");
+        });
+    }
+    </script>
+
+{% endblock js %}

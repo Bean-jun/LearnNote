@@ -98,6 +98,11 @@
 
    👉	[入门使用](WebFrameDocs/Django-入门.md)👈
 
+   **Demo:**
+   
+   👉   [基于django实现的PersonBlog](WebFrameDocs/src/demo/PersonBlogSystem-demo.md)👈   【需要最新版请点击[这里](https://github.com/Bean-jun/PersonBlogSystem.git)】
+  
+   👉   [基于django实现的AuthSystem](WebFrameDocs/src/demo/AuthSystem-demo.md)👈   【需要最新版请点击[这里](https://github.com/Bean-jun/AuthSystem.git)】
 
 
 2. [Flask](https://flask.palletsprojects.com/)    [中文文档](https://dormousehole.readthedocs.io/en/latest/)               推荐指数 ⭐️⭐️⭐️⭐️⭐️
@@ -106,9 +111,10 @@
 
    👉	[入门使用](WebFrameDocs/Flask-入门.md)👈
    
-   👉	[基于flask实现的api-demo](WebFrameDocs/src/demo/flask-demo-api.md)👈
-   
    👉	[flask源码分析第一弹](WebFrameDocs/Flask-源码分析.md)👈
+
+   **Demo:**
+   👉	[基于flask实现的api-demo](WebFrameDocs/src/demo/flask-demo-api.md)👈
    
    
 
@@ -116,6 +122,8 @@
 
    FastAPI 是一个用于构建 API 的现代、快速（高性能）的 web 框架，使用 Python 3.6+ 并基于标准的 Python 类型提示。
 
+   **Demo:**
+   
    👉	[基于fastAPI实现的文件对象存储](WebFrameDocs/src/demo/fileStorage.md)👈 【当前版本为0.1版，需要最新版的请点[这里](https://github.com/Bean-jun/fileStorage)】
 
    

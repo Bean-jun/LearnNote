@@ -1,0 +1,29 @@
+{% extends 'layout/base.html' %}
+
+
+{% block title %}
+    Not Found
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+    <div>
+        <div style="margin:20px auto;width:960px">
+            <a href="{% url 'blog:index' %}" style="text-decoration: none">
+                <div style="font-size:25px;color:#1b9336;border-bottom:5px solid #eef9eb">
+                    <span>B</span>
+                    <span style="color:#0092c8">E</span>
+                    <span style="color:#ffad68">A</span>
+                    <span style="color:#68ffe6">N</span>
+                    <span>J</span>
+                    <span style="color:#0092c8">U</span>
+                    <span style="color:#ffad68">N</span>
+                </div>
+            </a>
+            <h1>Not Found</h1>
+            <div><p>你要的东西不在这, 到别处看看吧。</p></div>
+        </div>
+    </div>
+{% endblock %}
