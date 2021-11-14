@@ -1,4 +1,5 @@
 ## 一、字符串
+
 - 添加键值
 	
 	- set key value
@@ -159,6 +160,8 @@
 
 ## 四、哈希表
 
+- 常见业务场景：对象缓存
+
 - 添加键值
   - hset key field value # 添加键值
   - hmet key field1 value1 [field2 value2] # 添加多个键值
@@ -217,6 +220,8 @@ if __name__ == '__main__':
 
 元素都是string类型，并具有唯一性；每个元素都会关联一个double类型的score，表示元素的权重
 
+- 常用业务场景：排行榜单（根据时间、播放量...进行排行）
+
 - 添加键值
     - zadd key score1 member1 score2 member2 ...  
 - 获取键值
@@ -230,3 +235,59 @@ if __name__ == '__main__':
         - zrem key member1 member2 ...
     - 删除指定score范围的元素
         - zremrangegyscore key min max
+
+## 六、Bitmaps
+
+通过一个bit位来表示某个元素对应的值或者状态，其中key是元素本身，offset表示位置，value表示值。
+
+`setbit key offset value`
+
+- 常见业务场景：签到、统计活跃用户、用户在线/离线状态
+
+- 设置值
+
+  - setbit key offset value
+
+- 获取值
+
+  - getbit key offset
+
+- 统计值
+
+  - bitcount key
+
+  
+
+## 七、HyperLogLogs
+
+做基数统计处理，相比较set集合将占用更小的空间使用量，注意：有一定的范围误差
+
+`pfadd key value`
+
+- 常见业务场景：访客统计
+
+- 添加元素到HyperLogLog中
+  - pfadd key value
+- 返回对应数量值
+  - pfcount key
+- 将多个HyperLogLog合并
+  - pfmerge destkey sourcekey
+
+## 八、geospatial
+
+将指定的地理空间位置（纬度、经度、名称）添加到指定的`key`中。这些数据将会存储到`sorted set`这样的目的是为了方便使用GEORADIUS或者GEORADIUSBYMEMBER命令对数据进行半径查询等操作。
+
+- 常见业务场景：附近的人筛选功能
+
+- 添加地理位置坐标
+  - geoadd key longitude latitude member
+- 获取地理位置坐标
+  - geopos key member
+- 计算两个坐标之间的距离
+  - geodist key member1 member2
+- 根据指定坐标获取指点范围坐标集合
+  - georadius key longitude latitude radius
+- 根据储存在位置集合里面的某个地点获取指定范围内的地理位置集合
+  - georadiusbymember key member radius
+- 返回一个或多个位置对象的 geohash 值
+  - geohash key member
