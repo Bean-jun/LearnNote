@@ -114,6 +114,8 @@
    👉   [基于django实现的PersonBlog](WebFrameDocs/src/demo/PersonBlogSystem-demo.md)👈   【需要最新版请点击[这里](https://github.com/Bean-jun/PersonBlogSystem.git)】
   
    👉   [基于django实现的AuthSystem](WebFrameDocs/src/demo/AuthSystem-demo.md)👈   【需要最新版请点击[这里](https://github.com/Bean-jun/AuthSystem.git)】
+   
+   
 
 
 2. [Flask](https://flask.palletsprojects.com/)    [中文文档](https://dormousehole.readthedocs.io/en/latest/)               推荐指数 ⭐️⭐️⭐️⭐️⭐️
@@ -166,5 +168,31 @@
 
    一款简单方便的压测工具
 
-### 七、遇见的BUG
+3. [nginx](https://nginx.org/)
+
+   一款轻量级的Web服务器/反向代理服务器
+
+   👉	[ubuntu下nginx简易安装](OtherDocs/nginx安装-Ubuntu.md)👈
+
+   👉	[nginx中的一些基本概念](OtherDocs/nginx.md)👈
+   
+4. [uwsgi]([https://uwsgi-docs-zh.readthedocs.io/zh_CN/latest/index.html)
+
+   uWSGI是一个Web服务器，它实现了WSGI协议、uwsgi、http等协议
+
+
+
+### 七、项目部署
+
+ 1. nginx+uwsgi+django项目部署
+
+    点👉 [这里](DeployDocs/nginx_uwsgi_django部署.md)👈查看
+
+ 2. nginx+uwsgi+flask项目部署
+
+    点👉 [这里](DeployDocs/nginx_uwsgi_flask部署.md)👈查看
+
+    
+
+### 八、遇见的BUG
 
