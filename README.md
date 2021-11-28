@@ -176,7 +176,7 @@
 
    👉	[nginx中的一些基本概念](OtherDocs/nginx.md)👈
    
-4. [uwsgi]([https://uwsgi-docs-zh.readthedocs.io/zh_CN/latest/index.html)
+4. [uwsgi](https://uwsgi-docs-zh.readthedocs.io/zh_CN/latest/index.html)
 
    uWSGI是一个Web服务器，它实现了WSGI协议、uwsgi、http等协议
 
