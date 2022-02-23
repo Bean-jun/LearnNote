@@ -62,6 +62,25 @@
 
 
 
+### 二、常见模块
 
-### 二、...
+1. auth_request 实现nginx端鉴权控制  官方介绍[https://nginx.org/en/docs/http/ngx_http_auth_request_module.html](`https://nginx.org/en/docs/http/ngx_http_auth_request_module.html`)
+
+   auth_request指令允许放在http、server和location上下文中，在配置好后，每当指定的作用域在收到HTTP请求时，Nginx会向指定的路径发起一个GET类型的子请求，子请求的请求头部分与原HTTP请求的请求头部分一致。
+
+   如果子请求收到2xx响应代码，则Nginx将允许原HTTP请求，如果子请求返回401或403响应代码时，则Nginx将使用相应的错误代码拒绝原HTTP请求，其他响应代码，则被视为错误。
+
+   ```shell
+   location /private/ {					# 请求想走/private/接口
+       auth_request /auth;				# 走之前需要在此处进行/auth接口的权限校验
+       ...												# 下面是/private/接口的具体路径
+   }
+   
+   location = /auth {						# /auth授权
+       proxy_pass ...						# 具体代理到那个授权接口 eg:http://127.0.0.1:5000/api/nginx/auth
+       proxy_pass_request_body off;
+       proxy_set_header Content-Length "";	# Content-Length请务必设置为""
+       proxy_set_header X-Original-URI $request_uri;
+   }
+   ```
 
