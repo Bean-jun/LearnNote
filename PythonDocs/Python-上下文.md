@@ -143,19 +143,19 @@
    user = User(.....)
    db.session.add(user)
    try:
-   		db.session.commit()
+       db.session.commit()
    except:
-     	db.session.rollback()
+       db.session.rollback()
    ```
-
+   
    当然啦，酱紫写是没有任何毛病滴，可是每次创建一个model对象都要这样吼累哦，不是嘛？
-
+   
    于是有了这样的写法 :)
-
+   
    ```python
    def db_session_commit():
-     	try:
-   				db.session.commit()
+       try:
+           db.session.commit()
            return True
        except:
            db.session.rollback()
@@ -165,27 +165,27 @@
    db.session.add(user)
    db_session_commit()	# 可以多次复用，倒也是省事了不少
    ```
-
+   
    那么还有没有其他的方案呢？当然有来，看看这个
-
+   
    ```python
    from contextlib import contextmanager
    from flask_sqlalchemy import SQLAlchemy as _SQLAlchemy
    
    
    class SQLAlchemy(_SQLAlchemy):
-     	
+   
        @contextmanager
-       def auto_save(self)
-       		try:
-           		yield
-             	self.session.commit()
+       def auto_save(self):
+           try:
+               yield
+               self.session.commit()
            except:
-             	self.session.rollback()
-               
+               self.session.rollback()
+   
    user = User(....)
    with db.auto_save():
-   		db.session.add(user)
+       db.session.add(user)
    ```
-
+   
    看起来好像高大上了不少哦~ 哦嚯嚯嚯
