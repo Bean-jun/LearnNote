@@ -82,7 +82,7 @@
 
 1. MySQL
 
-
+   👉	[入门使用](DatabaseDocs/MySQL-入门.md)👈
 
 2. Redis
 
