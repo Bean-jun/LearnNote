@@ -325,4 +325,9 @@ docker-compose up .
    newgrep docker
    ```
 
+2. docker 常见时区设置
+
+    ```shell
+    ENV TZ Asia/ShangHai
+    ```
    
