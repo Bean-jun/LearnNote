@@ -219,3 +219,83 @@
         _async_raise(thread.ident, SystemExit)
     ```
 
+6. custom flask logger
+
+    ```python
+    import logging
+    import logging.config
+    import logging.handlers
+    import os
+    import sys
+    from datetime import date
+
+
+    class Logger:
+        def __init__(self, app=None, path="logs", fmt=None, level=logging.DEBUG):
+            self.logger = logging.getLogger(__name__)
+            self.level = level
+            self.path = path
+            if isinstance(fmt, logging.Formatter):
+                self.fmt = fmt
+            else:
+                self.fmt = logging.Formatter(
+                    "%(asctime)s [%(levelname)s] [%(threadName)s:%(thread)d] [%(module)s] [%(pathname)s:%(lineno)d] - %(message)s"
+                )
+
+            self.terminal = sys.stdout  # 将标准输出处理至终端
+            self.logger.setLevel(level=self.level)  # 自定义日志器
+            self.all_file_handler()
+            self.errors_file_handler()
+
+            if app is not None:
+                self.init_app(app)
+
+        def write(self, msg):
+            self.terminal.write(msg)  # 将日志输出到终端
+            if msg != "\n":
+                self.logger.debug(msg)  # 日志写入文件中
+
+        def flush(self):
+            pass
+
+        def init_app(self, app):
+            app.logger = self.logger
+
+        def exists_path(self, path=None):
+            if not path:
+                path = self.path
+            return os.path.exists(path)
+
+        def mkdir_path(self, path):
+            if not self.exists_path(path):
+                os.makedirs(path)
+
+        def log_filename(self, prefix="log"):
+            filename = "%s_%s%s" % (prefix, date.today().isoformat(), ".log")
+            path = os.path.join(self.path, filename)
+            return path
+
+        def all_file_handler(self):
+            self.mkdir_path(self.path)
+            log_path = self.log_filename("all_log_")
+            file = logging.handlers.RotatingFileHandler(log_path, maxBytes=10485760, backupCount=20, encoding="utf-8")
+            file.setFormatter(self.fmt)
+            file.setLevel(logging.DEBUG)
+            self.logger.addHandler(file)
+
+        def errors_file_handler(self):
+            self.mkdir_path(self.path)
+            log_path = self.log_filename("error_log_")
+            file = logging.handlers.RotatingFileHandler(log_path, maxBytes=10485760, backupCount=20, encoding="utf-8")
+            file.setFormatter(self.fmt)
+            file.setLevel(logging.ERROR)
+            self.logger.addHandler(file)
+
+
+    def init_app(app):
+        logger = Logger()
+        logger.init_app(app)
+
+        sys.stdout = logger
+    ```
+
