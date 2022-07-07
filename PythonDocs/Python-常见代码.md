@@ -37,10 +37,10 @@
     from datetime import datetime
     import requests
     from lxml import etree
-
+    
     BASE_URL = "https://cn.bing.com"
-
-
+    
+    
     def get_response(url, n=2):
         """
         获取内容
@@ -60,8 +60,7 @@
                     yield response
         except Exception as e:
             return get_response(url, n-1)
-
-
+         
     def get_xpath_content(response, xpath, n=2):
         """
         获取xpath内容
@@ -74,8 +73,8 @@
             return res
         except Exception as e:
             return get_xpath_content(response, xpath, n-1)
-
-
+          
+         
     def save_content(content):
         """
         保存内容
@@ -87,8 +86,8 @@
         filename = "bing/" + datetime.now().strftime("%Y-%m-%d-%H") + ".png"
         with open(filename, 'ab') as f:
             f.write(content.content)
-
-
+            
+           
     if __name__ == "__main__":
         xpath = "// *[@id='preloadBg']/@href"
         for response in get_response(BASE_URL):
@@ -104,10 +103,10 @@
     import base64
     import io
     import os
-
+    
     from PIL import Image, ImageFile
-
-
+    
+    
     # 压缩图片文件
     def compress_image(outfile, mb=900, quality=85, k=0.9):
         """不改变图片尺寸压缩到指定大小
@@ -117,12 +116,12 @@
         :param quality: 初始压缩比率
         :return: 压缩文件地址，压缩文件大小
         """
-
+    
         o_size = os.path.getsize(outfile) // 1024
         print(o_size, mb)
         if o_size <= mb:
             return outfile
-
+    
         ImageFile.LOAD_TRUNCATED_IMAGES = True
         while o_size > mb:
             im = Image.open(outfile)
@@ -135,8 +134,8 @@
                 break
             o_size = os.path.getsize(outfile) // 1024
         return outfile
-
-
+      
+      
     # 压缩base64的图片
     def compress_image_bs4(b64, mb=190, k=0.9):
         """不改变图片尺寸压缩到指定大小
@@ -163,24 +162,25 @@
             b64 = base64.b64encode(im_out.getvalue())
             im_out.close()
             return str(b64, encoding='utf8')
-
-
+    
+     
     if __name__ == "__main__":
         for img in os.listdir('./out_img'):
             compress_image(outfile='./out_img/' + str(img)[0:-4] + '.png')
     ```
+
 
 4. 连接mysql、redis
 
     ```python
     import redis
     import pymysql
-
-
+    
+    
     # redis
     pool = redis.ConnectionPool(host='localhost',port=6379, db=15)
     db = redis.Redis(connection_pool=pool)
-
+    
     # mysql
     def connect_mysql(host="localhost", user="root", port=3306, password='', database=''):
         client = pymysql.connect(host=host,
@@ -192,13 +192,14 @@
         return client
     ```
 
+
 5. kill threading
 
     ```python
     import ctypes
     import inspect
-
-
+    
+    
     def _async_raise(tid, exctype):
         """raises the exception, performs cleanup if needed"""
         tid = ctypes.c_long(tid)
@@ -213,11 +214,11 @@
             # and you should call it again with exc=NULL to revert the effect"""
             # _typeshed.pythonapi.PyThreadState_SetAsyncExc(tid, None)
             raise SystemError("PyThreadState_SetAsyncExc failed")
-
-
+            
     def stop_thread(thread):
         _async_raise(thread.ident, SystemExit)
     ```
+
 
 6. custom flask logger
 
@@ -228,8 +229,8 @@
     import os
     import sys
     from datetime import date
-
-
+    
+    
     class Logger:
         def __init__(self, app=None, path="logs", fmt=None, level=logging.DEBUG):
             self.logger = logging.getLogger(__name__)
@@ -241,40 +242,40 @@
                 self.fmt = logging.Formatter(
                     "%(asctime)s [%(levelname)s] [%(threadName)s:%(thread)d] [%(module)s] [%(pathname)s:%(lineno)d] - %(message)s"
                 )
-
+    
             self.terminal = sys.stdout  # 将标准输出处理至终端
             self.logger.setLevel(level=self.level)  # 自定义日志器
             self.all_file_handler()
             self.errors_file_handler()
-
+    
             if app is not None:
                 self.init_app(app)
-
+    
         def write(self, msg):
             self.terminal.write(msg)  # 将日志输出到终端
             if msg != "\n":
                 self.logger.debug(msg)  # 日志写入文件中
-
+    
         def flush(self):
             pass
-
+    
         def init_app(self, app):
             app.logger = self.logger
-
+    
         def exists_path(self, path=None):
             if not path:
                 path = self.path
             return os.path.exists(path)
-
+    
         def mkdir_path(self, path):
             if not self.exists_path(path):
                 os.makedirs(path)
-
+    
         def log_filename(self, prefix="log"):
             filename = "%s_%s%s" % (prefix, date.today().isoformat(), ".log")
             path = os.path.join(self.path, filename)
             return path
-
+    
         def all_file_handler(self):
             self.mkdir_path(self.path)
             log_path = self.log_filename("all_log_")
@@ -282,7 +283,7 @@
             file.setFormatter(self.fmt)
             file.setLevel(logging.DEBUG)
             self.logger.addHandler(file)
-
+    
         def errors_file_handler(self):
             self.mkdir_path(self.path)
             log_path = self.log_filename("error_log_")
@@ -290,12 +291,14 @@
             file.setFormatter(self.fmt)
             file.setLevel(logging.ERROR)
             self.logger.addHandler(file)
-
-
+            
+            
     def init_app(app):
         logger = Logger()
         logger.init_app(app)
-
+    
         sys.stdout = logger
     ```
+    
+    
 
