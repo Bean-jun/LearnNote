@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta charset="UTF-8">
     <!-- <link rel="stylesheet" href="./.static/css/dark.min.css"> -->
-    <link rel="stylesheet" href="./.static/css/vue.min.css">
+    <link rel="stylesheet" href="./.static/css/dark.min.css" id="coustom_css">
 </head>
 <body>
 <nav>
     <a href="#/">笔记主页</a>
+    <a href="#/" id="btn-change-theme">切换主题</a>
 </nav>
 <div id="app">客官稍等....奋力加载中....</div>
 <script>
@@ -24,5 +25,21 @@
 <script src="./.static/js/prism-javascript.min.js"></script>
 <script src="./.static/js/prism-bash.min.js"></script>
 <script src="./.static/js/prism-sql.min.js"></script>
+<script>
+    var CoustomCss = document.getElementById("coustom_css");
+    var ChangeCssBtn = document.getElementById("btn-change-theme");
+    
+    ChangeCssBtn.onclick = function(e){
+        var themeHref = CoustomCss.getAttribute("href");
+        switch (themeHref){
+            case "./.static/css/vue.min.css":
+                CoustomCss.setAttribute("href", "./.static/css/dark.min.css");
+                break;
+            case "./.static/css/dark.min.css":
+                CoustomCss.setAttribute("href", "./.static/css/vue.min.css");
+                break;
+        };
+    }
+</script>
 </body>
 </html>
