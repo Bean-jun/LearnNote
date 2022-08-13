@@ -36,6 +36,8 @@
 
       - 👉	[生成器&迭代器&迭代对象](PythonDocs/Python-生成器&迭代器&迭代对象.md)👈
       
+      - 👉	[多线程](PythonDocs/Python-多线程.md)👈
+
       - 👉	[理解元类](PythonDocs/Python-理解元类.md)👈
    
    - 1.3 工作中常见
