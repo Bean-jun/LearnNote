@@ -115,7 +115,91 @@
 
 
 
-### 二、索引
+### 二、触发器
+
+触发器（Trigger）是与表有关的数据库对象，是一种特殊的存储过程，在满足定义条件时触发，并执行触发器中定义的语句集合。它可以在你执行INSERT、UPDATE或DELETE的时候，执行一些特定的操作。在创建触发器时，可以指定是在执行SQL语句之前或是之后执行这些操作。
+
+1. 基础语法
+
+    ```shell
+    # 创建触发器
+    CREATE TRIGGER <触发器名称>
+    { BEFORE | AFTER }
+    { INSERT | UPDATE | DELETE } 
+    ON <表名称>
+    FOR EACH ROW
+    BEGIN
+    <触发的SQL语句>
+    END;
+    # 查看触发器
+    SHOW TRIGGERS [FROM schema_name];
+    # 删除触发器
+    DROP TRIGGER [IF EXISTS] [schema_name.]trigger_name;
+    ```
+
+2. Demo
+
+    有一张users表，在对其表进行插入、修改、删除时，自动将将操作日志写入到logs表中
+
+    ```sql
+    -- 创建一张用户表
+    CREATE TABLE `users` ( 
+      `id` BIGINT PRIMARY KEY AUTO_INCREMENT, 
+      `name` VARCHAR(30) NOT NULL, 
+      `createAt` datetime, 
+      `modifyAt` datetime, 
+      `state` bool DEFAULT TRUE 
+    );
+
+    -- 创建一张操作日志表
+    CREATE TABLE `logs` (
+      `id` BIGINT PRIMARY KEY AUTO_INCREMENT, 
+      `targetable` VARCHAR(30) NOT NULL,
+      `method` VARCHAR(30) NOT NULL,
+      `createAt` datetime, 
+      `modifyAt` datetime, 
+      `state` bool DEFAULT TRUE 
+    );
+
+    -- 创建用户表的触发器，当用户表crud时，在日志表中生成记录
+    CREATE TRIGGER `users_trigger_insert` AFTER INSERT ON `users` FOR EACH ROW
+    BEGIN
+        INSERT INTO `logs` ( `targetable`, `method`, `createAt`, `modifyAt` )
+      VALUES("users", "insert", NOW(), NOW());
+    END;
+
+    CREATE TRIGGER `users_trigger_update` AFTER UPDATE ON `users` FOR EACH ROW
+    BEGIN
+        INSERT INTO `logs` ( `targetable`, `method`, `createAt`, `modifyAt` )
+      VALUES("users", "update", NOW(), NOW());
+    END;
+
+    CREATE TRIGGER `users_trigger_delete` AFTER DELETE ON `users` FOR EACH ROW
+    BEGIN
+        INSERT INTO `logs` ( `targetable`, `method`, `createAt`, `modifyAt` )
+      VALUES("users", "delete", NOW(), NOW());
+    END;
+
+    -- 查看触发器
+    SHOW TRIGGERS;
+
+    -- 插入数据
+    INSERT INTO `users` (`name`, `createAt`, `modifyAt`) values ("张三", NOW(), NOW());
+    INSERT INTO `users` (`name`, `createAt`, `modifyAt`) values ("李四", NOW(), NOW());
+    INSERT INTO `users` (`name`, `createAt`, `modifyAt`) values ("李四22", NOW(), NOW());
+    UPDATE `users` set `name`="张三1" WHERE `name`="张三";
+    UPDATE `users` set `name`="李四1" WHERE `name`="李四";
+    DELETE FROM `users` WHERE `name`="李四22";
+
+    -- 删除触发器
+    DROP TRIGGER `users_trigger_insert`;
+    DROP TRIGGER `users_trigger_update`;
+    DROP TRIGGER `users_trigger_delete`;
+
+    -- 请自行查看表中数据
+    ```
+
+### 三、索引
 
 1. 索引种类
 
@@ -155,7 +239,7 @@
 - 存在类型转化
 
 
-### 三、事务
+### 四、事务
 
 1. 四大特性(ACID)
 
