@@ -227,7 +227,15 @@
 
     点👉 [这里](DeployDocs/nginx_uwsgi_flask部署.md)👈查看
 
-    
 
-### 八、遇见的BUG
+
+### 八、折腾笔记
+
+ 1. Jetson Nano B01 环境搭建 
+
+    老实说，买来好久了，没倒腾几次，最近看到这货，倒是折腾了一下
+
+      点👉 [Jetson_Nano_环境搭建](TryDocs/Jetson_Nano_环境搭建.md)👈查看
+
+### 九、遇见的BUG
 
