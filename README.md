@@ -239,3 +239,6 @@
 
 ### 九、遇见的BUG
 
+ 1. cookie离谱的生效范围
+
+      点👉 [cookie离谱的生效范围](BugDocs/cookies/cookie离谱的生效范围.md)👈查看
