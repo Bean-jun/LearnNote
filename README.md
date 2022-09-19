@@ -136,9 +136,9 @@
 
    **Demo:**
    
-   👉   [基于django实现的PersonBlog](WebFrameDocs/src/demo/PersonBlogSystem-demo.md)👈   【需要最新版请点击[这里](https://github.com/Bean-jun/PersonBlogSystem.git)】
+   👉   [基于django实现的PersonBlog](https://github.com/Bean-jun/PersonBlogSystem.git)👈
   
-   👉   [基于django实现的AuthSystem](WebFrameDocs/src/demo/AuthSystem-demo.md)👈   【需要最新版请点击[这里](https://github.com/Bean-jun/AuthSystem.git)】
+   👉   [基于django实现的AuthSystem](https://github.com/Bean-jun/AuthSystem.git)👈
    
    
 
@@ -163,7 +163,7 @@
 
    **Demo:**
    
-   👉	[基于fastAPI实现的文件对象存储](WebFrameDocs/src/demo/fileStorage.md)👈 【当前版本为0.1版，需要最新版的请点[这里](https://github.com/Bean-jun/fileStorage)】
+   👉	[基于fastAPI实现的文件对象存储](https://github.com/Bean-jun/fileStorage)👈
 
    
 
@@ -235,7 +235,7 @@
 
     老实说，买来好久了，没倒腾几次，最近看到这货，倒是折腾了一下
 
-      点👉 [Jetson_Nano_环境搭建](TryDocs/Jetson_Nano_环境搭建.md)👈查看
+      点👉 [Jetson Nano环境搭建](TryDocs/Jetson_Nano_环境搭建.md)👈查看
 
 ### 九、遇见的BUG
 

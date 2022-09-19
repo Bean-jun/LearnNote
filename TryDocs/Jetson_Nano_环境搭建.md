@@ -11,7 +11,7 @@ sudo reboot
 ```
 
 ```shell
-中文候选词无法出现，操作方案 不使用 fcitx-qimpanel  这个有毒
+# 中文候选词无法出现，操作方案 不使用 fcitx-qimpanel  这个有毒
 killall fcitx-qimpanel
 sudo apt-get remove fcitx-ui-qimpanel 
 ```
