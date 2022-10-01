@@ -80,7 +80,7 @@
 
 2. HTTP协议
 
-   HTTP超文本传输协议，它是基于TCP协议的应用层传输协议，简单来说就是客户端和服务端进行数据传输的一种规则。
+   HTTP超文本传输协议，它是基于TCP协议的应用层传输协议，简单来说就是客户端和服务端进行数据传输的一种规则。[http协议参考](https://developer.mozilla.org/zh-CN/docs/Web/HTTP)
 
    👉	[基于Socket的HTTP协议实现](NetworkDocs/基于Socket的HTTP协议实现.md)👈
 
@@ -200,6 +200,10 @@
    👉	[ubuntu下nginx简易安装](OtherDocs/nginx安装-Ubuntu.md)👈
 
    👉	[nginx中的一些基本概念](OtherDocs/nginx.md)👈
+
+   👉 [nginx+uwsgi+django项目部署](DeployDocs/nginx_uwsgi_django部署.md)👈
+
+   👉 [nginx+uwsgi+flask项目部署](DeployDocs/nginx_uwsgi_flask部署.md)👈
    
 4. [uwsgi](https://uwsgi-docs-zh.readthedocs.io/zh_CN/latest/index.html)
 
@@ -217,15 +221,15 @@
 
    👉	[crontab操作文档(哈哈哈哈，我直接摘的操作手册)](OtherDocs/crontab.md)👈
 
-### 七、项目部署
+### 七、开发常识
 
- 1. nginx+uwsgi+django项目部署
+ 1. cookies、session、token
 
-    点👉 [这里](DeployDocs/nginx_uwsgi_django部署.md)👈查看
+    👉 [cookies、session、token到底是个啥?](DevelopDocs/cookie_session_token介绍.md)👈
 
- 2. nginx+uwsgi+flask项目部署
+ 2. OAuth2、SSO
 
-    点👉 [这里](DeployDocs/nginx_uwsgi_flask部署.md)👈查看
+    👉 [OAuth2、SSO介绍](DevelopDocs/oauth2_sso介绍.md)👈
 
 
 
