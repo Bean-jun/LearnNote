@@ -113,3 +113,23 @@ sudo add-apt-repository ppa:git-core/ppa
 sudo apt update
 sudo apt install git
 ```
+
+### 7. 安装vnc远程
+
+```shell
+# 参见官方说明文档 https://developer.nvidia.com/embedded/learn/tutorials/vnc-setup
+# 1. 安装vnc
+sudo apt update
+sudo apt install vino
+# 2. 创建一个目录
+mkdir -p ~/.config/autostart
+cp /usr/share/applications/vino-server.desktop ~/.config/autostart
+# 3. 配置vnc server
+gsettings set org.gnome.Vino prompt-enabled false
+gsettings set org.gnome.Vino require-encryption false
+# 4. 设置密码
+gsettings set org.gnome.Vino authentication-methods "['vnc']"
+gsettings set org.gnome.Vino vnc-password $(echo -n 'your password'|base64)
+# 5. 重启即可
+sudo reboot
+```
