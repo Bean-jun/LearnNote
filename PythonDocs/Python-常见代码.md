@@ -301,4 +301,39 @@
     ```
     
     
+7. Uncompress zip file
+
+    ```python
+    import os
+    import zipfile
+
+
+    def decode_to_plain_text(text):
+        try:
+            text = text.encode('cp437').decode('gbk')
+        except:
+            text = text.encode('cp437').decode('utf-8')
+        return text
+
+    def abs_path(base_dir, dir):
+        return os.path.join(base_dir, dir)
+
+
+    def unzip_to(zip_file, dest_dir):
+        with zipfile.ZipFile(zip_file) as packages:
+            packages.extractall(dest_dir)
+            folder_dict = {}
+            for dirpath, dirnames, filenames in os.walk(dest_dir):
+                for filename in filenames:
+                    new_filename = decode_to_plain_text(filename)
+                    os.rename(os.path.join(dirpath, filename),
+                            os.path.join(dirpath, new_filename))
+                for dirname in dirnames:
+                    new_dirname = decode_to_plain_text(dirname)
+                    folder_dict[abs_path(dirpath, dirname)] = abs_path(dirpath, new_dirname)
+            # 修改文件夹名称
+            for old_file, new_file in folder_dict.items():
+                os.rename(old_file, new_file)
+    ```
+
 
