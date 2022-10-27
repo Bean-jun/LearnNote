@@ -175,6 +175,10 @@
 
    - 图书推荐 [introduction to tornado](http://shouce.jb51.net/tornado/)       **大家有机会还是支持正版书籍哦**
 
+   **Demo**
+
+   👉	[一个基于rbac模型的crud架子](https://github.com/Bean-jun/tornado_demo.git)👈
+
    
 
 5. [aiohttp](https://docs.aiohttp.org/en/stable/)   [中文文档](https://www.bookstack.cn/books/aiohttp-chinese-documentation)               推荐指数 ⭐️⭐️⭐️
