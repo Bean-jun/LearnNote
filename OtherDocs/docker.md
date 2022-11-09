@@ -331,3 +331,6 @@ docker-compose up .
     ENV TZ Asia/ShangHai
     ```
    
+3. docker compose组合服务间的ready控制问题
+
+    相关文档[https://docs.docker.com/compose/startup-order/](https://docs.docker.com/compose/startup-order/)
