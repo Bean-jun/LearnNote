@@ -307,7 +307,6 @@
     import os
     import zipfile
 
-
     def decode_to_plain_text(text):
         try:
             text = text.encode('cp437').decode('gbk')
@@ -317,7 +316,6 @@
 
     def abs_path(base_dir, dir):
         return os.path.join(base_dir, dir)
-
 
     def unzip_to(zip_file, dest_dir):
         with zipfile.ZipFile(zip_file) as packages:

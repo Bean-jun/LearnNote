@@ -9,10 +9,8 @@
     import multiprocessing
     import os
 
-
     def func(num):
         print("当前获取数字：", num, "当前获取进程ID: ", os.getpid())
-
 
     def main():
         tasks = []
@@ -26,7 +24,6 @@
 
         print("进程结束")
 
-
     if __name__ == "__main__":
         main()
     ```
@@ -38,7 +35,6 @@
     import multiprocessing
     import os
 
-
     class ProcessChild(multiprocessing.Process):
 
         def __init__(self, group=None, target=None, name=None, args=()):
@@ -46,7 +42,6 @@
 
         def run(self):
             print("当前获取数字：", self._args, "当前获取进程ID: ", os.getpid())
-
 
     def main():
         tasks = []
@@ -58,7 +53,6 @@
         [i.join() for i in tasks]
 
         print("进程结束")
-
 
     if __name__ == "__main__":
         main()
@@ -78,11 +72,9 @@
     import multiprocessing
     import os
 
-
     def func(l, num):
         with l:
             print("当前获取到的数据结果为: ", num, "当前进程ID: ", os.getpid())
-
 
     def main():
         l = multiprocessing.Lock()
@@ -97,7 +89,6 @@
         [p.join() for p in tasks]
 
         print("进程结束")
-
 
     if __name__ == "__main__":
         main()
@@ -114,7 +105,6 @@
     import os
     import time
 
-
     def func_1(q):
         n = 10
         while True:
@@ -126,7 +116,6 @@
             time.sleep(1)
             n -= 1
 
-
     def func_2(q):
         try:
             while True:
@@ -134,7 +123,6 @@
                 print("func_2-"+str(os.getpid())+"-接受数据:"+str(ret))
         except Exception as e:
             print(e.args)
-
 
     def main():
         q = Queue(10)
@@ -151,7 +139,6 @@
         [p.join() for p in tasks]
 
         print("进程结束")
-
 
     if __name__ == "__main__":
         main()

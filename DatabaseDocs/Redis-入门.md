@@ -178,10 +178,10 @@
 
 
 - Python中的操作
+
 ```python
 import redis
 import json
-
 
 if __name__ == '__main__':
     client = redis.Redis(host='139.224.46.213', port=6379, decode_responses=True)

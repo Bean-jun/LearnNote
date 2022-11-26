@@ -130,21 +130,21 @@ slideToggle() 依次展开或卷起某个元素
 ```
 ### 1.6 animate动画
 - 参考00007animate.html动画
-```html
-$('#div1').animate({
-    width:300,
-    height:300
-},1000,'swing',function(){
-    alert('done!');
-});
+    ```html
+    $('#div1').animate({
+        width:300,
+        height:300
+    },1000,'swing',function(){
+        alert('done!');
+    });
 
-$('#div1').animate({
-    width:'+=100',
-    height:300
-},1000,'swing',function(){
-    alert('done!');
-});
-```
+    $('#div1').animate({
+        width:'+=100',
+        height:300
+    },1000,'swing',function(){
+        alert('done!');
+    });
+    ```
 
 ### 1.7 尺寸及滚动事件
 #### 1.7.1 获取和设置元素的尺寸
@@ -170,26 +170,26 @@ $('#div1').animate({
 
 ### 1.8 属性操作
 - html取出或者设置内容
-```html
-// 取出html内容
+    ```html
+    // 取出html内容
 
-var $htm = $('#div1').html();
+    var $htm = $('#div1').html();
 
-// 设置html内容
+    // 设置html内容
 
-$('#div1').html('<span>添加文字</span>');
-```
+    $('#div1').html('<span>添加文字</span>');
+    ```
 
 - prop取出或者设置某个属性的值
-```html
-// 取出图片的地址
+    ```html
+    // 取出图片的地址
 
-var $src = $('#img1').prop('src');
+    var $src = $('#img1').prop('src');
 
-// 设置图片的地址和alt属性
+    // 设置图片的地址和alt属性
 
-$('#img1').prop({src: "test.jpg", alt: "Test Image" });
-```
+    $('#img1').prop({src: "test.jpg", alt: "Test Image" });
+    ```
 
 ### 1.9 jQuery循环
 - 对jQuery选择的对象集合分别进行操作

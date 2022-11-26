@@ -10,10 +10,8 @@
     # src/PythonThread/001.py
     import threading
 
-
     def func(num):
         print("当前获取数字：", num)
-
 
     def main():
         tasks = []
@@ -26,7 +24,6 @@
 
         print("线程结束")
 
-
     if __name__ == "__main__":
         main()
     ```
@@ -37,10 +34,8 @@
     # src/PythonThread/002.py
     import threading
 
-
     def func(num):
         print("当前获取数字：", num)
-
 
     class ThreadChild(threading.Thread):
 
@@ -50,7 +45,6 @@
         def run(self):
             print("当前线程名：", self.getName)
             return super().run()
-
 
     def main():
         tasks = []
@@ -62,7 +56,6 @@
         [i.join() for i in tasks]
 
         print("线程结束")
-
 
     if __name__ == "__main__":
         main()
@@ -101,18 +94,15 @@
 
     NUM = 100
 
-
     def task1(n):
         global NUM
         for i in range(n):
             NUM = NUM + 1
 
-
     def task2(n):
         global NUM
         for i in range(n):
             NUM = NUM - 1
-
 
     def main():
         t1 = threading.Thread(target=task1, name="name-task1", args=(10000000, ))
@@ -125,7 +115,6 @@
         t2.join()
 
         print(f"NUM预期结果:100, 最终结果:{NUM}")
-
 
     if __name__ == "__main__":
         main()
@@ -145,7 +134,6 @@
 
     NUM = 100
 
-
     def task1(n):
         global NUM
         for i in range(n):
@@ -154,14 +142,12 @@
                 NUM += i
                 # lock.release()
 
-
     def task2(n):
         global NUM
         for i in range(n):
             lock.acquire()
             NUM -= i
             lock.release()
-
 
     def main():
         t1 = threading.Thread(target=task1, name="name-task1", args=(1000, ))
@@ -176,7 +162,6 @@
         print(f"NUM预期结果:100, 最终结果:{NUM}")
 
         print("线程结束")
-
 
     if __name__ == "__main__":
         main()
@@ -206,7 +191,6 @@
 
     event = threading.Event()
 
-
     def task(i):
         print(
             f"start current ID: {i}, current thread status: {event.is_set()}")
@@ -215,7 +199,6 @@
         # 执行结果
         print(
             f"end current ID: {i}, current thread status: {event.is_set()}")
-
 
     def main():
         thread_task = list()
@@ -228,7 +211,6 @@
         # 由于task中设置的wait, 故当前线程执行一部分代码后都处于阻塞状态
         # 现在将线程状态释放
         event.set()
-
 
     if __name__ == "__main__":
         main()
@@ -285,7 +267,6 @@ Condition 提供了一种多线程通信机制，假如线程 1 需要数据，�
     con = threading.Condition()
     number = 1
 
-
     def func_1():
         global number
 
@@ -302,7 +283,6 @@ Condition 提供了一种多线程通信机制，假如线程 1 需要数据，�
                 break
 
         con.release()
-
 
     def func_2():
         global number
@@ -321,7 +301,6 @@ Condition 提供了一种多线程通信机制，假如线程 1 需要数据，�
                 break
         con.release()
 
-
     def main():
         f1 = threading.Thread(target=func_1)
         f2 = threading.Thread(target=func_2)
@@ -330,7 +309,6 @@ Condition 提供了一种多线程通信机制，假如线程 1 需要数据，�
         f2.start()
 
         # 默认主线程等待子线程执行完毕，故不做任何操作
-
 
     if __name__ == "__main__":
         main()
@@ -367,23 +345,19 @@ Condition 提供了一种多线程通信机制，假如线程 1 需要数据，�
     from datetime import datetime
     import threading
 
-
     def func():
         print("current time: ", datetime.now())
-
 
     def func2():
         print("current time: ", datetime.now())
         timer = threading.Timer(2, func2)
         timer.start()
 
-
     def main():
         print("start....")
         # timer = threading.Timer(10, func) # 定时执行一次
         timer = threading.Timer(10, func2)  # 函数内部有定时任务，故不间断执行
         timer.start()
-
 
     if __name__ == "__main__":
         main()
@@ -403,7 +377,6 @@ Condition 提供了一种多线程通信机制，假如线程 1 需要数据，�
 
     sem = threading.Semaphore(4)
 
-
     def func(id):
         sem.acquire()
         print(str(id) + " thread id:",
@@ -420,12 +393,10 @@ Condition 提供了一种多线程通信机制，假如线程 1 需要数据，�
         #           datetime.now())
         #     time.sleep(3)
 
-
     def main():
         for i in range(10):
             t = threading.Thread(target=func, args=(i, ))
             t.start()
-
 
     if __name__ == "__main__":
         main()
@@ -459,13 +430,10 @@ Barrier 栅栏对象，多线程 Barrier 会设置一个线程栅栏数量 parti
     import threading
     import time
 
-
     def showMsg():
         print("前面的准备工作都做完了,开始我自己的事情..")
 
-
     barrier = threading.Barrier(3, showMsg)
-
 
     def func(i):
         # time.sleep(4)
@@ -478,7 +446,6 @@ Barrier 栅栏对象，多线程 Barrier 会设置一个线程栅栏数量 parti
             print(e)
         print("current task id:", i)
 
-
     def main():
         for i in range(3):
             t = threading.Thread(target=func, args=(i, ))
@@ -487,7 +454,6 @@ Barrier 栅栏对象，多线程 Barrier 会设置一个线程栅栏数量 parti
             # 当然 我们也可以将之前的wait结果给恢复至初始状态
             if i == 1:
                 barrier.reset()
-
 
     if __name__ == "__main__":
         main()

@@ -41,73 +41,73 @@
 
   >1. 创建表
   >
-  >   ```mysql
-  >   -- 班级表
-  >   create table `cs_class` (
-  >   	`autoid` int auto_increment,
-  >     `name` varchar(100),
-  >     `state` bool default true,
-  >     primary key(autoid)
-  >   );
-  >   -- 学生表
-  >   create table `cs_student` (
-  >   	`autoid` int auto_increment,
-  >     `c_autoid` int,
-  >     `name` varchar(100),
-  >     `gender` char,
-  >     `state` bool default true,
-  >     primary key(autoid),
-  >     foreign key (c_autoid) references cs_class(autoid)
-  >   );
-  >   ```
+  >```mysql
+  >-- 班级表
+  >create table `cs_class` (
+  >	`autoid` int auto_increment,
+  >  `name` varchar(100),
+  >  `state` bool default true,
+  >  primary key(autoid)
+  >);
+  >-- 学生表
+  >create table `cs_student` (
+  >	`autoid` int auto_increment,
+  >  `c_autoid` int,
+  >  `name` varchar(100),
+  >  `gender` char,
+  >  `state` bool default true,
+  >  primary key(autoid),
+  >  foreign key (c_autoid) references cs_class(autoid)
+  >);
+  >```
   >
   >2. 对表结构操作
   >
-  >   ```mysql
-  >   -- 添加列
-  >   alter table cs_class add address varchar(200);
-  >   -- 删除列
-  >   alter table cd_class drop address;
-  >   -- 修改字段
-  >   alter table cs_class modify name varchar(200);
-  >   -- 修改字段&字段名
-  >   alter table cs_class change name cs_name varchar(100);
-  >   -- 添加外键约束
-  >   alter table cs_student constraint foreign key (f_autoid) references cs_class(autoid);	-- 需要提前在该表中添加一个f_autoid字段
-  >   -- 修改表名
-  >   alter table cs_class rename new_cs_class;
-  >   -- 删除表
-  >   alter drop if exists cs_class;
-  >   ```
+  >```mysql
+  >-- 添加列
+  >alter table cs_class add address varchar(200);
+  >-- 删除列
+  >alter table cd_class drop address;
+  >-- 修改字段
+  >alter table cs_class modify name varchar(200);
+  >-- 修改字段&字段名
+  >alter table cs_class change name cs_name varchar(100);
+  >-- 添加外键约束
+  >alter table cs_student constraint foreign key (f_autoid) references cs_class(autoid);	-- 需要提前在该表中添加一个f_autoid字段
+  >-- 修改表名
+  >alter table cs_class rename new_cs_class;
+  >-- 删除表
+  >alter drop if exists cs_class;
+  >```
 
 - DML(Data Manipulation Language)：数据操作语言，用来定义数据库记录：增、删、改表记录。
 
   >1. 添加数据
   >
-  >   ```mysql
-  >   insert into cs_class (name) values ('六年级一班'), ('六年级二班');
-  >   ```
+  >```mysql
+  >insert into cs_class (name) values ('六年级一班'), ('六年级二班');
+  >```
   >
   >2. 删除数据
   >
-  >   ```mysql
-  >   delete from cs_class where autoid=1;
-  >   ```
+  >```mysql
+  >delete from cs_class where autoid=1;
+  >```
   >
   >3. 修改数据
   >
-  >   ```mysql
-  >   update cs_class set name="六年级一班" where autoid=2;
-  >   ```
+  >```mysql
+  >update cs_class set name="六年级一班" where autoid=2;
+  >```
   >
   >4. delete、drop、truncate对比
   >
-  >   ```mysql
-  >   当表被truncate后，表和索引的所占空间会恢复到初始大小，delete操作不会减少表和索引的所占空间。
-  >   truncate和delete只删除数据，drop则删除整个表（结构和数据）。
-  >   truncate速度快，效率高，可以理解为先把表删除了，再重新建立。
-  >   truncate和delete均不会使表结构及其列、约束、索引等发生改变。
-  >   ```
+  >```mysql
+  >当表被truncate后，表和索引的所占空间会恢复到初始大小，delete操作不会减少表和索引的所占空间。
+  >truncate和delete只删除数据，drop则删除整个表（结构和数据）。
+  >truncate速度快，效率高，可以理解为先把表删除了，再重新建立。
+  >truncate和delete均不会使表结构及其列、约束、索引等发生改变。
+  >```
   >
   >   
 

@@ -49,12 +49,12 @@ parseFloat() 将内容转换为小数
 
 ### 1.3 获取元素
 - document.getElementById(id名称)
-```html
-var oDiv = document.getElementById('div1');
+	```html
+	var oDiv = document.getElementById('div1');
 
-oDiv.style.color = 'green';
-oDiv.style.fontSize = '30px';
-```
+	oDiv.style.color = 'green';
+	oDiv.style.fontSize = '30px';
+	```
 - document.getElementsByTagName("li")
 
 	这种方式获取到的内容是一个结果集，`基本`可以像数组一样操作
@@ -70,7 +70,7 @@ oDiv.style.fontSize = '30px';
 	- style中加-的要改为驼峰式
 	
 - 修改html中内嵌的内容
-	 - innerHTML
+	- innerHTML
 	```html
 		<!-- 	读取-->
 		var oDiv = document.getElementById('div1');
@@ -82,15 +82,15 @@ oDiv.style.fontSize = '30px';
  
 ### 1.5 函数
 #### 1.5.1 基本定义
-```html
-<!--基本定义-->
-function myFunction()
-{
-    alert("Hello World!");
-}
-<!--调用函数-->
-myFunction();
-```
+	```html
+	<!--基本定义-->
+	function myFunction()
+	{
+		alert("Hello World!");
+	}
+	<!--调用函数-->
+	myFunction();
+	```
 
 #### 1.5.2 提取行间事件
 ```html

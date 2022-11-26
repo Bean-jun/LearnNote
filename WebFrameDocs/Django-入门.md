@@ -319,6 +319,7 @@
   - exists() 返回内容是否存在
 
 2. 条件查询
+
 - exact 判断相等
 ```python
 模型名.objects.filter(pk__exact=1)
@@ -427,10 +428,11 @@
   ```
 
 6. 模型管理器
+
 > 属性objects：管理器，是models.Manager类型的对象，用于与数据库进行交互。
-
+>
 > 当没有为模型类定义管理器时，Django会为每一个模型类生成一个名为objects的管理器，自定义管理器后，Django不再生成默认管理器objects。
-
+>
 > 使用方式
 > 1. 创建模型管理器类
 > 2. 使用时，需要在对应类中加入模型管理器的实例化对象
@@ -443,7 +445,8 @@
 - 获取对应字段的对象
     - 模型类._meta.get_field(对应字段)
 - 获取对应字段的值
-    - 模型类._meta.get_field(对应字段).verbose_name
+  - 模型类._meta.get_field(对应字段).verbose_name
+  
   ```python
   class UserInfo(models.Model):
       """用户信息表"""
@@ -474,8 +477,9 @@
 2. 管理页显示
   - 使用管理类实现
 
-      - 使用注册参数
-      - 使用装饰器
+    - 使用注册参数
+    - 使用装饰器
+
     ```python
     from django.contrib import admin
     from book.models import Author
@@ -508,6 +512,7 @@
       - 注意field和fieldset只能单独使用
       - field 显示字段顺序
       - fieldset 分组显示
+
       ```python
           fields = ['last_name', 'first_name', 'email']
           fieldsets = (
@@ -516,24 +521,25 @@
           )
       ```
       - 关联对象
-          - 在一对多的关系中，可以在一端编辑页面修改多段的内容。将多端的内容嵌入到一段中有两种方式[表格、块]
-          - 使用时需要创建一个多端的表格或者块形式的类，并将其在一端中使用
-    ```python
-    from django.contrib import admin
-    from book.models import Book, Publisher
-    # 创建块
-    class BookStackedInline(admin.StackedInline):
-        model = Book
-        extra = 2
-    # 创建表格
-    class BookTabularInline(admin.TabularInline):
-        model = Book
-        extra = 2
-    
-    @admin.register(Publisher)
-    class PublisherAdmin(admin.ModelAdmin):
-        # 使用块方式
-        inlines = [BookStackedInline]
-        # 使用表格
-        inlines = [BookTabularInline]
-    ```
+        - 在一对多的关系中，可以在一端编辑页面修改多段的内容。将多端的内容嵌入到一段中有两种方式[表格、块]
+        - 使用时需要创建一个多端的表格或者块形式的类，并将其在一端中使用
+
+      ```python
+      from django.contrib import admin
+      from book.models import Book, Publisher
+      # 创建块
+      class BookStackedInline(admin.StackedInline):
+          model = Book
+          extra = 2
+      # 创建表格
+      class BookTabularInline(admin.TabularInline):
+          model = Book
+          extra = 2
+      
+      @admin.register(Publisher)
+      class PublisherAdmin(admin.ModelAdmin):
+          # 使用块方式
+          inlines = [BookStackedInline]
+          # 使用表格
+          inlines = [BookTabularInline]
+      ```

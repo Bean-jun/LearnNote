@@ -59,45 +59,47 @@
 </body>
 </html>
 ```
+
 - 层级选择器
+
     - 定义在类选择器或者标签选择器下
-```html
-# 例如如下代码
-.box span{color:red}
-.box .red{color:pink}
-.red{color:red}
+    ```html
+    # 例如如下代码
+    .box span{color:red}
+    .box .red{color:pink}
+    .red{color:red}
 
-<div class="box">
-    <span>....</span>
-    <a href="#" class="red">....</a>
-</div>
+    <div class="box">
+        <span>....</span>
+        <a href="#" class="red">....</a>
+    </div>
 
-<h3 class="red">....</h3>
-```
+    <h3 class="red">....</h3>
+    ```
 - 组选择器 多个选择器，如果有同样的样式设置，可以使用组选择器节省代码
-```html
-.box1,.box2,.box3{width:100px;height:100px}
-.box1{background:red}
-.box2{background:pink}
-.box2{background:gold}
+  ```html
+  .box1,.box2,.box3{width:100px;height:100px}
+  .box1{background:red}
+  .box2{background:pink}
+  .box2{background:gold}
 
-<div class="box1">....</div>
-<div class="box2">....</div>
-<div class="box3">....</div>
-```
+  <div class="box1">....</div>
+  <div class="box2">....</div>
+  <div class="box3">....</div>
+  ```
 - 伪类及伪类元素选择器
+
     - 常用的伪类选择器有hover，表示鼠标悬浮在元素上时的状态，
     - 伪元素选择器有before和after,它们可以通过样式在元素中插入内容。
-```html
-.box1:hover{color:red}
-.box2:before{content:'行首文字';}
-.box3:after{content:'行尾文字';}
+    ```html
+    .box1:hover{color:red}
+    .box2:before{content:'行首文字';}
+    .box3:after{content:'行尾文字';}
 
-
-<div class="box1">....</div>
-<div class="box2">....</div>
-<div class="box3">....</div>
-```
+    <div class="box1">....</div>
+    <div class="box2">....</div>
+    <div class="box3">....</div>
+    ```
 ### 1.3盒子模型
 - 关键词
   - padding 填充 直接设置时，是顺时针方向
