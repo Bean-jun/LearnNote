@@ -140,17 +140,26 @@
    
 3. MongoDB
 
+4. ORM工具
+
+   - [SQLAlchemy](https://www.sqlalchemy.org/)
+
+      👉	[SQLAlchemy基本使用](OtherDocs/SQLAlchemy基本使用.md)👈
+
+   - [peewee](http://docs.peewee-orm.com/en/latest/)
 
 
 ### 七、Web框架
-
-   个人建议先学习Django和Flask后再学习其他框架.....
 
 1. [Django](https://docs.djangoproject.com/)     [中文文档](https://docs.djangoproject.com/zh-hans/)           推荐指数 ⭐️⭐️⭐️⭐️⭐️
 
    Django是一个可以使Web开发工作愉快并且高效的Web开发框架。 使用Django，能够以最小的代价构建和维护高质量的Web应用。
 
-   👉	[入门使用](WebFrameDocs/Django-入门.md)👈
+   推荐: [Django REST framework](https://www.django-rest-framework.org/)
+
+   👉	[Django入门使用](WebFrameDocs/Django-入门.md)👈
+
+   👉	[DRF入门使用](WebFrameDocs/DRF-入门.md)👈
 
    **Demo:**
    
@@ -245,9 +254,12 @@
 
    👉	[crontab操作文档(哈哈哈哈，我直接摘的操作手册)](OtherDocs/crontab.md)👈
 
-7. [frp]()
+7. [frp](https://gofrp.org/)
 
-### 九、开发常识
+   内网穿透工具
+
+
+### 九、开发知识
 
  1. cookies、session、token
 
@@ -256,6 +268,10 @@
  2. OAuth2、SSO
 
     👉 [OAuth2、SSO介绍](DevelopDocs/oauth2_sso介绍.md)👈
+
+ 3. LVS
+
+    👉 [LVS介绍（转载）](DevelopDocs/LVS介绍.md)👈
 
 
 
