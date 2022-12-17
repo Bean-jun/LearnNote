@@ -42,7 +42,11 @@
 
       - 👉	[理解元类](PythonDocs/Python-理解元类.md)👈
    
-   - 1.3 工作中常见
+   - 1.3 Python相关文章推荐
+
+      - 👉	[【知乎】-Python部分魔法方法一览](https://zhuanlan.zhihu.com/p/344951719)👈
+
+   - 1.4 工作中常见
 
       - 👉	[常见代码](PythonDocs/Python-常见代码.md)👈
 
