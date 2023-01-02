@@ -60,6 +60,10 @@
 
       - 👉	[基础语法](GolangDocs/Golang-基础语法.md)👈
 
+      - 👉	[基础语法-操作MySQL](GolangDocs/Golang-操作MySQL.md)👈
+
+      - 👉	[基础语法-RPC](GolangDocs/Golang-RPC.md)👈
+
 3. 前端那些事【 仅学习笔记🙄 】
 
    - 3.1 前端基础
@@ -148,7 +152,7 @@
    
 3. MongoDB
 
-4. ORM工具
+4. ORM工具【非数据库】
 
    - [SQLAlchemy](https://www.sqlalchemy.org/)
 
