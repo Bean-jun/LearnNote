@@ -57,7 +57,7 @@ SameSite 可以有下面三种值：
 
 #### 2.7 开发中可能遇见的坑
 
-[笔者踩过的坑-cookie离谱的生效范围](../README.md#九遇见的bug)
+[笔者踩过的坑-cookie离谱的生效范围](../README.md#十遇见的bug)
 
 ### 3. session
 

@@ -49,6 +49,10 @@
    - 1.4 工作中常见
 
       - 👉	[常见代码](PythonDocs/Python-常见代码.md)👈
+   
+   - 1.5 无聊的代码
+
+      - 👉	[重写os.walk工具](PythonDocs/Python-重写os.walk工具.md)👈
 
 2. Golang从入门到入土
 
@@ -279,16 +283,17 @@
 
 
 
-### 十、折腾笔记
+### 十、遇见的BUG
+
+ 1. cookie离谱的生效范围
+
+      点👉 [cookie离谱的生效范围](BugDocs/cookies/cookie离谱的生效范围.md)👈查看
+
+
+### 十一、其他
 
  1. Jetson Nano B01 环境搭建 
 
     老实说，买来好久了，没倒腾几次，最近看到这货，倒是折腾了一下
 
       点👉 [Jetson Nano环境搭建](TryDocs/Jetson_Nano_环境搭建.md)👈查看
-
-### 十一、遇见的BUG
-
- 1. cookie离谱的生效范围
-
-      点👉 [cookie离谱的生效范围](BugDocs/cookies/cookie离谱的生效范围.md)👈查看
