@@ -42,17 +42,17 @@
 
       - 👉	[理解元类](PythonDocs/Python-理解元类.md)👈
    
-   - 1.3 Python相关文章推荐
+   - 1.3 无聊的代码
 
-      - 👉	[【知乎】-Python部分魔法方法一览](https://zhuanlan.zhihu.com/p/344951719)👈
+      - 👉	[重写os.walk工具](PythonDocs/Python-重写os.walk工具.md)👈
 
    - 1.4 工作中常见
 
       - 👉	[常见代码](PythonDocs/Python-常见代码.md)👈
    
-   - 1.5 无聊的代码
+   - 1.5 Python相关文章推荐
 
-      - 👉	[重写os.walk工具](PythonDocs/Python-重写os.walk工具.md)👈
+      - 👉	[【知乎】-Python部分魔法方法一览](https://zhuanlan.zhihu.com/p/344951719)👈
 
 2. Golang从入门到入土
 
@@ -194,7 +194,7 @@
 
    **Demo:**
    
-   👉	[基于flask实现的api-demo](WebFrameDocs/src/demo/flask-demo-api.md)👈
+   👉	[基于flask实现的api-demo](https://github.com/Bean-jun/PersonBlogSystemFlask/blob/master/docs/APIDocuments.md)👈
    
    
 
