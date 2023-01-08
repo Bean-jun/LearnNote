@@ -41,6 +41,10 @@
       - 👉	[多进程](PythonDocs/Python-多进程.md)👈
 
       - 👉	[理解元类](PythonDocs/Python-理解元类.md)👈
+
+      - 👉	[网络编程](#五网络编程)    (涉及TCP、UDP、HTTP协议)👈
+
+      - 👉	[数据库编程](#六数据库)    (见数据库-ORM工具部分)👈
    
    - 1.3 无聊的代码
 
@@ -49,6 +53,8 @@
    - 1.4 工作中常见
 
       - 👉	[常见代码](PythonDocs/Python-常见代码.md)👈
+
+      - 👉	[grpc&protobuf使用](PythonDocs/grpc&protobuf使用.md)👈
    
    - 1.5 Python相关文章推荐
 
@@ -77,6 +83,8 @@
       - 👉	[JQuery基础语法](FrontDocs/JQuery-基础语法.md)👈
    
       - 👉	[Ajax基础语法](FrontDocs/Ajax-基础语法.md)👈
+
+      - 👉	[Vue基础语法](FrontDocs/Vue-基础语法.md)👈
 
 
 
@@ -291,13 +299,11 @@
 
  1. cookie离谱的生效范围
 
-      点👉 [cookie离谱的生效范围](BugDocs/cookies/cookie离谱的生效范围.md)👈查看
+      👉 [cookie离谱的生效范围](BugDocs/cookies/cookie离谱的生效范围.md)👈
 
 
 ### 十一、其他
 
  1. Jetson Nano B01 环境搭建 
 
-    老实说，买来好久了，没倒腾几次，最近看到这货，倒是折腾了一下
-
-      点👉 [Jetson Nano环境搭建](TryDocs/Jetson_Nano_环境搭建.md)👈查看
+      👉 [Jetson Nano环境搭建](TryDocs/Jetson_Nano_环境搭建.md)👈
