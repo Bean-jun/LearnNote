@@ -307,3 +307,7 @@
  1. Jetson Nano B01 环境搭建 
 
       👉 [Jetson Nano环境搭建](TryDocs/Jetson_Nano_环境搭建.md)👈
+
+ 2. pyinstaller打包小技巧
+
+      👉 [Pyinstaller工具小Tips](TryDocs/Pyinstaller工具小tips.md)👈
