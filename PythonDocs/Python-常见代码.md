@@ -328,9 +328,12 @@
                             os.path.join(dirpath, new_filename))
                 for dirname in dirnames:
                     new_dirname = decode_to_plain_text(dirname)
+                    if dirname == new_dirname:
+                        continue
                     folder_dict[abs_path(dirpath, dirname)] = abs_path(dirpath, new_dirname)
             # 修改文件夹名称
-            for old_file, new_file in folder_dict.items():
+            folder_list = sorted(folder_dict.items(), key=lambda x: len(x[0].split(os.sep)), reverse=True)
+            for old_file, new_file in folder_list:
                 os.rename(old_file, new_file)
     ```
 
