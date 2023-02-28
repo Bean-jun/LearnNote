@@ -50,6 +50,8 @@
 
       - 👉	[重写os.walk工具](PythonDocs/Python-重写os.walk工具.md)👈
 
+      - 👉	[限流-简单滑动窗口](PythonDocs/Python-简单滑动窗口.md)👈
+
    - 1.4 工作中常见
 
       - 👉	[常见代码](PythonDocs/Python-常见代码.md)👈
