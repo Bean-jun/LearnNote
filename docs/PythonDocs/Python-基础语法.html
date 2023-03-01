@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>Python-基础语法.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <ol>
+<li>
+<p>查看Python版本</p>
+<div class="highlight highlight-source-shell"><pre>python3 --version</pre></div>
+</li>
+<li>
+<p>第一个HelloWord程序</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/001.py</span>
+
+<span class="pl-en">print</span>(<span class="pl-s">"Hello, Word"</span>)</pre></div>
+</li>
+<li>
+<p>变量赋值</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/002.py</span>
+
+<span class="pl-c"># 单个变量赋值</span>
+<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"小明"</span>
+<span class="pl-en">print</span>(<span class="pl-s1">name</span>)
+
+<span class="pl-c"># 多变量赋统一值</span>
+<span class="pl-s1">tom_age</span> <span class="pl-c1">=</span> <span class="pl-s1">jerry_age</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span>
+<span class="pl-en">print</span>(<span class="pl-s">f"tom的年龄为<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">tom_age</span><span class="pl-kos">}</span></span>, jerry的年龄为<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">jerry_age</span><span class="pl-kos">}</span></span>"</span>)
+
+<span class="pl-c"># 多个变量赋不同值</span>
+<span class="pl-s1">name</span>, <span class="pl-s1">age</span> <span class="pl-c1">=</span> <span class="pl-s">"小明"</span>, <span class="pl-c1">23</span>
+<span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">name</span><span class="pl-kos">}</span></span>的年龄是<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">age</span><span class="pl-kos">}</span></span>岁"</span>)</pre></div>
+</li>
+<li>
+<p>运算符</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/003.py</span>
+
+<span class="pl-c"># 算术运算符</span>
+<span class="pl-s">"""</span>
+<span class="pl-s">+	加 - 两个对象相加	 </span>
+<span class="pl-s">-	减 - 得到负数或是一个数减去另一个数	 </span>
+<span class="pl-s">*	乘 - 两个数相乘或是返回一个被重复若干次的字符串 </span>
+<span class="pl-s">/	除 - x 除以 y	 </span>
+<span class="pl-s">%	取模 - 返回除法的余数	 </span>
+<span class="pl-s">**	幂 - 返回x的y次幂	</span>
+<span class="pl-s">//	取整除 - 向下取接近商的整数</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># 比较运算</span>
+<span class="pl-s">"""</span>
+<span class="pl-s">==	等于 - 比较对象是否相等 </span>
+<span class="pl-s">!=	不等于 - 比较两个对象是否不相等	 </span>
+<span class="pl-s">&gt;	大于 - 返回x是否大于y </span>
+<span class="pl-s">&lt;	小于 - 返回x是否小于y。所有比较运算符返回1表示真，返回0表示假。 </span>
+<span class="pl-s">&gt;=	大于等于 - 返回x是否大于等于y。	 </span>
+<span class="pl-s">&lt;=	小于等于 - 返回x是否小于等于y。</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># 位运算</span>
+<span class="pl-s">"""</span>
+<span class="pl-s">&amp;	按位与运算符：参与运算的两个值,如果两个相应位都为1,则该位的结果为1,否则为0 </span>
+<span class="pl-s">|	按位或运算符：只要对应的二个二进位有一个为1时，结果位就为1。 </span>
+<span class="pl-s">^	按位异或运算符：当两对应的二进位相异时，结果为1 </span>
+<span class="pl-s">~	按位取反运算符：对数据的每个二进制位取反,即把1变为0,把0变为1。~x 类似于 -x-1  </span>
+<span class="pl-s">&lt;&lt;	左移动运算符：运算数的各二进位全部左移若干位，由"&lt;&lt;"右边的数指定移动的位数，高位丢弃，低位补0。 </span>
+<span class="pl-s">&gt;&gt;	右移动运算符：把"&gt;&gt;"左边的运算数的各二进位全部右移若干位，"&gt;&gt;"右边的数指定移动的位数 </span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># 逻辑运算</span>
+<span class="pl-s">"""</span>
+<span class="pl-s">and	x and y	布尔"与" - 如果 x 为 False，x and y 返回 x 的值，否则返回 y 的计算值。	 </span>
+<span class="pl-s">or	x or y	布尔"或" - 如果 x 是 True，它返回 x 的值，否则它返回 y 的计算值。	 </span>
+<span class="pl-s">not	not x	布尔"非" - 如果 x 为 True，返回 False 。如果 x 为 False，它返回 True。 </span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># 成员运算</span>
+<span class="pl-s">"""</span>
+<span class="pl-s">in	如果在指定的序列中找到值返回 True，否则返回 False。	 </span>
+<span class="pl-s">not in	如果在指定的序列中没有找到值返回 True，否则返回 False。</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># 身份运算符</span>
+<span class="pl-s">"""</span>
+<span class="pl-s">is	 判断两个标识符是不是引用自一个对象 </span>
+<span class="pl-s">is not	 判断两个标识符是不是引用自不同对象</span>
+<span class="pl-s"></span>
+<span class="pl-s">is 与 == 区别：</span>
+<span class="pl-s">    is 用于判断两个变量引用对象是否为同一个， == 用于判断引用变量的值是否相等。</span>
+<span class="pl-s">"""</span></pre></div>
+</li>
+<li>
+<p>条件语句</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/004.py</span>
+
+<span class="pl-s1">a</span> <span class="pl-c1">=</span> <span class="pl-c1">20</span>
+<span class="pl-s1">b</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span>
+
+<span class="pl-c"># if结构</span>
+<span class="pl-k">if</span> <span class="pl-s1">a</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">b</span>:
+    <span class="pl-en">print</span>(<span class="pl-s">"yes"</span>)
+
+<span class="pl-c"># if...else结构</span>
+<span class="pl-k">if</span> <span class="pl-s1">a</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">b</span>:
+    <span class="pl-en">print</span>(<span class="pl-s">"yes"</span>)
+<span class="pl-k">else</span>:
+    <span class="pl-en">print</span>(<span class="pl-s">"no"</span>)
+
+<span class="pl-c"># if...elif结构</span>
+<span class="pl-k">if</span> <span class="pl-s1">a</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">b</span>:
+    <span class="pl-en">print</span>(<span class="pl-s">"yes"</span>)
+<span class="pl-k">elif</span> <span class="pl-s1">b</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">0</span>:
+    <span class="pl-en">print</span>(<span class="pl-s">"???"</span>)
+<span class="pl-k">else</span>:
+    <span class="pl-en">print</span>(<span class="pl-s">"no"</span>)
+
+<span class="pl-c"># 嵌套分支</span>
+<span class="pl-k">if</span> <span class="pl-s1">a</span> <span class="pl-c1">&gt;</span> <span class="pl-s1">b</span>:
+    <span class="pl-k">if</span> <span class="pl-s1">a</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">21</span>:
+        <span class="pl-en">print</span>(<span class="pl-s">"yes"</span>)
+    <span class="pl-k">elif</span> <span class="pl-s1">b</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">0</span>:
+        <span class="pl-en">print</span>(<span class="pl-s">"???"</span>)
+<span class="pl-k">else</span>:
+    <span class="pl-en">print</span>(<span class="pl-s">"no"</span>)</pre></div>
+</li>
+<li>
+<p>循环语句</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/005.py</span>
+
+<span class="pl-c"># for循环</span>
+<span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">10</span>):
+    <span class="pl-en">print</span>(<span class="pl-s1">i</span>)
+
+<span class="pl-c"># while循环</span>
+<span class="pl-s1">flag</span> <span class="pl-c1">=</span> <span class="pl-c1">True</span>
+<span class="pl-s1">a</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>
+<span class="pl-k">while</span> <span class="pl-c1">True</span>:
+    <span class="pl-k">if</span> <span class="pl-s1">flag</span> <span class="pl-c1">is</span> <span class="pl-c1">False</span>:
+        <span class="pl-k">break</span>
+    <span class="pl-s1">a</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span>
+    <span class="pl-en">print</span>(<span class="pl-s">'哈'</span> <span class="pl-c1">*</span> <span class="pl-s1">a</span>, <span class="pl-s">"!"</span>)
+    <span class="pl-k">if</span> <span class="pl-s1">a</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">6</span>:
+        <span class="pl-s1">flag</span> <span class="pl-c1">=</span> <span class="pl-c1">False</span></pre></div>
+</li>
+<li>
+<p>函数</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/006.py</span>
+
+<span class="pl-c"># 无参函数</span>
+<span class="pl-k">def</span> <span class="pl-en">function_1</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"这是一个函数"</span>)
+    
+<span class="pl-en">function_1</span>()
+
+<span class="pl-c"># 有参函数</span>
+<span class="pl-k">def</span> <span class="pl-en">function_2</span>(<span class="pl-s1">name</span>):
+    <span class="pl-en">print</span>(<span class="pl-s">f"大家好，我叫<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">name</span><span class="pl-kos">}</span></span>"</span>)
+    
+<span class="pl-en">function_2</span>(<span class="pl-s">"小明"</span>)
+
+<span class="pl-c"># 通用参数函数</span>
+<span class="pl-k">def</span> <span class="pl-en">function_3</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+    <span class="pl-en">print</span>(<span class="pl-s">"元组形式:"</span>, <span class="pl-s1">args</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"字典形式:"</span>, <span class="pl-s1">kwargs</span>)
+    
+<span class="pl-en">function_3</span>(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-s1">name</span><span class="pl-c1">=</span><span class="pl-s">"小明"</span>, <span class="pl-s1">age</span><span class="pl-c1">=</span><span class="pl-c1">23</span>)</pre></div>
+</li>
+<li>
+<p>面向对象-01</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/007.py</span>
+
+<span class="pl-k">class</span> <span class="pl-v">Foo</span>():
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">msg</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">msg</span> <span class="pl-c1">=</span> <span class="pl-s1">msg</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">show</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s1">self</span>.<span class="pl-s1">msg</span>)
+
+    <span class="pl-en">@<span class="pl-s1">classmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">foo_class_method</span>(<span class="pl-s1">cls</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"我是<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">cls</span>.<span class="pl-s1">__name__</span><span class="pl-kos">}</span></span>类, 但是我在调用自己的静态方法哦~  "</span>, <span class="pl-s1">end</span><span class="pl-c1">=</span><span class="pl-s">''</span>)
+        <span class="pl-s1">cls</span>.<span class="pl-en">foo_static_method</span>()
+
+    <span class="pl-en">@<span class="pl-s1">staticmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">foo_static_method</span>():
+        <span class="pl-en">print</span>(<span class="pl-s">"Foo的静态方法"</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s1">foo</span> <span class="pl-c1">=</span> <span class="pl-v">Foo</span>(<span class="pl-s">"哈哈哈"</span>)
+    <span class="pl-s1">foo</span>.<span class="pl-en">show</span>()
+    <span class="pl-s1">foo</span>.<span class="pl-en">foo_class_method</span>()
+    <span class="pl-s1">foo</span>.<span class="pl-en">foo_static_method</span>()</pre></div>
+</li>
+<li>
+<p>面向对象-02</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/008.py</span>
+
+<span class="pl-k">class</span> <span class="pl-v">A</span>():
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">pass</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">run</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">raise</span> <span class="pl-v">Exception</span>(<span class="pl-s">"请子类实现"</span>)
+
+<span class="pl-k">class</span> <span class="pl-v">B</span>(<span class="pl-v">A</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">name</span>):
+        <span class="pl-en">super</span>().<span class="pl-en">__init__</span>()
+        <span class="pl-s1">self</span>.<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s1">name</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">run</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"我<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span>是被迫实现的run方法哦~"</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s1">b</span> <span class="pl-c1">=</span> <span class="pl-v">B</span>(<span class="pl-s">"小明"</span>)
+    <span class="pl-s1">b</span>.<span class="pl-en">run</span>()</pre></div>
+</li>
+</ol>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

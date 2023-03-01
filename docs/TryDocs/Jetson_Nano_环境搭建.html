@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>Jetson_Nano_环境搭建.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h1><a id="user-content-jetson-nano-舒适折腾指南" class="anchor" aria-hidden="true" href="#jetson-nano-舒适折腾指南"><span aria-hidden="true" class="octicon octicon-link"></span></a>jetson nano 舒适折腾指南</h1>
+<h3><a id="user-content-1-更新镜像源" class="anchor" aria-hidden="true" href="#1-更新镜像源"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. 更新镜像源</h3>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to</span>
+<span class="pl-c"><span class="pl-c">#</span> newer versions of the distribution.</span>
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic main restricted
+<span class="pl-c"><span class="pl-c">#</span> deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic main restricted</span>
+
+<span class="pl-c"><span class="pl-c">#</span># Major bug fix updates produced after the final release of the</span>
+<span class="pl-c"><span class="pl-c">#</span># distribution.</span>
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main restricted
+<span class="pl-c"><span class="pl-c">#</span> deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main restricted</span>
+
+<span class="pl-c"><span class="pl-c">#</span># N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu</span>
+<span class="pl-c"><span class="pl-c">#</span># team. Also, please note that software in universe WILL NOT receive any</span>
+<span class="pl-c"><span class="pl-c">#</span># review or updates from the Ubuntu security team.</span>
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic universe
+<span class="pl-c"><span class="pl-c">#</span> deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic universe</span>
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-updates universe
+<span class="pl-c"><span class="pl-c">#</span> deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-updates universe</span>
+
+<span class="pl-c"><span class="pl-c">#</span># N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu</span>
+<span class="pl-c"><span class="pl-c">#</span># team, and may not be under a free licence. Please satisfy yourself as to</span>
+<span class="pl-c"><span class="pl-c">#</span># your rights to use the software. Also, please note that software in</span>
+<span class="pl-c"><span class="pl-c">#</span># multiverse WILL NOT receive any review or updates from the Ubuntu</span>
+<span class="pl-c"><span class="pl-c">#</span># security team.</span>
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic multiverse
+<span class="pl-c"><span class="pl-c">#</span> deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic multiverse</span>
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-updates multiverse
+<span class="pl-c"><span class="pl-c">#</span> deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-updates multiverse</span>
+
+<span class="pl-c"><span class="pl-c">#</span># N.B. software from this repository may not have been tested as</span>
+<span class="pl-c"><span class="pl-c">#</span># extensively as that contained in the main release, although it includes</span>
+<span class="pl-c"><span class="pl-c">#</span># newer versions of some applications which may provide useful features.</span>
+<span class="pl-c"><span class="pl-c">#</span># Also, please note that software in backports WILL NOT receive any review</span>
+<span class="pl-c"><span class="pl-c">#</span># or updates from the Ubuntu security team.</span>
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-backports main restricted universe multiverse
+<span class="pl-c"><span class="pl-c">#</span> deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-backports main restricted universe multiverse</span>
+
+<span class="pl-c"><span class="pl-c">#</span># Uncomment the following two lines to add software from Canonical's</span>
+<span class="pl-c"><span class="pl-c">#</span># 'partner' repository.</span>
+<span class="pl-c"><span class="pl-c">#</span># This software is not part of Ubuntu, but is offered by Canonical and the</span>
+<span class="pl-c"><span class="pl-c">#</span># respective vendors as a service to Ubuntu users.</span>
+<span class="pl-c"><span class="pl-c">#</span> deb http://archive.canonical.com/ubuntu bionic partner</span>
+<span class="pl-c"><span class="pl-c">#</span> deb-src http://archive.canonical.com/ubuntu bionic partner</span>
+
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-security main restricted
+<span class="pl-c"><span class="pl-c">#</span> deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-security main restricted</span>
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-security universe
+<span class="pl-c"><span class="pl-c">#</span> deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-security universe</span>
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-security multiverse
+<span class="pl-c"><span class="pl-c">#</span> deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-security multiverse</span></pre></div>
+<h3><a id="user-content-2-安装输入法谷歌输入法" class="anchor" aria-hidden="true" href="#2-安装输入法谷歌输入法"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. 安装输入法[谷歌输入法]</h3>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> settings -&gt; language support 将 keyboard input method system 设置为fcitx</span>
+sudo apt-get install fcitx-googlepinyin
+<span class="pl-c"><span class="pl-c">#</span> 重启</span>
+sudo reboot
+<span class="pl-c"><span class="pl-c">#</span> 可能出现的问题</span></pre></div>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 中文候选词无法出现，操作方案 不使用 fcitx-qimpanel  这个有毒</span>
+killall fcitx-qimpanel
+sudo apt-get remove fcitx-ui-qimpanel </pre></div>
+<h3><a id="user-content-3-安装娱乐环境让你的nano可以使用蓝牙音箱" class="anchor" aria-hidden="true" href="#3-安装娱乐环境让你的nano可以使用蓝牙音箱"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. 安装娱乐环境[让你的nano可以使用蓝牙音箱]</h3>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 打开配置文件</span>
+sudo vim /lib/systemd/system/bluetooth.service.d/nv-bluetooth-service.conf
+<span class="pl-c"><span class="pl-c">#</span> 修改配置文件</span>
+ExecStart=/usr/lib/bluetooth/bluetoothd -d --noplugin=audio,a2dp,avrcp
+<span class="pl-c"><span class="pl-c">#</span> 修改为</span>
+ExecStart=/usr/lib/bluetooth/bluetoothd -d
+<span class="pl-c"><span class="pl-c">#</span> 执行命令</span>
+sudo apt-get update
+sudo apt-get install pulseaudio-module-bluetooth
+sudo reboot
+<span class="pl-c"><span class="pl-c">#</span> 连接蓝牙音箱试试</span></pre></div>
+<h3><a id="user-content-4-安装vscode" class="anchor" aria-hidden="true" href="#4-安装vscode"><span aria-hidden="true" class="octicon octicon-link"></span></a>4. 安装vscode</h3>
+<pre><code>直接上清华源下载VS codium安装即可
+</code></pre>
+<h3><a id="user-content-5-安装开发环境记住一点--无脑选择arm64就行" class="anchor" aria-hidden="true" href="#5-安装开发环境记住一点--无脑选择arm64就行"><span aria-hidden="true" class="octicon octicon-link"></span></a>5. 安装开发环境[记住一点  无脑选择arm64就行]</h3>
+<pre><code>5.1 安装golang环境
+
+5.2 安装java环境
+</code></pre>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> bashrc 中添加如下配置</span>
+<span class="pl-k">export</span> PATH=/usr/local/node/bin:<span class="pl-smi">$PATH</span>
+<span class="pl-k">export</span> PATH=/usr/local/go/bin:<span class="pl-smi">$PATH</span>
+<span class="pl-k">export</span> JAVA_HOME=/usr/local/jdk17
+<span class="pl-k">export</span> PATH=<span class="pl-smi">$JAVA_HOME</span>/bin:<span class="pl-smi">$PATH</span></pre></div>
+<h3><a id="user-content-6-更新git" class="anchor" aria-hidden="true" href="#6-更新git"><span aria-hidden="true" class="octicon octicon-link"></span></a>6. 更新git</h3>
+<div class="highlight highlight-source-shell"><pre>sudo add-apt-repository ppa:git-core/ppa
+sudo apt update
+sudo apt install git</pre></div>
+<h3><a id="user-content-7-安装vnc远程" class="anchor" aria-hidden="true" href="#7-安装vnc远程"><span aria-hidden="true" class="octicon octicon-link"></span></a>7. 安装vnc远程</h3>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 参见官方说明文档 https://developer.nvidia.com/embedded/learn/tutorials/vnc-setup</span>
+<span class="pl-c"><span class="pl-c">#</span> 1. 安装vnc</span>
+sudo apt update
+sudo apt install vino
+<span class="pl-c"><span class="pl-c">#</span> 2. 创建一个目录</span>
+mkdir -p <span class="pl-k">~</span>/.config/autostart
+cp /usr/share/applications/vino-server.desktop <span class="pl-k">~</span>/.config/autostart
+<span class="pl-c"><span class="pl-c">#</span> 3. 配置vnc server</span>
+gsettings <span class="pl-c1">set</span> org.gnome.Vino prompt-enabled <span class="pl-c1">false</span>
+gsettings <span class="pl-c1">set</span> org.gnome.Vino require-encryption <span class="pl-c1">false</span>
+<span class="pl-c"><span class="pl-c">#</span> 4. 设置密码</span>
+gsettings <span class="pl-c1">set</span> org.gnome.Vino authentication-methods <span class="pl-s"><span class="pl-pds">"</span>['vnc']<span class="pl-pds">"</span></span>
+gsettings <span class="pl-c1">set</span> org.gnome.Vino vnc-password <span class="pl-s"><span class="pl-pds">$(</span>echo -n <span class="pl-s"><span class="pl-pds">'</span>your password<span class="pl-pds">'</span></span><span class="pl-k">|</span>base64<span class="pl-pds">)</span></span>
+<span class="pl-c"><span class="pl-c">#</span> 5. 重启即可</span>
+sudo reboot</pre></div>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

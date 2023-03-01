@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>SQLAlchemy基本使用.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h3><a id="user-content-1-链接数据库" class="anchor" aria-hidden="true" href="#1-链接数据库"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. 链接数据库</h3>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># SQLAlchemy本身无法操作数据库，其必须以来pymsql等第三方插件，Dialect用于和数据API进行交流，根据配置文件的不同调用不同的数据库API，从而实现对数据库的操作，如：</span>
+
+<span class="pl-c"># https://docs.sqlalchemy.org/en/14/dialects/index.html</span>
+
+<span class="pl-c"># MySQL-Python </span>
+<span class="pl-c">#     mysql+mysqldb://&lt;user&gt;:&lt;password&gt;@&lt;host&gt;[:&lt;port&gt;]/&lt;dbname&gt;</span>
+<span class="pl-c"># </span>
+<span class="pl-c"># pymysql </span>
+<span class="pl-c">#     mysql+pymysql://&lt;username&gt;:&lt;password&gt;@&lt;host&gt;/&lt;dbname&gt;[?&lt;options&gt;]</span>
+<span class="pl-c"># </span>
+<span class="pl-c"># MySQL-Connector </span>
+<span class="pl-c">#     mysql+mysqlconnector://&lt;user&gt;:&lt;password&gt;@&lt;host&gt;[:&lt;port&gt;]/&lt;dbname&gt;</span>
+<span class="pl-c"># </span>
+<span class="pl-c"># cx_Oracle </span>
+<span class="pl-c">#     oracle+cx_oracle://user:pass@host:port/dbname[?key=value&amp;key=value...]</span></pre></div>
+<h3><a id="user-content-2-使用原生sql" class="anchor" aria-hidden="true" href="#2-使用原生sql"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. 使用原生sql</h3>
+<ul>
+<li>使用 Engine/ConnectionPooling/Dialect 进行数据库操作，Engine使用ConnectionPooling连接数据库，然后再通过Dialect执行SQL语句。</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># -*- coding:utf-8 -*-</span>
+<span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span> <span class="pl-k">import</span> <span class="pl-s1">create_engine</span>
+
+<span class="pl-c"># 链接数据库</span>
+<span class="pl-s1">engine</span> <span class="pl-c1">=</span> <span class="pl-en">create_engine</span>(<span class="pl-s">"mysql+pymysql://root:123@127.0.0.1:3306/t1"</span>, <span class="pl-s1">max_overflow</span><span class="pl-c1">=</span><span class="pl-c1">5</span>)
+
+<span class="pl-c"># 执行SQL</span>
+<span class="pl-c"># cur = engine.execute(</span>
+<span class="pl-c">#     "INSERT INTO hosts (host, color_id) VALUES ('1.1.1.22', 3)"</span>
+<span class="pl-c"># )</span>
+
+<span class="pl-c"># 新插入行自增ID</span>
+<span class="pl-c"># cur.lastrowid</span>
+
+<span class="pl-c"># 执行SQL</span>
+<span class="pl-c"># cur = engine.execute(</span>
+<span class="pl-c">#     "INSERT INTO hosts (host, color_id) VALUES(%s, %s)",[('1.1.1.22', 3),('1.1.1.221', 3),]</span>
+<span class="pl-c"># )</span>
+
+
+<span class="pl-c"># 执行SQL</span>
+<span class="pl-c"># cur = engine.execute(</span>
+<span class="pl-c">#     "INSERT INTO hosts (host, color_id) VALUES (%(host)s, %(color_id)s)",</span>
+<span class="pl-c">#     host='1.1.1.99', color_id=3</span>
+<span class="pl-c"># )</span>
+
+<span class="pl-c"># 执行SQL</span>
+<span class="pl-c"># cur = engine.execute('select * from hosts')</span>
+<span class="pl-c"># 获取第一行数据</span>
+<span class="pl-c"># cur.fetchone()</span>
+<span class="pl-c"># 获取第n行数据</span>
+<span class="pl-c"># cur.fetchmany(3)</span>
+<span class="pl-c"># 获取所有数据</span>
+<span class="pl-c"># cur.fetchall()</span></pre></div>
+<h3><a id="user-content-2-使用orm实现对数据库的操作" class="anchor" aria-hidden="true" href="#2-使用orm实现对数据库的操作"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. 使用orm实现对数据库的操作</h3>
+<ul>
+<li>使用 ORM/Schema Type/SQL Expression Language/Engine/ConnectionPooling/Dialect 所有组件对数据进行操作。根据类创建对象，对象转换成SQL，执行SQL。</li>
+</ul>
+<h4><a id="user-content-21-创建表结构" class="anchor" aria-hidden="true" href="#21-创建表结构"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.1 创建表结构</h4>
+<div class="highlight highlight-source-python"><pre><span class="pl-s">"""</span>
+<span class="pl-s">注意对于一对多及多对多的结构，使用relationship来实现关联，方便后期的数据查询及添加</span>
+<span class="pl-s"></span>
+<span class="pl-s"># 例如</span>
+<span class="pl-s">cls = relationship("Classes", backref='student')    # 一对多的实现</span>
+<span class="pl-s">servers = relationship('Server', secondary='server2group', backref='groups')  # 多对多需要添加secondary字段</span>
+<span class="pl-s"></span>
+<span class="pl-s">"""</span>
+<span class="pl-k">import</span> <span class="pl-s1">datetime</span>
+
+<span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span> <span class="pl-k">import</span> <span class="pl-v">String</span>, <span class="pl-v">Column</span>, <span class="pl-v">Integer</span>, <span class="pl-v">DateTime</span>, <span class="pl-v">ForeignKey</span>, <span class="pl-v">UniqueConstraint</span>, <span class="pl-s1">create_engine</span>
+<span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span>.<span class="pl-s1">orm</span> <span class="pl-k">import</span> <span class="pl-s1">declarative_base</span>
+
+<span class="pl-c"># 链接数据库</span>
+<span class="pl-s1">engine</span> <span class="pl-c1">=</span> <span class="pl-en">create_engine</span>(<span class="pl-s">"mysql+pymysql://root:00090009@192.168.199.103:3306/sqlalchemy?charset=utf8"</span>, <span class="pl-s1">max_overflow</span><span class="pl-c1">=</span><span class="pl-c1">5</span>)
+<span class="pl-v">Base</span> <span class="pl-c1">=</span> <span class="pl-en">declarative_base</span>()
+
+
+<span class="pl-k">class</span> <span class="pl-v">Classes</span>(<span class="pl-v">Base</span>):
+    <span class="pl-s">"""创建班级表"""</span>
+    <span class="pl-s1">__tablename__</span> <span class="pl-c1">=</span> <span class="pl-s">'classes'</span>
+    <span class="pl-s1">id</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">Integer</span>, <span class="pl-s1">primary_key</span><span class="pl-c1">=</span><span class="pl-c1">True</span>, <span class="pl-s1">autoincrement</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+    <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">String</span>(<span class="pl-c1">32</span>), <span class="pl-s1">nullable</span><span class="pl-c1">=</span><span class="pl-c1">False</span>, <span class="pl-s1">unique</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+
+
+<span class="pl-c"># 一对多实例</span>
+<span class="pl-k">class</span> <span class="pl-v">Student</span>(<span class="pl-v">Base</span>):
+    <span class="pl-s">"""创建学生表"""</span>
+    <span class="pl-s1">__tablename__</span> <span class="pl-c1">=</span> <span class="pl-s">'student'</span>
+    <span class="pl-s1">id</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">Integer</span>, <span class="pl-s1">primary_key</span><span class="pl-c1">=</span><span class="pl-c1">True</span>, <span class="pl-s1">autoincrement</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+    <span class="pl-s1">username</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">String</span>(<span class="pl-c1">32</span>), <span class="pl-s1">nullable</span><span class="pl-c1">=</span><span class="pl-c1">False</span>, <span class="pl-s1">unique</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+    <span class="pl-s1">password</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">String</span>(<span class="pl-c1">32</span>), <span class="pl-s1">nullable</span><span class="pl-c1">=</span><span class="pl-c1">False</span>)
+    <span class="pl-s1">ctime</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">DateTime</span>, <span class="pl-s1">default</span><span class="pl-c1">=</span><span class="pl-s1">datetime</span>.<span class="pl-s1">datetime</span>.<span class="pl-s1">now</span>)
+    <span class="pl-s1">class_id</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">Integer</span>, <span class="pl-v">ForeignKey</span>(<span class="pl-s">'classes.id'</span>))
+
+
+<span class="pl-c"># 多对多实例</span>
+<span class="pl-k">class</span> <span class="pl-v">Hobby</span>(<span class="pl-v">Base</span>):
+    <span class="pl-s">"""爱好"""</span>
+    <span class="pl-s1">__tablename__</span> <span class="pl-c1">=</span> <span class="pl-s">'hobby'</span>
+    <span class="pl-s1">id</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">Integer</span>, <span class="pl-s1">primary_key</span><span class="pl-c1">=</span><span class="pl-c1">True</span>, <span class="pl-s1">autoincrement</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+    <span class="pl-s1">caption</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">String</span>(<span class="pl-c1">32</span>), <span class="pl-s1">default</span><span class="pl-c1">=</span><span class="pl-s">"看鸡你太美"</span>)
+
+
+<span class="pl-s">"""</span>
+<span class="pl-s">sqlalchemy对于多对多需要手动创建第三张表</span>
+<span class="pl-s">"""</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">Student2Hobby</span>(<span class="pl-v">Base</span>):
+    <span class="pl-s">"""学生爱好表"""</span>
+    <span class="pl-s1">__tablename__</span> <span class="pl-c1">=</span> <span class="pl-s">'student2hobby'</span>
+    <span class="pl-s1">id</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">Integer</span>, <span class="pl-s1">primary_key</span><span class="pl-c1">=</span><span class="pl-c1">True</span>, <span class="pl-s1">autoincrement</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+    <span class="pl-s1">student_id</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">Integer</span>, <span class="pl-v">ForeignKey</span>(<span class="pl-s">'student.id'</span>))
+    <span class="pl-s1">hobby_id</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">Integer</span>, <span class="pl-v">ForeignKey</span>(<span class="pl-s">'hobby.id'</span>))
+
+    <span class="pl-s1">__table_args__</span> <span class="pl-c1">=</span> (
+        <span class="pl-v">UniqueConstraint</span>(<span class="pl-s">'student_id'</span>, <span class="pl-s">'hobby_id'</span>, <span class="pl-s1">name</span><span class="pl-c1">=</span><span class="pl-s">'uix_student_id_hobby_id'</span>),  <span class="pl-c"># 创建联合索引</span>
+    )
+
+
+<span class="pl-k">def</span> <span class="pl-en">init_db</span>():
+    <span class="pl-c"># 创建表</span>
+    <span class="pl-v">Base</span>.<span class="pl-s1">metadata</span>.<span class="pl-en">create_all</span>(<span class="pl-s1">engine</span>)
+
+
+<span class="pl-k">def</span> <span class="pl-en">drop_db</span>():
+    <span class="pl-c"># 删除表</span>
+    <span class="pl-v">Base</span>.<span class="pl-s1">metadata</span>.<span class="pl-en">drop_all</span>(<span class="pl-s1">engine</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-en">init_db</span>()
+    <span class="pl-en">drop_db</span>()</pre></div>
+<h4><a id="user-content-22-操作表" class="anchor" aria-hidden="true" href="#22-操作表"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2 操作表</h4>
+<p>注意：以下操作都必须在<code>创建链接</code>和<code>关闭链接</code>之间完成</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span> <span class="pl-k">import</span> <span class="pl-s1">create_engine</span>
+<span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span>.<span class="pl-s1">orm</span> <span class="pl-k">import</span> <span class="pl-s1">sessionmaker</span>
+
+<span class="pl-c"># 链接数据库</span>
+<span class="pl-s1">engine</span> <span class="pl-c1">=</span> <span class="pl-en">create_engine</span>(<span class="pl-s">"mysql+pymysql://root:00090009@192.168.199.103:3306/sqlalchemy?charset=utf8"</span>, <span class="pl-s1">max_overflow</span><span class="pl-c1">=</span><span class="pl-c1">5</span>)
+
+<span class="pl-c"># 创建链接</span>
+<span class="pl-v">Session</span> <span class="pl-c1">=</span> <span class="pl-en">sessionmaker</span>(<span class="pl-s1">bind</span><span class="pl-c1">=</span><span class="pl-s1">engine</span>)
+<span class="pl-s1">session</span> <span class="pl-c1">=</span> <span class="pl-v">Session</span>()
+
+<span class="pl-s">"""</span>
+<span class="pl-s">增加、修改、删除、查询</span>
+<span class="pl-s">"""</span>
+
+<span class="pl-c"># 关闭链接</span>
+<span class="pl-s1">session</span>.<span class="pl-en">close</span>()</pre></div>
+<ul>
+<li>增加</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-s1">session</span>.<span class="pl-en">add</span>(<span class="pl-v">Classes</span>(<span class="pl-s1">name</span><span class="pl-c1">=</span><span class="pl-s">'三年级二班'</span>))  <span class="pl-c"># 单条</span>
+<span class="pl-s1">session</span>.<span class="pl-en">add_all</span>([  <span class="pl-c"># 多条增加</span>
+    <span class="pl-v">Classes</span>(<span class="pl-s1">name</span><span class="pl-c1">=</span><span class="pl-s">'三年级1班'</span>),
+    <span class="pl-v">Classes</span>(<span class="pl-s1">name</span><span class="pl-c1">=</span><span class="pl-s">'三年级2班'</span>),
+    <span class="pl-v">Classes</span>(<span class="pl-s1">name</span><span class="pl-c1">=</span><span class="pl-s">'三年级3班'</span>)
+])
+<span class="pl-s1">session</span>.<span class="pl-en">commit</span>()</pre></div>
+<ul>
+<li>查询</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Classes</span>).<span class="pl-en">all</span>()
+<span class="pl-en">print</span>(<span class="pl-s1">res</span>)
+<span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Classes</span>).<span class="pl-en">filter</span>(<span class="pl-v">Classes</span>.<span class="pl-s1">id</span> <span class="pl-c1">==</span> <span class="pl-c1">1</span>).<span class="pl-en">all</span>()
+<span class="pl-en">print</span>(<span class="pl-s1">res</span>)
+<span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Classes</span>).<span class="pl-en">filter_by</span>(<span class="pl-v">Classes</span>.<span class="pl-s1">id</span> <span class="pl-c1">=</span> <span class="pl-c1">1</span>).<span class="pl-en">all</span>()
+<span class="pl-en">print</span>(<span class="pl-s1">res</span>)</pre></div>
+<ul>
+<li>修改
+<ul>
+<li>特殊设置
+<ul>
+<li>synchronize_session=False # 加在其中表示字符串拼接</li>
+<li>synchronize_session="evaluate"  # 加在其中表示数字相加</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Classes</span>).<span class="pl-en">filter</span>(<span class="pl-v">Classes</span>.<span class="pl-s1">id</span> <span class="pl-c1">==</span> <span class="pl-c1">1</span>).<span class="pl-en">update</span>({<span class="pl-v">Classes</span>.<span class="pl-s1">name</span>: <span class="pl-s">'三年级0班'</span>})
+<span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Classes</span>).<span class="pl-en">filter</span>(<span class="pl-v">Classes</span>.<span class="pl-s1">id</span> <span class="pl-c1">==</span> <span class="pl-c1">2</span>).<span class="pl-en">update</span>({<span class="pl-v">Classes</span>.<span class="pl-s1">name</span>: <span class="pl-s">'三年级0班'</span>}，<span class="pl-s1">synchronize_session</span> <span class="pl-c1">=</span> <span class="pl-c1">False</span>)
+<span class="pl-s1">session</span>.<span class="pl-en">commit</span>()</pre></div>
+<ul>
+<li>删除</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Classes</span>).<span class="pl-en">filter</span>(<span class="pl-v">Classes</span>.<span class="pl-s1">id</span> <span class="pl-c1">==</span> <span class="pl-c1">4</span>).<span class="pl-en">delete</span>()
+<span class="pl-s1">session</span>.<span class="pl-en">commit</span>()</pre></div>
+<h4><a id="user-content-23-查询中的其他操作" class="anchor" aria-hidden="true" href="#23-查询中的其他操作"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3 查询中的其他操作</h4>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span> <span class="pl-k">import</span> <span class="pl-s1">and_</span>, <span class="pl-s1">or_</span>
+
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>).<span class="pl-en">filter</span>(<span class="pl-en">and_</span>(<span class="pl-v">Users</span>.<span class="pl-s1">id</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">3</span>, <span class="pl-v">Users</span>.<span class="pl-s1">name</span> <span class="pl-c1">==</span> <span class="pl-s">'eric'</span>)).<span class="pl-en">all</span>()
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>).<span class="pl-en">filter</span>(<span class="pl-en">or_</span>(<span class="pl-v">Users</span>.<span class="pl-s1">id</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">2</span>, <span class="pl-v">Users</span>.<span class="pl-s1">name</span> <span class="pl-c1">==</span> <span class="pl-s">'eric'</span>)).<span class="pl-en">all</span>()
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>).<span class="pl-en">filter</span>(
+    <span class="pl-en">or_</span>(
+        <span class="pl-v">Users</span>.<span class="pl-s1">id</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">2</span>,
+        <span class="pl-en">and_</span>(<span class="pl-v">Users</span>.<span class="pl-s1">name</span> <span class="pl-c1">==</span> <span class="pl-s">'eric'</span>, <span class="pl-v">Users</span>.<span class="pl-s1">id</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">3</span>),
+        <span class="pl-v">Users</span>.<span class="pl-s1">extra</span> <span class="pl-c1">!=</span> <span class="pl-s">""</span>
+    )).<span class="pl-en">all</span>()
+
+<span class="pl-c"># 通配符</span>
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>).<span class="pl-en">filter</span>(<span class="pl-v">Users</span>.<span class="pl-s1">name</span>.<span class="pl-en">like</span>(<span class="pl-s">'e%'</span>)).<span class="pl-en">all</span>()
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>).<span class="pl-en">filter</span>(<span class="pl-c1">~</span><span class="pl-v">Users</span>.<span class="pl-s1">name</span>.<span class="pl-en">like</span>(<span class="pl-s">'e%'</span>)).<span class="pl-en">all</span>()
+
+<span class="pl-c"># 正则</span>
+<span class="pl-s1">db</span>.<span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>).<span class="pl-en">filter</span>(<span class="pl-v">User</span>.<span class="pl-s1">name</span>.<span class="pl-en">op</span>(<span class="pl-s">'regexp'</span>)(<span class="pl-s">r'[[:&lt;:]]John[[:&gt;:]]'</span>)).<span class="pl-en">all</span>() 
+
+<span class="pl-c"># 限制</span>
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>)[<span class="pl-c1">1</span>:<span class="pl-c1">2</span>]
+
+<span class="pl-c"># 排序</span>
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>).<span class="pl-en">order_by</span>(<span class="pl-v">Users</span>.<span class="pl-s1">name</span>.<span class="pl-en">desc</span>()).<span class="pl-en">all</span>()
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>).<span class="pl-en">order_by</span>(<span class="pl-v">Users</span>.<span class="pl-s1">name</span>.<span class="pl-en">desc</span>(), <span class="pl-v">Users</span>.<span class="pl-s1">id</span>.<span class="pl-en">asc</span>()).<span class="pl-en">all</span>()
+
+<span class="pl-c"># 分组</span>
+<span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span>.<span class="pl-s1">sql</span> <span class="pl-k">import</span> <span class="pl-s1">func</span>
+
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>).<span class="pl-en">group_by</span>(<span class="pl-v">Users</span>.<span class="pl-s1">extra</span>).<span class="pl-en">all</span>()
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(
+    <span class="pl-s1">func</span>.<span class="pl-en">max</span>(<span class="pl-v">Users</span>.<span class="pl-s1">id</span>),
+    <span class="pl-s1">func</span>.<span class="pl-en">sum</span>(<span class="pl-v">Users</span>.<span class="pl-s1">id</span>),
+    <span class="pl-s1">func</span>.<span class="pl-en">min</span>(<span class="pl-v">Users</span>.<span class="pl-s1">id</span>)).<span class="pl-en">group_by</span>(<span class="pl-v">Users</span>.<span class="pl-s1">name</span>).<span class="pl-en">all</span>()
+
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(
+    <span class="pl-s1">func</span>.<span class="pl-en">max</span>(<span class="pl-v">Users</span>.<span class="pl-s1">id</span>),
+    <span class="pl-s1">func</span>.<span class="pl-en">sum</span>(<span class="pl-v">Users</span>.<span class="pl-s1">id</span>),
+    <span class="pl-s1">func</span>.<span class="pl-en">min</span>(<span class="pl-v">Users</span>.<span class="pl-s1">id</span>)).<span class="pl-en">group_by</span>(<span class="pl-v">Users</span>.<span class="pl-s1">name</span>).<span class="pl-en">having</span>(<span class="pl-s1">func</span>.<span class="pl-en">min</span>(<span class="pl-v">Users</span>.<span class="pl-s1">id</span>) <span class="pl-c1">&gt;</span> <span class="pl-c1">2</span>).<span class="pl-en">all</span>()
+
+<span class="pl-c"># 连表</span>
+
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>, <span class="pl-v">Favor</span>).<span class="pl-en">filter</span>(<span class="pl-v">Users</span>.<span class="pl-s1">id</span> <span class="pl-c1">==</span> <span class="pl-v">Favor</span>.<span class="pl-s1">nid</span>).<span class="pl-en">all</span>()
+
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Person</span>).<span class="pl-en">join</span>(<span class="pl-v">Favor</span>).<span class="pl-en">all</span>()
+
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Person</span>).<span class="pl-en">join</span>(<span class="pl-v">Favor</span>, <span class="pl-s1">isouter</span><span class="pl-c1">=</span><span class="pl-c1">True</span>).<span class="pl-en">all</span>()
+
+<span class="pl-c"># 组合</span>
+<span class="pl-s1">q1</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>.<span class="pl-s1">name</span>).<span class="pl-en">filter</span>(<span class="pl-v">Users</span>.<span class="pl-s1">id</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">2</span>)
+<span class="pl-s1">q2</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Favor</span>.<span class="pl-s1">caption</span>).<span class="pl-en">filter</span>(<span class="pl-v">Favor</span>.<span class="pl-s1">nid</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">2</span>)
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">q1</span>.<span class="pl-en">union</span>(<span class="pl-s1">q2</span>).<span class="pl-en">all</span>()
+
+<span class="pl-s1">q1</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Users</span>.<span class="pl-s1">name</span>).<span class="pl-en">filter</span>(<span class="pl-v">Users</span>.<span class="pl-s1">id</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">2</span>)
+<span class="pl-s1">q2</span> <span class="pl-c1">=</span> <span class="pl-s1">session</span>.<span class="pl-en">query</span>(<span class="pl-v">Favor</span>.<span class="pl-s1">caption</span>).<span class="pl-en">filter</span>(<span class="pl-v">Favor</span>.<span class="pl-s1">nid</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">2</span>)
+<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">q1</span>.<span class="pl-en">union_all</span>(<span class="pl-s1">q2</span>).<span class="pl-en">all</span>()</pre></div>
+<h4><a id="user-content-24-关联关系介绍" class="anchor" aria-hidden="true" href="#24-关联关系介绍"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.4 关联关系介绍</h4>
+<p><a href="https://www.cnblogs.com/DragonFire/p/10166527.html" rel="nofollow">https://www.cnblogs.com/DragonFire/p/10166527.html</a></p>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

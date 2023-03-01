@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>基于Socket的HTTP协议实现.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h3><a id="user-content-一概念知识" class="anchor" aria-hidden="true" href="#一概念知识"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、概念知识</h3>
+<ol>
+<li>
+<p>HTTP的工作原理</p>
+<p>HTTP协议定义了Web客户端如何从Web服务器请求Web页面，以及服务器如何把Web页面传送给客户端。</p>
+<blockquote>
+<p>HTTP协议采用了请求/响应模型。</p>
+<p>客户端向服务器发送一个请求报文，请求报文包含请求的方法、URL、协议版本、请求头部和请求数据。</p>
+<p>服务器以一个状态行作为响应，响应的内容包括协议的版本、成功或者错误代码、服务器信息、响应头部和响应数据。</p>
+</blockquote>
+</li>
+<li>
+<p>关于HTTP的注意点</p>
+<blockquote>
+<p>HTTP是无连接：无连接的含义是限制每次连接只处理一个请求。服务器处理完客户的请求，并收到客户的应答后，即<strong>断开连接</strong>。采用这种方式可以节省传输时间。</p>
+<p>HTTP是媒体独立的：这意味着，只要客户端和服务器知道如何处理的数据内容，任何类型的数据都可以通过HTTP发送。客户端以及服务器指定使用适合的MIME-type内容类型。</p>
+<p>HTTP是无状态：HTTP协议是无状态协议。无状态是指协议对于事务处理没有记忆能力。缺少状态意味着如果后续处理需要前面的信息，则它必须重传，这样可能导致每次连接传送的数据量增大。另一方面，在服务器不需要先前信息时它的应答就较快。</p>
+</blockquote>
+</li>
+<li>
+<p>HTTP的请求消息格式</p>
+</li>
+</ol>
+<ul>
+<li>请求格式</li>
+</ul>
+<p><a target="_blank" rel="noopener noreferrer" href="image/2012072810301161.png"><img src="image/2012072810301161.png" alt="2012072810301161" style="max-width: 100%;"></a></p>
+<p>百度网站的栗子-请求头</p>
+<p><a target="_blank" rel="noopener noreferrer" href="image/image-20210912111134961.png"><img src="image/image-20210912111134961.png" alt="image-20210912111134961" style="max-width: 100%;"></a></p>
+<ul>
+<li>响应格式</li>
+</ul>
+<p><a target="_blank" rel="noopener noreferrer" href="image/867021-20180322001744323-654009411.jpg"><img src="image/867021-20180322001744323-654009411.jpg" alt="867021-20180322001744323-654009411" style="max-width: 100%;"></a></p>
+<p>百度网站的栗子-响应头</p>
+<p><a target="_blank" rel="noopener noreferrer" href="image/image-20210912111153729.png"><img src="image/image-20210912111153729.png" alt="image-20210912111153729" style="max-width: 100%;"></a></p>
+<ol start="4">
+<li>
+<p>常见的请求方式</p>
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>GET</th>
+<th>请求指定的页面信息，并返回实体主体。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>HEAD</td>
+<td>类似于 GET 请求，只不过返回的响应中没有具体的内容，用于获取报头</td>
+</tr>
+<tr>
+<td>3</td>
+<td>POST</td>
+<td>向指定资源提交数据进行处理请求（例如提交表单或者上传文件）。数据被包含在请求体中。POST 请求可能会导致新的资源的建立和/或已有资源的修改。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>PUT</td>
+<td>从客户端向服务器传送的数据取代指定的文档的内容。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>DELETE</td>
+<td>请求服务器删除指定的页面。</td>
+</tr>
+<tr>
+<td>6</td>
+<td>CONNECT</td>
+<td>HTTP/1.1 协议中预留给能够将连接改为管道方式的代理服务器。</td>
+</tr>
+<tr>
+<td>7</td>
+<td>OPTIONS</td>
+<td>允许客户端查看服务器的性能。</td>
+</tr>
+<tr>
+<td>8</td>
+<td>TRACE</td>
+<td>回显服务器收到的请求，主要用于测试或诊断。</td>
+</tr>
+<tr>
+<td>9</td>
+<td>PATCH</td>
+<td>是对 PUT 方法的补充，用来对已知资源进行局部更新 。</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<h3><a id="user-content-二源码实现-demo" class="anchor" aria-hidden="true" href="#二源码实现-demo"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、源码实现-demo</h3>
+<ol>
+<li>
+<p>创建server端--超级简易版</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># NetworkDocs/HTTP/server.py</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">re</span>
+<span class="pl-k">import</span> <span class="pl-s1">socket</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">send_2_client</span>(<span class="pl-s1">tcp_client</span>):
+    <span class="pl-c"># 向客户端发送数据</span>
+    <span class="pl-s1">recv</span> <span class="pl-c1">=</span> <span class="pl-s1">tcp_client</span>.<span class="pl-en">recv</span>(<span class="pl-c1">1024</span>).<span class="pl-en">decode</span>()
+    <span class="pl-s1">recv</span> <span class="pl-c1">=</span> <span class="pl-s1">recv</span>.<span class="pl-en">splitlines</span>()  <span class="pl-c"># ['GET / HTTP/1.1', 'Host: 192.168.1.101:8080', 'Connection: keep-alive', ...]</span>
+
+    <span class="pl-c"># 获取请求内容</span>
+    <span class="pl-k">if</span> <span class="pl-s1">recv</span>:
+        <span class="pl-s1">methods</span> <span class="pl-c1">=</span> <span class="pl-c1">None</span>
+        <span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-c1">None</span>
+        <span class="pl-k">try</span>:
+            <span class="pl-s1">methods</span> <span class="pl-c1">=</span> <span class="pl-s1">re</span>.<span class="pl-en">match</span>(<span class="pl-s">"^(.+?)\s"</span>, <span class="pl-en">str</span>(<span class="pl-s1">recv</span>[<span class="pl-c1">0</span>]))
+            <span class="pl-s1">methods</span> <span class="pl-c1">=</span> <span class="pl-s1">methods</span>.<span class="pl-en">group</span>(<span class="pl-c1">0</span>).<span class="pl-en">strip</span>()
+            <span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">re</span>.<span class="pl-en">match</span>(<span class="pl-s">"[^/]+(/[^ ]*)"</span>, <span class="pl-en">str</span>(<span class="pl-s1">recv</span>[<span class="pl-c1">0</span>]))
+            <span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">ret</span>.<span class="pl-en">group</span>(<span class="pl-c1">1</span>).<span class="pl-en">strip</span>()
+        <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+            <span class="pl-en">print</span>(<span class="pl-s1">e</span>.<span class="pl-s1">args</span>)
+
+        <span class="pl-k">if</span> <span class="pl-s1">ret</span>:
+            <span class="pl-s1">headers</span> <span class="pl-c1">=</span> <span class="pl-s">"HTTP/1.1 200 OK<span class="pl-cce">\r</span><span class="pl-cce">\n</span>"</span>
+            <span class="pl-s1">headers</span> <span class="pl-c1">+=</span> <span class="pl-s">"content-type: text/html;charset=utf-8<span class="pl-cce">\r</span><span class="pl-cce">\n</span><span class="pl-cce">\r</span><span class="pl-cce">\n</span>"</span>
+            <span class="pl-k">import</span> <span class="pl-s1">datetime</span>
+            <span class="pl-s1">headers</span> <span class="pl-c1">+=</span> <span class="pl-en">str</span>(<span class="pl-s">"请求方式:{}, 响应结果：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">methods</span>, <span class="pl-s1">datetime</span>.<span class="pl-s1">datetime</span>.<span class="pl-en">now</span>()))
+            <span class="pl-s1">tcp_client</span>.<span class="pl-en">send</span>(<span class="pl-s1">headers</span>.<span class="pl-en">encode</span>(<span class="pl-s">"utf-8"</span>))
+
+        <span class="pl-en">print</span>(<span class="pl-s">"{}-请求响应完毕...."</span>.<span class="pl-en">format</span>(<span class="pl-s1">tcp_client</span>))
+    <span class="pl-k">else</span>:
+        <span class="pl-s1">tcp_client</span>.<span class="pl-en">close</span>()
+
+
+<span class="pl-k">def</span> <span class="pl-en">main</span>():
+    <span class="pl-c"># 创建套接字</span>
+    <span class="pl-s1">sock</span> <span class="pl-c1">=</span> <span class="pl-s1">socket</span>.<span class="pl-en">socket</span>(<span class="pl-s1">socket</span>.<span class="pl-v">AF_INET</span>, <span class="pl-s1">socket</span>.<span class="pl-v">SOCK_STREAM</span>)
+    <span class="pl-s1">sock</span>.<span class="pl-en">setsockopt</span>(<span class="pl-s1">socket</span>.<span class="pl-v">SOL_SOCKET</span>, <span class="pl-s1">socket</span>.<span class="pl-v">SO_REUSEADDR</span>, <span class="pl-c1">1</span>)
+
+    <span class="pl-c"># 绑定本地ip</span>
+    <span class="pl-s1">sock</span>.<span class="pl-en">bind</span>((<span class="pl-s">"192.168.1.101"</span>, <span class="pl-c1">8080</span>))
+
+    <span class="pl-c"># 开启监听</span>
+    <span class="pl-s1">sock</span>.<span class="pl-en">listen</span>(<span class="pl-c1">128</span>)
+
+    <span class="pl-k">while</span> <span class="pl-c1">True</span>:
+        <span class="pl-c"># 处理客户端连接</span>
+        <span class="pl-s1">response_client</span>, <span class="pl-s1">response_address</span> <span class="pl-c1">=</span> <span class="pl-s1">sock</span>.<span class="pl-en">accept</span>()
+
+        <span class="pl-k">try</span>:
+            <span class="pl-en">send_2_client</span>(<span class="pl-s1">response_client</span>)
+        <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+            <span class="pl-en">print</span>(<span class="pl-s1">e</span>.<span class="pl-s1">args</span>)
+            <span class="pl-k">break</span>
+
+    <span class="pl-c"># 关闭套接字</span>
+    <span class="pl-s1">sock</span>.<span class="pl-en">close</span>()
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-en">main</span>()</pre></div>
+<p>小结：</p>
+<p>​       仔细观察我们会发现，这个版本的server服务器在实现时，完成遵守了HTTP协议的请求协议-获取请求头-处理响应</p>
+</li>
+<li>
+<p>基于HTTP协议的简易文件下载服务器</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># NetworkDocs/HTTP/file_server.py</span>
+
+
+<span class="pl-k">import</span> <span class="pl-s1">re</span>
+<span class="pl-k">import</span> <span class="pl-s1">socket</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">send_2_client</span>(<span class="pl-s1">tcp_client</span>):
+    <span class="pl-c"># 向客户端发送数据</span>
+    <span class="pl-s1">recv</span> <span class="pl-c1">=</span> <span class="pl-s1">tcp_client</span>.<span class="pl-en">recv</span>(<span class="pl-c1">1024</span>).<span class="pl-en">decode</span>()
+    <span class="pl-s1">recv</span> <span class="pl-c1">=</span> <span class="pl-s1">recv</span>.<span class="pl-en">splitlines</span>()  <span class="pl-c"># ['GET / HTTP/1.1', 'Host: 192.168.1.101:8080', 'Connection: keep-alive', ...]</span>
+
+    <span class="pl-c"># 获取请求内容</span>
+    <span class="pl-k">if</span> <span class="pl-s1">recv</span>:
+        <span class="pl-s1">methods</span> <span class="pl-c1">=</span> <span class="pl-c1">None</span>
+        <span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-c1">None</span>
+        <span class="pl-k">try</span>:
+            <span class="pl-s1">methods</span> <span class="pl-c1">=</span> <span class="pl-s1">re</span>.<span class="pl-en">match</span>(<span class="pl-s">"^(.+?)\s"</span>, <span class="pl-en">str</span>(<span class="pl-s1">recv</span>[<span class="pl-c1">0</span>]))
+            <span class="pl-s1">methods</span> <span class="pl-c1">=</span> <span class="pl-s1">methods</span>.<span class="pl-en">group</span>(<span class="pl-c1">0</span>).<span class="pl-en">strip</span>()
+            <span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">re</span>.<span class="pl-en">match</span>(<span class="pl-s">"[^/]+(/[^ ]*)"</span>, <span class="pl-en">str</span>(<span class="pl-s1">recv</span>[<span class="pl-c1">0</span>]))
+            <span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">ret</span>.<span class="pl-en">group</span>(<span class="pl-c1">1</span>).<span class="pl-en">strip</span>()
+        <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+            <span class="pl-en">print</span>(<span class="pl-s1">e</span>.<span class="pl-s1">args</span>)
+
+        <span class="pl-k">if</span> <span class="pl-s1">ret</span>:
+            <span class="pl-en">print</span>(<span class="pl-s">"当前文件目录"</span>, <span class="pl-s1">ret</span>)
+            <span class="pl-s1">headers</span> <span class="pl-c1">=</span> <span class="pl-s">"HTTP/1.1 200 OK<span class="pl-cce">\r</span><span class="pl-cce">\n</span>"</span>
+
+            <span class="pl-k">try</span>:
+                <span class="pl-k">with</span> <span class="pl-en">open</span>(<span class="pl-s">"TestFile"</span> <span class="pl-c1">+</span> <span class="pl-s1">ret</span>, <span class="pl-s">'rb'</span>) <span class="pl-k">as</span> <span class="pl-s1">f</span>:
+                    <span class="pl-s1">content</span> <span class="pl-c1">=</span> <span class="pl-s1">f</span>.<span class="pl-en">read</span>()
+            <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+                <span class="pl-en">print</span>(<span class="pl-s1">e</span>.<span class="pl-s1">args</span>)
+                <span class="pl-s1">content</span> <span class="pl-c1">=</span> <span class="pl-s">b""</span>
+
+            <span class="pl-k">if</span> <span class="pl-s1">content</span>:
+                <span class="pl-s1">headers</span> <span class="pl-c1">+=</span> <span class="pl-s">"Content-Disposition: attachment;filename={}<span class="pl-cce">\r</span><span class="pl-cce">\n</span><span class="pl-cce">\r</span><span class="pl-cce">\n</span>"</span>.<span class="pl-en">format</span>(<span class="pl-s1">ret</span>.<span class="pl-en">strip</span>(<span class="pl-s">"/"</span>))
+                <span class="pl-s1">headers</span> <span class="pl-c1">=</span> <span class="pl-s1">headers</span>.<span class="pl-en">encode</span>(<span class="pl-s">"utf-8"</span>)
+                <span class="pl-s1">headers</span> <span class="pl-c1">+=</span> <span class="pl-s1">content</span>
+            <span class="pl-k">else</span>:
+                <span class="pl-s1">headers</span> <span class="pl-c1">+=</span> <span class="pl-s">"content-type: text/html;charset=utf-8<span class="pl-cce">\r</span><span class="pl-cce">\n</span><span class="pl-cce">\r</span><span class="pl-cce">\n</span>"</span>
+                <span class="pl-s1">headers</span> <span class="pl-c1">=</span> <span class="pl-s1">headers</span>.<span class="pl-en">encode</span>(<span class="pl-s">"utf-8"</span>)
+                <span class="pl-s1">headers</span> <span class="pl-c1">+=</span> <span class="pl-s">"文件不存在"</span>.<span class="pl-en">encode</span>(<span class="pl-s">"utf-8"</span>)
+
+            <span class="pl-s1">tcp_client</span>.<span class="pl-en">send</span>(<span class="pl-s1">headers</span>)
+
+        <span class="pl-en">print</span>(<span class="pl-s">"{}-请求响应完毕...."</span>.<span class="pl-en">format</span>(<span class="pl-s1">tcp_client</span>))
+
+    <span class="pl-s1">tcp_client</span>.<span class="pl-en">close</span>()
+
+
+<span class="pl-k">def</span> <span class="pl-en">main</span>():
+    <span class="pl-c"># 创建套接字</span>
+    <span class="pl-s1">sock</span> <span class="pl-c1">=</span> <span class="pl-s1">socket</span>.<span class="pl-en">socket</span>(<span class="pl-s1">socket</span>.<span class="pl-v">AF_INET</span>, <span class="pl-s1">socket</span>.<span class="pl-v">SOCK_STREAM</span>)
+    <span class="pl-s1">sock</span>.<span class="pl-en">setsockopt</span>(<span class="pl-s1">socket</span>.<span class="pl-v">SOL_SOCKET</span>, <span class="pl-s1">socket</span>.<span class="pl-v">SO_REUSEADDR</span>, <span class="pl-c1">1</span>)
+
+    <span class="pl-c"># 绑定本地ip</span>
+    <span class="pl-s1">sock</span>.<span class="pl-en">bind</span>((<span class="pl-s">"192.168.1.101"</span>, <span class="pl-c1">8080</span>))
+
+    <span class="pl-c"># 开启监听</span>
+    <span class="pl-s1">sock</span>.<span class="pl-en">listen</span>(<span class="pl-c1">128</span>)
+
+    <span class="pl-k">while</span> <span class="pl-c1">True</span>:
+        <span class="pl-c"># 处理客户端连接</span>
+        <span class="pl-s1">response_client</span>, <span class="pl-s1">response_address</span> <span class="pl-c1">=</span> <span class="pl-s1">sock</span>.<span class="pl-en">accept</span>()
+
+        <span class="pl-k">try</span>:
+            <span class="pl-en">send_2_client</span>(<span class="pl-s1">response_client</span>)
+        <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+            <span class="pl-en">print</span>(<span class="pl-s1">e</span>.<span class="pl-s1">args</span>)
+            <span class="pl-k">break</span>
+
+    <span class="pl-c"># 关闭套接字</span>
+    <span class="pl-s1">sock</span>.<span class="pl-en">close</span>()
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-en">main</span>()</pre></div>
+</li>
+<li>
+<p>高性能版本</p>
+<p>都在用Python开发了，还要啥自行车啊，上面的用着吧!（ps：开个玩笑哈，后面补充完Python高级部分进程、线程、协程后更新该版本~ ）</p>
+</li>
+</ol>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

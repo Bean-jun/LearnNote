@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>JavaScript-基础语法.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h3><a id="user-content-11-脚本引入" class="anchor" aria-hidden="true" href="#11-脚本引入"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.1 脚本引入</h3>
+<ul>
+<li>
+<p>内联</p>
+<ul>
+<li>直接在行间写入</li>
+</ul>
+</li>
+<li>
+<p>内嵌</p>
+<div class="highlight highlight-text-html-basic"><pre> <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">type</span>="<span class="pl-s">text/javascript</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
+</li>
+<li>
+<p>外联</p>
+<div class="highlight highlight-text-html-basic"><pre> <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">type</span>="<span class="pl-s">text/javascript</span>" <span class="pl-c1">src</span>="<span class="pl-s">地址</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
+</li>
+</ul>
+<h3><a id="user-content-12-变量" class="anchor" aria-hidden="true" href="#12-变量"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.2 变量</h3>
+<ul>
+<li>
+<p>使用规范</p>
+<p>区分大小写</p>
+<p>首字符必须是字母、下划线或者$</p>
+<p>其他字符可以是字母、下划线或者$、数字</p>
+</li>
+</ul>
+<p>定义变量需要使用关键字<code>var</code>.</p>
+<div class="highlight highlight-text-html-basic"><pre>var iNum = 45;</pre></div>
+<ul>
+<li>
+<p>数据类型</p>
+<p>数字类型 number</p>
+<p>字符串类型 string</p>
+<p>布尔类型 boolean</p>
+<p>undefined类型 undefined</p>
+<p>null类型 null ----- 一般在页面中获取不到就为null</p>
+</li>
+<li>
+<p>类型转换</p>
+</li>
+</ul>
+<div class="highlight highlight-text-html-basic"><pre>parseInt()  将内容转换为整数
+parseFloat() 将内容转换为小数</pre></div>
+<ul>
+<li>
+<p>变量的作用域</p>
+<p>函数外面的变量在任何范围都可以访问。并且可以直接修改。</p>
+<p>函数内部的变量只能在函数内部使用。</p>
+</li>
+</ul>
+<h3><a id="user-content-13-获取元素" class="anchor" aria-hidden="true" href="#13-获取元素"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.3 获取元素</h3>
+<ul>
+<li>
+<p>document.getElementById(id名称)</p>
+<div class="highlight highlight-text-html-basic"><pre> var oDiv = document.getElementById('div1');
+
+ oDiv.style.color = 'green';
+ oDiv.style.fontSize = '30px';</pre></div>
+</li>
+<li>
+<p>document.getElementsByTagName("li")</p>
+<p>这种方式获取到的内容是一个结果集，<code>基本</code>可以像数组一样操作</p>
+</li>
+</ul>
+<h3><a id="user-content-14-操作元素属性" class="anchor" aria-hidden="true" href="#14-操作元素属性"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.4 操作元素属性</h3>
+<ul>
+<li>
+<p>操作方式</p>
+<ul>
+<li>使用.   【针对变量不可以】</li>
+<li>使用[]	   【专门针对js的变量使用】</li>
+</ul>
+</li>
+<li>
+<p>属性写法</p>
+<ul>
+<li>html中的属性基本和js一致</li>
+<li>class要写成className</li>
+<li>style中加-的要改为驼峰式</li>
+</ul>
+</li>
+<li>
+<p>修改html中内嵌的内容</p>
+<ul>
+<li>innerHTML</li>
+</ul>
+<div class="highlight highlight-text-html-basic"><pre> 	<span class="pl-c">&lt;!-- 	读取--&gt;</span>
+ 	var oDiv = document.getElementById('div1');
+ 	var sTr = oDiv.innerHTML;
+ 	alert(sTr);
+ 	<span class="pl-c">&lt;!--    修改--&gt;</span>
+ 	oDiv.innerHTML = "我裂开了";</pre></div>
+</li>
+</ul>
+<h3><a id="user-content-15-函数" class="anchor" aria-hidden="true" href="#15-函数"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.5 函数</h3>
+<h4><a id="user-content-151-基本定义" class="anchor" aria-hidden="true" href="#151-基本定义"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.5.1 基本定义</h4>
+<pre><code>```html
+&lt;!--基本定义--&gt;
+function myFunction()
+{
+	alert("Hello World!");
+}
+&lt;!--调用函数--&gt;
+myFunction();
+```
+</code></pre>
+<h4><a id="user-content-152-提取行间事件" class="anchor" aria-hidden="true" href="#152-提取行间事件"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.5.2 提取行间事件</h4>
+<div class="highlight highlight-text-html-basic"><pre><span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">type</span>="<span class="pl-s">text/javascript</span>"<span class="pl-kos">&gt;</span>
+	<span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-en">onload</span> <span class="pl-c1">=</span> <span class="pl-k">function</span> <span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+		<span class="pl-k">var</span> <span class="pl-s1">oBtn</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-en">getElementById</span><span class="pl-kos">(</span><span class="pl-s">'div1'</span><span class="pl-kos">)</span>
+
+		<span class="pl-s1">oBtn</span><span class="pl-kos">.</span><span class="pl-c1">onclick</span> <span class="pl-c1">=</span> <span class="pl-s1">fnChange</span><span class="pl-kos">;</span>
+
+		<span class="pl-k">function</span> <span class="pl-en">fnChange</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+			<span class="pl-k">var</span> <span class="pl-s1">oDiv</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-en">getElementById</span><span class="pl-kos">(</span><span class="pl-s">'div1'</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+			<span class="pl-s1">oDiv</span><span class="pl-kos">.</span><span class="pl-c1">style</span><span class="pl-kos">.</span><span class="pl-c1">color</span> <span class="pl-c1">=</span> <span class="pl-s">"red"</span><span class="pl-kos">;</span>
+			<span class="pl-s1">oDiv</span><span class="pl-kos">.</span><span class="pl-c1">fonSize</span> <span class="pl-c1">=</span> <span class="pl-s">"30px"</span><span class="pl-kos">;</span>
+			<span class="pl-kos">}</span>
+	<span class="pl-kos">}</span>
+<span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>
+
+<span class="pl-kos">&lt;</span><span class="pl-ent">div</span> <span class="pl-c1">class</span>="<span class="pl-s">box</span>"  <span class="pl-c1">id</span>="<span class="pl-s">div1</span>"<span class="pl-kos">&gt;</span>哈哈哈哈<span class="pl-kos">&lt;/</span><span class="pl-ent">div</span><span class="pl-kos">&gt;</span></pre></div>
+<h4><a id="user-content-153-匿名函数" class="anchor" aria-hidden="true" href="#153-匿名函数"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.5.3 匿名函数</h4>
+<p>不给函数名称，及那个函数直接赋值给元素绑定的事件。</p>
+<div class="highlight highlight-text-html-basic"><pre><span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">type</span>="<span class="pl-s">text/javascript</span>"<span class="pl-kos">&gt;</span>
+	<span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-en">onload</span> <span class="pl-c1">=</span> <span class="pl-k">function</span> <span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+		<span class="pl-k">var</span> <span class="pl-s1">oBox</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-en">getElementById</span><span class="pl-kos">(</span><span class="pl-s">'box1'</span><span class="pl-kos">)</span>
+		<span class="pl-s1">oBox</span><span class="pl-kos">.</span><span class="pl-en">onclick</span> <span class="pl-c1">=</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">{</span>
+			<span class="pl-s1">oBox</span><span class="pl-kos">.</span><span class="pl-c1">style</span><span class="pl-kos">.</span><span class="pl-c1">color</span> <span class="pl-c1">=</span> <span class="pl-s">'red'</span><span class="pl-kos">;</span>
+		<span class="pl-kos">}</span>
+	<span class="pl-kos">}</span>
+<span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
+<p>注意看上面的</p>
+<pre><code>oBox.onclick = function(){
+	oBox.style.color = 'red';
+}
+</code></pre>
+<h4><a id="user-content-154-函数传参" class="anchor" aria-hidden="true" href="#154-函数传参"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.5.4 函数传参</h4>
+<div class="highlight highlight-text-html-basic"><pre>function fnChange(mystyle, val){
+	var oDiv  = document.getElementById("div1");
+	oDiv.style[mystyle] = val;
+}
+<span class="pl-kos">&lt;</span><span class="pl-ent">div</span> <span class="pl-c1">id</span>="<span class="pl-s">div1</span>" <span class="pl-c1">onclick</span>="<span class="pl-s">fnChange('color','red')</span>"<span class="pl-kos">&gt;</span>这是div哦<span class="pl-kos">&lt;/</span><span class="pl-ent">div</span><span class="pl-kos">&gt;</span></pre></div>
+<h4><a id="user-content-155-返回值" class="anchor" aria-hidden="true" href="#155-返回值"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.5.5 返回值</h4>
+<ul>
+<li>return 关键字
+<ul>
+<li>返回函数的运行结果</li>
+<li>结束函数的执行</li>
+</ul>
+</li>
+</ul>
+<div class="highlight highlight-text-html-basic"><pre>function fnAdd(a, b){
+	return a+b;
+}
+alert(fnAdd(1, 3));</pre></div>
+<h3><a id="user-content-16-条件语句" class="anchor" aria-hidden="true" href="#16-条件语句"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.6 条件语句</h3>
+<p><code>==</code>和<code>===</code>的区别</p>
+<pre><code>== 是用来判断内容是否相等
+=== 是先比较两边数据的类型，然后在比较内容
+</code></pre>
+<p>条件语句在使用上和C++类似，条件需要加上()</p>
+<h4><a id="user-content-161-if" class="anchor" aria-hidden="true" href="#161-if"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.6.1 if</h4>
+<div class="highlight highlight-text-html-basic"><pre>if (3<span class="pl-kos">&lt;</span><span class="pl-ent">4</span><span class="pl-c1">){</span>
+	<span class="pl-c1">alert(</span>"ok");
+}</pre></div>
+<h4><a id="user-content-162-ifelse" class="anchor" aria-hidden="true" href="#162-ifelse"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.6.2 if...else</h4>
+<div class="highlight highlight-text-html-basic"><pre>if (3<span class="pl-kos">&gt;</span>4){
+	alert("1");
+}
+else{
+	alert("2");
+}
+
+
+if (3<span class="pl-kos">&gt;</span>4){
+	alert("1");
+}
+else if (3 <span class="pl-kos">&gt;</span> 10){
+	alert("2");
+}
+else{
+	alert("3");
+}</pre></div>
+<h4><a id="user-content-163-switch" class="anchor" aria-hidden="true" href="#163-switch"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.6.3 switch</h4>
+<div class="highlight highlight-text-html-basic"><pre>var iNum = 3;
+switch (iNum){
+	case 1:
+		...;
+		break;
+	case 2:
+		...;
+		break;
+	.....
+	default:
+		...;
+		break;
+}</pre></div>
+<h3><a id="user-content-17-数组" class="anchor" aria-hidden="true" href="#17-数组"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.7 数组</h3>
+<h4><a id="user-content-171-创建方式" class="anchor" aria-hidden="true" href="#171-创建方式"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.7.1 创建方式</h4>
+<ul>
+<li>
+<p>使用对象创建
+var aList = new Array(1,2,3);</p>
+</li>
+<li>
+<p>直接创建
+var aList = [1, 2, 3]</p>
+</li>
+</ul>
+<h4><a id="user-content-172-操作数据的方式" class="anchor" aria-hidden="true" href="#172-操作数据的方式"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.7.2 操作数据的方式</h4>
+<ul>
+<li>
+<p>获取长度
+aList.length;</p>
+</li>
+<li>
+<p>获取某一个内容
+aList[]</p>
+</li>
+<li>
+<p>join()将数组成员拼接为一串字符串
+aList.join('-')</p>
+<div class="highlight highlight-text-html-basic"><pre> var aList = [1,2,3,4]
+ alert(aList.join('-')</pre></div>
+</li>
+<li>
+<p>push()和pop()</p>
+<div class="highlight highlight-text-html-basic"><pre> var aList = [1,2,3,4];
+ aList.push(5); aList数组中变为 1,2,3,4,5
+ aList.pop();  aList数组中变为 1,2,3,4</pre></div>
+</li>
+<li>
+<p>unshift()和 shift()</p>
+<div class="highlight highlight-text-html-basic"><pre> var aList = [1,2,3,4];
+ aList.unshift(5); aList数组中变为5,1,2,3,4
+ aList.shift(); aList数组中变为1,2,3,4</pre></div>
+</li>
+<li>
+<p>reverse() 将数组反转</p>
+<div class="highlight highlight-text-html-basic"><pre> aList.reverse()</pre></div>
+</li>
+<li>
+<p>indexOf() 返回数组中元素第一次出现的索引值</p>
+<div class="highlight highlight-text-html-basic"><pre> aList.indexOf(xxx)</pre></div>
+</li>
+<li>
+<p>splice() 在数组中增加或删除成员</p>
+<div class="highlight highlight-text-html-basic"><pre> var aList = [1,2,3,4];
+ aList.splice(2,1,7,8,9); //从第2个元素开始，删除1个元素，然后在此位置增加'7,8,9'三个元素
+ alert(aList); //弹出 1,2,7,8,9,4</pre></div>
+</li>
+</ul>
+<h4><a id="user-content-173-多维数组" class="anchor" aria-hidden="true" href="#173-多维数组"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.7.3 多维数组</h4>
+<ul>
+<li>实例
+var aList = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]</li>
+</ul>
+<h3><a id="user-content-18-循环" class="anchor" aria-hidden="true" href="#18-循环"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.8 循环</h3>
+<ul>
+<li>for 循环</li>
+</ul>
+<div class="highlight highlight-text-html-basic"><pre>for(var i = 0;i<span class="pl-kos">&lt;</span><span class="pl-ent">9</span><span class="pl-c1">;i++){</span>
+	
+<span class="pl-c1">}</span></pre></div>
+<ul>
+<li>while循环</li>
+</ul>
+<div class="highlight highlight-text-html-basic"><pre>var i= 0；
+while (i<span class="pl-kos">&lt;</span><span class="pl-ent">8</span><span class="pl-c1">){</span>
+	<span class="pl-c1">i++;</span>	
+<span class="pl-c1">}</span>	</pre></div>
+<ul>
+<li>break</li>
+<li>continue</li>
+</ul>
+<h3><a id="user-content-19-字符串" class="anchor" aria-hidden="true" href="#19-字符串"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.9 字符串</h3>
+<ul>
+<li>split() 分割</li>
+<li>charAt() 获取字符串中的某一个字符</li>
+<li>indexOf() 获取内容是否存在，存在则返回索引，不存在返回-1</li>
+<li>substring(start,end) 类似于Python的切片</li>
+<li>toUpperCase() 转换为大写</li>
+<li>toLowerCase() 转换为小写</li>
+</ul>
+<h3><a id="user-content-110-调试程序的方法" class="anchor" aria-hidden="true" href="#110-调试程序的方法"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.10 调试程序的方法</h3>
+<ul>
+<li>alert 直接弹出</li>
+<li>console.log 显示在控制台</li>
+<li>document.title 显示在标题栏</li>
+</ul>
+<h3><a id="user-content-111-定时器" class="anchor" aria-hidden="true" href="#111-定时器"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.11 定时器</h3>
+<ul>
+<li>
+<p>功能</p>
+<ul>
+<li>制作动画</li>
+<li>异步操作</li>
+<li>函数缓存与节流</li>
+</ul>
+</li>
+<li>
+<p>使用方式</p>
+<div class="highlight highlight-text-html-basic"><pre> 定时器
+ setTimeout 只执行一次的定时器
+ clearTimeout 关闭只执行一次的定时器
+ 
+ setInterval 反复执行定时
+ clearInterval 关闭反复执行的定时器</pre></div>
+</li>
+<li>
+<p>具体方式</p>
+<ul>
+<li>setTimeout(函数名, 时间[单位：毫秒])</li>
+<li>要关闭,需要将定时器和变量关联，然后关闭</li>
+</ul>
+<div class="highlight highlight-text-html-basic"><pre> function fnTest(){
+ 	alert("hello world");
+ }
+ var timer01 = setTimeout(fnTest, 1000);
+
+ // 关闭只执行一次的定时器
+ clearTimeout(timer01);</pre></div>
+<ul>
+<li>关于反复执行的定时器，使用方式和单次定时的内容一致</li>
+</ul>
+</li>
+</ul>
+<h3><a id="user-content-112-鼠标事件" class="anchor" aria-hidden="true" href="#112-鼠标事件"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.12 鼠标事件</h3>
+<ul>
+<li>对象.onmouseover 鼠标移入</li>
+<li>对象.onmouseout 鼠标移出</li>
+</ul>
+<h3><a id="user-content-113-封闭函数" class="anchor" aria-hidden="true" href="#113-封闭函数"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.13 封闭函数</h3>
+<ul>
+<li>封闭函数是javascript中匿名函数的另外一种写法，创建一个一开始就执行而不用命名的函数。
+<div class="highlight highlight-text-html-basic"><pre> 一般定义的函数和执行函数：
+ function myalert(){
+ 	alert('hello!');
+ };
+ myalert();
+
+ 封闭函数：	
+ (function myalert(){
+ 	alert('hello!');
+ })();
+
+ 还可以在函数定义前加上“~”和“!”等符号来定义匿名函数
+ !function myalert(){
+ 	alert('hello!');
+ }()</pre></div>
+</li>
+<li>封闭函数可以创造一个独立的空间，在封闭函数内定义的变量和函数不会影响外部同名的函数和变量，可以避免命名冲突，在页面上引入多个js文件时，用这种方式添加js文件比较安全</li>
+</ul>
+<h3><a id="user-content-114-内置方法" class="anchor" aria-hidden="true" href="#114-内置方法"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.14 内置方法</h3>
+<ul>
+<li>Date()  获取时间</li>
+<li>document.referrer 存储上一个页面的地址</li>
+<li>window.location对象
+<ul>
+<li>href 获取或者重定向链接</li>
+<li>search 获取地址参数部分 获取？后的内容</li>
+<li>hash 获取页面的hash值  获取# 后的内容</li>
+</ul>
+</li>
+<li>Math对象
+<ul>
+<li>Math.random 获取0-1的随机数</li>
+<li>Math.floor 向下取整</li>
+<li>Math.ceil 向上取整</li>
+</ul>
+</li>
+</ul>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

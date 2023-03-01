@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>docker.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h3><a id="user-content-1-操作基础" class="anchor" aria-hidden="true" href="#1-操作基础"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. 操作基础</h3>
+<h4><a id="user-content-1-1-安装" class="anchor" aria-hidden="true" href="#1-1-安装"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. 1 安装</h4>
+<div class="highlight highlight-source-shell"><pre>curl -fsSL https://get.docker.com <span class="pl-k">|</span> bash -s docker --mirror Aliyun</pre></div>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 国内 daocloud 一键安装命令</span>
+curl -sSL https://get.daocloud.io/docker <span class="pl-k">|</span> sh</pre></div>
+<h4><a id="user-content-12--卸载" class="anchor" aria-hidden="true" href="#12--卸载"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.2  卸载</h4>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 删除安装包</span>
+sudo apt-get purge docker-ce
+<span class="pl-c"><span class="pl-c">#</span> 删除镜像、容器、配置文件等内容：</span>
+sudo rm -rf /var/lib/docker</pre></div>
+<h4><a id="user-content-13--镜像加速" class="anchor" aria-hidden="true" href="#13--镜像加速"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.3  镜像加速</h4>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 科大镜像：https://docker.mirrors.ustc.edu.cn/</span>
+<span class="pl-c"><span class="pl-c">#</span> 网易：https://hub-mirror.c.163.com/</span>
+<span class="pl-c"><span class="pl-c">#</span> 七牛云加速器：https://reg-mirror.qiniu.com</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 在 /etc/docker/daemon.json 中写入如下内容（如果文件不存在请新建该文件）：</span>
+{<span class="pl-s"><span class="pl-pds">"</span>registry-mirrors<span class="pl-pds">"</span></span>:[<span class="pl-s"><span class="pl-pds">"</span>https://docker.mirrors.ustc.edu.cn/<span class="pl-pds">"</span></span>]}
+
+<span class="pl-c"><span class="pl-c">#</span> 然后重启docker哦！</span></pre></div>
+<h4><a id="user-content-14--测试安装" class="anchor" aria-hidden="true" href="#14--测试安装"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.4  测试安装</h4>
+<div class="highlight highlight-source-shell"><pre>sudo docker run hello-world</pre></div>
+<h3><a id="user-content-2-操作" class="anchor" aria-hidden="true" href="#2-操作"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. 操作</h3>
+<h4><a id="user-content-21-镜像基础命令" class="anchor" aria-hidden="true" href="#21-镜像基础命令"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.1 镜像基础命令</h4>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 列出本地主机上镜像</span>
+docker images
+
+<span class="pl-c"><span class="pl-c">#</span> 查找网络上的镜像</span>
+docker search xxx
+
+<span class="pl-c"><span class="pl-c">#</span> 获取镜像</span>
+docker pull xxx
+
+<span class="pl-c"><span class="pl-c">#</span> 删除镜像</span>
+docker rmi xxx
+
+<span class="pl-c"><span class="pl-c">#</span> 提交最新镜像</span>
+docker commit -m=<span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span> -a=<span class="pl-s"><span class="pl-pds">"</span>author<span class="pl-pds">"</span></span> 原镜像 新镜像</pre></div>
+<h4><a id="user-content-22-容器使用" class="anchor" aria-hidden="true" href="#22-容器使用"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.2 容器使用</h4>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 启动容器</span>
+docker run -it xxx
+
+<span class="pl-c"><span class="pl-c">#</span>###</span>
+-i: 交互式操作。
+-t: 终端。
+-d: 后台运行。
+-P:将容器内部使用的网络端口随机映射到我们使用的主机上。
+<span class="pl-c"><span class="pl-c">#</span>###</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 停止容器</span>
+docker stop <span class="pl-k">&lt;</span>容器ID<span class="pl-k">&gt;</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 重启容器</span>
+<span class="pl-c"><span class="pl-c">#</span> 通过docker ps -a来获取容器ID</span>
+docker start <span class="pl-k">&lt;</span>容器ID<span class="pl-k">&gt;</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 删除容器</span>
+docker rm <span class="pl-k">&lt;</span>容器ID<span class="pl-k">&gt;</span>
+<span class="pl-c"><span class="pl-c">#</span> 删除所有容器</span>
+docker rm -f <span class="pl-s"><span class="pl-pds">$(</span>docker ps -qa<span class="pl-pds">)</span></span>
+
+<span class="pl-c"><span class="pl-c">#</span> 进入容器</span>
+docker attach -it <span class="pl-k">&lt;</span>容器ID<span class="pl-k">&gt;</span>	[/bin/bash]	<span class="pl-c"><span class="pl-c">#</span> 不推荐</span>
+docker <span class="pl-c1">exec</span> -it <span class="pl-k">&lt;</span>容器ID<span class="pl-k">&gt;</span> [/bin/bash] <span class="pl-c"><span class="pl-c">#</span> 退出后不会导致容器停止</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 退出容器</span>
+<span class="pl-c1">exit</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 拷贝文件</span>
+docker cp 文件 <span class="pl-k">&lt;</span>容器ID<span class="pl-k">&gt;</span>:/目录 <span class="pl-c"><span class="pl-c">#</span> 主机到容器</span>
+docker cp <span class="pl-k">&lt;</span>容器ID<span class="pl-k">&gt;</span>:/目录 文件	<span class="pl-c"><span class="pl-c">#</span> 容器到主机</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 查看端口映射</span>
+docker port <span class="pl-k">&lt;</span>容器ID<span class="pl-k">&gt;</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 查看容器的底层信息</span>
+docker inspect xxx</pre></div>
+<h4><a id="user-content-23-容器的挂载" class="anchor" aria-hidden="true" href="#23-容器的挂载"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.3 容器的挂载</h4>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 挂载容器</span>
+docker run -it -v 卷名:容器内路径
+
+<span class="pl-c"><span class="pl-c">#</span>###</span>
+-v: 挂载地址
+<span class="pl-c"><span class="pl-c">#</span>###</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 查看数据卷</span>
+docker volume ls
+
+<span class="pl-c"><span class="pl-c">#</span> docker 卷没有指定卷地址时默认地址</span>
+/var/lib/docker/volumes/
+
+<span class="pl-c"><span class="pl-c">#</span> 容器间数据共享</span>
+docker run -it -volumes-from 卷名 镜像</pre></div>
+<h3><a id="user-content-3-dockfile" class="anchor" aria-hidden="true" href="#3-dockfile"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. Dockfile</h3>
+<h4><a id="user-content-31-介绍" class="anchor" aria-hidden="true" href="#31-介绍"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.1 介绍</h4>
+<div class="highlight highlight-source-shell"><pre>FROM				<span class="pl-c"><span class="pl-c">#</span> 基础镜像</span>
+LABEL				<span class="pl-c"><span class="pl-c">#</span> 镜像作者</span>
+RUN					<span class="pl-c"><span class="pl-c">#</span> docker 构建时需要运行的命令</span>
+ADD					<span class="pl-c"><span class="pl-c">#</span> 添加内容压缩包</span>
+WORKDIR			<span class="pl-c"><span class="pl-c">#</span> 工作目录</span>
+VOLUME			<span class="pl-c"><span class="pl-c">#</span> 添加数据卷</span>
+EXPOSE			<span class="pl-c"><span class="pl-c">#</span> 暴露端口</span>
+CMD					<span class="pl-c"><span class="pl-c">#</span> 指定这个容器启动时需要运行的命令,只有最后一个会生效，可被替代</span>
+ENTRYPOINT	<span class="pl-c"><span class="pl-c">#</span> 指定这个容器启动时需要运行的命令,可以追加命令</span>
+ONBUILD			<span class="pl-c"><span class="pl-c">#</span> 当构建一个被继承Dockerfile 会被执行，触发执行</span>
+COPY				<span class="pl-c"><span class="pl-c">#</span> 类似ADD,将文件导入到镜像中</span>
+ENV					<span class="pl-c"><span class="pl-c">#</span> 构建时设置环境变量</span></pre></div>
+<h4><a id="user-content-32构建image" class="anchor" aria-hidden="true" href="#32构建image"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.2构建image</h4>
+<div class="highlight highlight-source-shell"><pre>docker build -f dockerfile文件 -t 构建镜像名:[tag]</pre></div>
+<h4><a id="user-content-33-demo" class="anchor" aria-hidden="true" href="#33-demo"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.3 demo</h4>
+<p>通过dockerfile构建镜像</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 目录树</span>
+<span class="pl-c1">.</span>
+├── Dockerfile
+├── app.py
+├── requirements.txt
+└── run.sh</pre></div>
+<div class="highlight highlight-source-dockerfile"><pre><span class="pl-c"><span class="pl-c">#</span> Dockerfile</span>
+
+<span class="pl-k">FROM</span>    python:latest
+<span class="pl-k">LABEL</span>   email=<span class="pl-s">"1342104001@qq.com"</span>
+<span class="pl-k">ENV</span>     home /root
+<span class="pl-k">WORKDIR</span> ${home}
+<span class="pl-k">COPY</span>    app.py ${home}
+<span class="pl-k">COPY</span>    requirements.txt ${home}
+<span class="pl-k">RUN</span>     python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+<span class="pl-k">EXPOSE</span>  5000
+<span class="pl-k">CMD</span>     [ <span class="pl-s">"python"</span>, <span class="pl-s">"app.py"</span>]</pre></div>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># app.py</span>
+
+<span class="pl-k">from</span> <span class="pl-s1">flask</span> <span class="pl-k">import</span> <span class="pl-v">Flask</span>
+
+<span class="pl-s1">app</span> <span class="pl-c1">=</span> <span class="pl-v">Flask</span>(<span class="pl-s1">__name__</span>)
+
+
+<span class="pl-en">@<span class="pl-s1">app</span>.<span class="pl-en">get</span>(<span class="pl-s">"/"</span>)</span>
+<span class="pl-k">def</span> <span class="pl-en">index</span>():
+    <span class="pl-k">return</span> {
+        <span class="pl-s">"code"</span>: <span class="pl-c1">200</span>,
+        <span class="pl-s">"message"</span>: <span class="pl-s">"success"</span>,
+        <span class="pl-s">"data"</span>: {
+            <span class="pl-s">"name"</span>: <span class="pl-s">"tom"</span>,
+            <span class="pl-s">"age"</span>: <span class="pl-c1">12</span>
+        }
+    }
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-s1">app</span>.<span class="pl-en">run</span>(<span class="pl-s1">debug</span><span class="pl-c1">=</span><span class="pl-c1">True</span>, <span class="pl-s1">host</span><span class="pl-c1">=</span><span class="pl-s">"0.0.0.0"</span>)</pre></div>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> requirements.txt</span>
+
+Flask==2.0.2</pre></div>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> run.sh</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 存在即删除</span>
+docker rm -f fapp
+
+<span class="pl-c"><span class="pl-c">#</span> 启动镜像</span>
+docker run -itd -p 5001:5000 --name fapp application</pre></div>
+<h3><a id="user-content-4-网络" class="anchor" aria-hidden="true" href="#4-网络"><span aria-hidden="true" class="octicon octicon-link"></span></a>4. 网络</h3>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> docker 启动容器时，默认使用birdge模式，这种模式会有一个问题：局域网内容器之间通信可能异常</span>
+<span class="pl-c"><span class="pl-c">#</span> 解决方案： 创建网络，启动时指定网络即可</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 创建网络 子网：192.168.1.200/24  网关：192.168.1.200</span>
+docker network create --subnet 192.168.1.200/24 --gateway 192.168.1.200 localhost
+
+<span class="pl-c"><span class="pl-c">#</span> 以当前创建的网络进行启动  注意：--network localhost  表示以当前网络启动</span>
+docker run -td --name fapp1 --network localhost -p 5000:5000 镜像</pre></div>
+<h3><a id="user-content-5-docker-compose" class="anchor" aria-hidden="true" href="#5-docker-compose"><span aria-hidden="true" class="octicon octicon-link"></span></a>5. docker-compose</h3>
+<h4><a id="user-content-51-介绍" class="anchor" aria-hidden="true" href="#51-介绍"><span aria-hidden="true" class="octicon octicon-link"></span></a>5.1 介绍</h4>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 解决容器编排问题，通过yml文件一键启动docker镜像</span>
+<span class="pl-c"><span class="pl-c">#</span> Compose 使用的三个步骤：</span>
+<span class="pl-c"><span class="pl-c">#</span>		使用 Dockerfile 定义应用程序的环境。</span>
+<span class="pl-c"><span class="pl-c">#</span>		使用 docker-compose.yml 定义构成应用程序的服务，这样它们可以在隔离环境中一起运行。</span>
+<span class="pl-c"><span class="pl-c">#</span>		最后，执行 docker-compose up 命令来启动并运行整个应用程序。</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 启动命令</span>
+docker-compose up <span class="pl-c1">.</span></pre></div>
+<h4><a id="user-content-52-编排命令" class="anchor" aria-hidden="true" href="#52-编排命令"><span aria-hidden="true" class="octicon octicon-link"></span></a>5.2 编排命令</h4>
+<p>docker-compose的yml文件主要分为三个板块，通过这三个板块内容的编辑实现容器编排。分别为:</p>
+<ul>
+<li>版本 <code>version</code>
+</li>
+<li>服务 <code>services</code>
+</li>
+<li>其他 <code>...</code>
+</li>
+</ul>
+<p>demo演示：<code>对应上方Dockfile中的demo</code></p>
+<div class="highlight highlight-source-yaml"><pre> <span class="pl-ent">version</span>: <span class="pl-s"><span class="pl-pds">"</span>3.9<span class="pl-pds">"</span></span>
+ <span class="pl-ent">services</span>:
+   <span class="pl-ent">fileserver</span>:
+     <span class="pl-ent">build</span>: <span class="pl-s">.</span>
+     <span class="pl-ent">image</span>: <span class="pl-s">fileserver</span>
+     <span class="pl-ent">volumes</span>:
+       - <span class="pl-s">$PWD/FileResource:/root/FileResource</span>
+     <span class="pl-ent">ports</span>:
+       - <span class="pl-s"><span class="pl-pds">"</span>8000:8080<span class="pl-pds">"</span></span></pre></div>
+<h4><a id="user-content-53-启动demo" class="anchor" aria-hidden="true" href="#53-启动demo"><span aria-hidden="true" class="octicon octicon-link"></span></a>5.3 启动demo</h4>
+<div class="highlight highlight-source-shell"><pre>docker-compose up <span class="pl-c1">.</span></pre></div>
+<h3><a id="user-content-6-参考链接" class="anchor" aria-hidden="true" href="#6-参考链接"><span aria-hidden="true" class="octicon octicon-link"></span></a>6. 参考链接</h3>
+<p>具体命令参考docker官方文档</p>
+<p><a href="https://docs.docker.com/desktop/" rel="nofollow">Docker Desktop overview | Docker Documentation</a></p>
+<p>微软docker教程</p>
+<p><a href="https://docs.microsoft.com/zh-cn/visualstudio/docker/tutorials/docker-tutorial" rel="nofollow">教程：Windows 或 Mac 上的 Docker 和 Visual Studio Code 入门 | Microsoft Docs</a></p>
+<h3><a id="user-content-7-常见问题汇总" class="anchor" aria-hidden="true" href="#7-常见问题汇总"><span aria-hidden="true" class="octicon octicon-link"></span></a>7. 常见问题汇总</h3>
+<ol>
+<li>
+<p>用户组权限问题</p>
+<div class="highlight highlight-source-shell"><pre>Client: Docker Engine - Community
+ Version:           20.10.12
+ API version:       1.41
+ Go version:        go1.16.12
+ Git commit:        e91ed57
+ Built:             Mon Dec 13 11:45:33 2021
+ OS/Arch:           linux/amd64
+ Context:           default
+ Experimental:      <span class="pl-c1">true</span>
+Got permission denied <span class="pl-k">while</span> trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get <span class="pl-s"><span class="pl-pds">"</span>http://%2Fvar%2Frun%2Fdocker.sock/v1.24/version<span class="pl-pds">"</span></span>: dial unix /var/run/docker.sock: connect: permission denied</pre></div>
+<p>解决方案</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 将当前用户加入到docker用户组中</span>
+sudo groupadd docker
+sudo gpasswd -a <span class="pl-smi">$USER</span> docker
+newgrep docker</pre></div>
+</li>
+<li>
+<p>docker 常见时区设置</p>
+<div class="highlight highlight-source-shell"><pre>ENV TZ Asia/ShangHai</pre></div>
+</li>
+<li>
+<p>docker compose组合服务间的ready控制问题</p>
+<p>相关文档<a href="https://docs.docker.com/compose/startup-order/" rel="nofollow">https://docs.docker.com/compose/startup-order/</a></p>
+</li>
+</ol>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

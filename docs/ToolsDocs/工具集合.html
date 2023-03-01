@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>工具集合.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <ol>
+<li>
+<p>Python安装地址</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 去官网download</span>
+https://www.python.org
+<span class="pl-c"><span class="pl-c">#</span> 在华为镜像站download</span>
+https://repo.huaweicloud.com/python/</pre></div>
+</li>
+<li>
+<p>Python快速更换pip源</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 更新源到清华大学开源镜像站点</span>
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pip -U
+pip config <span class="pl-c1">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</pre></div>
+</li>
+<li>
+<p>Git下载</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 官网</span>
+https://git-scm.com
+<span class="pl-c"><span class="pl-c">#</span> 华为源</span>
+https://repo.huaweicloud.com/git-for-windows/
+https://repo.huaweicloud.com/git-for-macos/</pre></div>
+</li>
+<li>
+<p>vscode下载</p>
+<div class="highlight highlight-source-shell"><pre>https://code.visualstudio.com</pre></div>
+<p>vscode配置备份&amp;恢复方式</p>
+<blockquote>
+<ol>
+<li>
+<p>下载安装插件 <code>settings sync</code> <a href="https://github.com/shanalikhan/code-settings-sync">插件github地址</a></p>
+</li>
+<li>
+<p>点击使用github进行授权登录(需要在github上配置一个gist用来备份恢复)</p>
+</li>
+<li>
+<p>使用快捷键上传配置及下载配置</p>
+<p>Upload Your Settings:Press Shift + Alt + U (macOS: Shift + Option + U)</p>
+<p>Download your Settings(Press Shift + Alt + D (macOS: Shift + Option + D)</p>
+</li>
+</ol>
+</blockquote>
+</li>
+<li>
+<p>vim配置</p>
+<p>推荐大神配置<a href="https://github.com/amix/vimrc">地址</a></p>
+<ul>
+<li>
+<p>经典配置单</p>
+<p>将此<code>ToolsDocs/src</code>目录下的<code>vimrc.vimrc</code>复制到你的账户目录下，将其改名为<code>.vimrc</code>即可</p>
+</li>
+<li>
+<p>推荐配置单</p>
+</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre>git clone --depth=1 https://github.com/amix/vimrc.git <span class="pl-k">~</span>/.vim_runtime
+sh <span class="pl-k">~</span>/.vim_runtime/install_awesome_vimrc.sh</pre></div>
+</li>
+<li>
+<p>nodejs 下载</p>
+<p>下载<a href="https://nodejs.org/en/" rel="nofollow">地址</a></p>
+<ul>
+<li>
+<p>npm 换源(懒人一键操作)</p>
+<div class="highlight highlight-source-shell"><pre>npm config <span class="pl-c1">set</span> registry http://registry.npmmirror.com</pre></div>
+</li>
+<li>
+<p>npm 源恢复</p>
+<div class="highlight highlight-source-shell"><pre>npm config <span class="pl-c1">set</span> registry https://registry.npmjs.org</pre></div>
+</li>
+<li>
+<p>yarn 安装</p>
+<div class="highlight highlight-source-shell"><pre>npm install --global yarn</pre></div>
+</li>
+</ul>
+</li>
+<li>
+<p>golang 下载</p>
+<p>下载<a href="https://golang.google.cn/dl/" rel="nofollow">地址</a></p>
+<ul>
+<li>
+<p>换源(懒人一键操作)</p>
+<div class="highlight highlight-source-shell"><pre>go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.cn,direct</pre></div>
+</li>
+</ul>
+</li>
+<li>
+<p>MySQL 下载</p>
+<p>下载<a href="https://dev.mysql.com/downloads/" rel="nofollow">地址</a></p>
+</li>
+</ol>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

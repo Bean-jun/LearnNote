@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>Python-闭包&装饰器.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h3><a id="user-content-一闭包" class="anchor" aria-hidden="true" href="#一闭包"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、闭包</h3>
+<ol>
+<li>
+<p>初识闭包代码</p>
+<p>啥也不说，先看看代码哦~</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/009.py</span>
+
+<span class="pl-c"># 先定义一个函数</span>
+<span class="pl-k">def</span> <span class="pl-en">function</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"我是function函数哦~"</span>)
+    
+    <span class="pl-c"># 然后再定义一个函数</span>
+    <span class="pl-k">def</span> <span class="pl-en">inner</span>():
+        <span class="pl-en">print</span>(<span class="pl-s">"我是inner函数哦~"</span>)
+    
+    <span class="pl-c"># 好了, 这会我们的function函数有一个返回值</span>
+    <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-c"># 先调用函数看看结果及返回值嘛</span>
+    <span class="pl-s1">f</span> <span class="pl-c1">=</span> <span class="pl-en">function</span>()  <span class="pl-c"># 我是function函数哦~</span>
+    <span class="pl-en">print</span>(<span class="pl-s1">f</span>)  <span class="pl-c"># &lt;function function.&lt;locals&gt;.inner at 0x104795430&gt;</span>
+    <span class="pl-c"># 好家伙，上面的结果看懵了不是，说是返回了函数？？？ 我们借助callable查看是否可以调用</span>
+    <span class="pl-en">print</span>(<span class="pl-s">"当前内容是否是可以调用对象：{}"</span>.<span class="pl-en">format</span>(<span class="pl-en">callable</span>(<span class="pl-s1">f</span>)))  <span class="pl-c"># 当前内容是否是可以调用对象：True</span>
+    <span class="pl-c"># 歪？？？ 那就试试呗, 对了，别被迷糊了哦~</span>
+    <span class="pl-en">f</span>()  <span class="pl-c"># 我是inner函数哦~</span>
+    <span class="pl-c"># 那么想要一次性直接执行到内部咋办呢？真心的感觉好恶心哦~</span>
+    <span class="pl-en">function</span>()()</pre></div>
+</li>
+<li>
+<p>进一步了解</p>
+<p>我们尝试往里面传递一些参数试试嘛~</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/010.py</span>
+
+<span class="pl-k">def</span> <span class="pl-en">function</span>(<span class="pl-s1">args</span>):
+    <span class="pl-k">def</span> <span class="pl-en">inner</span>():
+        <span class="pl-en">print</span>(<span class="pl-s">"function函数传递进来的是：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">args</span>))
+        <span class="pl-k">return</span> <span class="pl-s1">args</span>
+    
+    <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">func</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"我是func函数哦~"</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-c"># 先传字符串进去</span>
+    <span class="pl-en">function</span>(<span class="pl-s">"哈哈哈"</span>)()  <span class="pl-c"># function函数传递进来的是：哈哈哈</span>
+    <span class="pl-c"># 传个被执行了的函数进去</span>
+    <span class="pl-en">function</span>(<span class="pl-en">func</span>())()  <span class="pl-c"># function函数传递进来的是：None     这里解释下func函数返回值是None</span>
+    <span class="pl-c"># 传个函数名进去</span>
+    <span class="pl-en">function</span>(<span class="pl-s1">func</span>)()  <span class="pl-c"># function函数传递进来的是：&lt;function func at 0x100f6b430&gt;</span>
+    <span class="pl-c"># 好家伙，上面那个是什么鬼，难不成可以再一次调用？？？？我们试试嘛~</span>
+    <span class="pl-en">function</span>(<span class="pl-s1">func</span>)()()  <span class="pl-c"># function函数传递进来的是：&lt;function func at 0x105dd5430&gt;   我是func函数哦~</span></pre></div>
+</li>
+<li>
+<p>再进一步</p>
+<p>这会我想尝试在内部函数中调用外层函数的变量，甚至我还想修改它~</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/011.py</span>
+
+<span class="pl-k">def</span> <span class="pl-en">function</span>():
+    <span class="pl-s1">n</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span>
+    
+    <span class="pl-k">def</span> <span class="pl-en">inner</span>():
+        <span class="pl-k">nonlocal</span> <span class="pl-s1">n</span>
+        <span class="pl-c"># 这里要尤为注意，内部函数不可以直接修改外部函数的值[不可变]，否则会抛出异常，若是必须修改请加上nonlocal声明</span>
+        <span class="pl-s1">n</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span>
+        <span class="pl-en">print</span>(<span class="pl-s">"n的值是：{} , 对应内存地址为{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">n</span>, <span class="pl-en">id</span>(<span class="pl-s1">n</span>)))
+    
+    <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-en">function</span>()()</pre></div>
+</li>
+</ol>
+<h3><a id="user-content-二装饰器" class="anchor" aria-hidden="true" href="#二装饰器"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、装饰器</h3>
+<p>好了，别说了，看看吧，你刚刚那个<code>function(func)()()</code>不嫌恶心？直奔主题 ~ 什么是装饰器？有啥用 ~ 有多少中写法~</p>
+<p>哈哈哈哈，那么接下来就聊聊简化方式嘛，先看个demo</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/012.py</span>
+
+<span class="pl-k">def</span> <span class="pl-en">function</span>(<span class="pl-s1">args</span>):
+    <span class="pl-k">def</span> <span class="pl-en">inner</span>():
+        <span class="pl-en">print</span>(<span class="pl-s">"function函数传递进来的是：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">args</span>))
+        <span class="pl-k">return</span> <span class="pl-s1">args</span>
+
+    <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+
+<span class="pl-en">@<span class="pl-s1">function</span></span>
+<span class="pl-k">def</span> <span class="pl-en">func</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"我是func函数哦~"</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-en">func</span>()()  <span class="pl-c"># function函数传递进来的是：&lt;function func at 0x105dd5430&gt;   我是func函数哦~</span></pre></div>
+<p>什么？？？？<code>func()()</code>还不够简单？？？看这个</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/013.py</span>
+
+<span class="pl-k">def</span> <span class="pl-en">function</span>(<span class="pl-s1">args</span>):
+    <span class="pl-k">def</span> <span class="pl-en">inner</span>():
+        <span class="pl-en">print</span>(<span class="pl-s">"function函数传递进来的是：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">args</span>))
+        <span class="pl-k">return</span> <span class="pl-en">args</span>()
+
+    <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+
+<span class="pl-en">@<span class="pl-s1">function</span></span>
+<span class="pl-k">def</span> <span class="pl-en">func</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"我是func函数哦~"</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-en">func</span>()  <span class="pl-c"># function函数传递进来的是：&lt;function func at 0x105dd5430&gt;   我是func函数哦~</span></pre></div>
+<ol>
+<li>
+<p>什么是装饰器？</p>
+<p>个人理解哈~  就是在不修改原函数的情况下添加更多的功能~ 上面的两个小栗子就是装饰器的应用，在不修改<code>func</code>函数的情况下添加一点点功能~</p>
+<p>说到这里大家就不乐意了，这<code>@function</code>是什么鬼捏~。好的，那么我们来看下这个写法~</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/014.py</span>
+
+<span class="pl-k">def</span> <span class="pl-en">function</span>(<span class="pl-s1">args</span>):
+    <span class="pl-k">def</span> <span class="pl-en">inner</span>():
+        <span class="pl-en">print</span>(<span class="pl-s">"function函数传递进来的是：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">args</span>))
+        <span class="pl-k">return</span> <span class="pl-en">args</span>()
+
+    <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+
+<span class="pl-en">@<span class="pl-s1">function</span></span>
+<span class="pl-k">def</span> <span class="pl-en">func_1</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"我是func_1函数哦~"</span>)
+
+
+<span class="pl-k">def</span> <span class="pl-en">func_2</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"我是func_2函数哦~"</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s">"""</span>
+<span class="pl-s">    下面两种结果是一样的，原因就在于@function放在函数func_1上面其实就是相当于变成了这样</span>
+<span class="pl-s">    func_1 = function(func_1)</span>
+<span class="pl-s">    那么在执行func_1()时，其实就是在执行function(func_1)()咯~</span>
+<span class="pl-s">    """</span>
+    <span class="pl-en">func_1</span>()
+    <span class="pl-en">function</span>(<span class="pl-s1">func_2</span>)()</pre></div>
+</li>
+<li>
+<p>装饰器的多种写法~</p>
+<p>没错，之前面试被问到了，问我怎么实现，我说就上面这种哇~~</p>
+<p>结果可想而知，凉凉~</p>
+<p>下面就来看看咯~</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/015.py</span>
+
+<span class="pl-s">"""</span>
+<span class="pl-s">这里我会多少种就写多少了~</span>
+<span class="pl-s">- 对函数的装饰</span>
+<span class="pl-s">    1. 普通装饰器</span>
+<span class="pl-s">    2. 可以传递参数的装饰器</span>
+<span class="pl-s">    3. 带参数的装饰器</span>
+<span class="pl-s">    4. 基于类实现装饰器&amp;&amp;可以传递参数的类装饰器</span>
+<span class="pl-s">- 对类的装饰</span>
+<span class="pl-s">    5. 函数装饰器对类的装饰</span>
+<span class="pl-s">    6. 类装饰器对类的装饰</span>
+<span class="pl-s">    7. 带参数的类的类装饰器</span>
+<span class="pl-s">- 停</span>
+<span class="pl-s">    不写了~,感觉在套娃，关于这部分的应用会在后面的框架中介绍</span>
+<span class="pl-s">"""</span>
+
+
+<span class="pl-c"># 1. 普通装饰器</span>
+<span class="pl-k">def</span> <span class="pl-en">function_1</span>(<span class="pl-s1">f</span>):
+    <span class="pl-k">def</span> <span class="pl-en">inner</span>():
+        <span class="pl-en">print</span>(<span class="pl-s">"函数传递进来的是：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">f</span>))
+        <span class="pl-k">return</span> <span class="pl-en">f</span>()
+
+    <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+
+<span class="pl-en">@<span class="pl-s1">function_1</span></span>
+<span class="pl-k">def</span> <span class="pl-en">func_1</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"func_1"</span>)
+
+
+<span class="pl-c"># 2. 可以传递参数的装饰器</span>
+<span class="pl-k">def</span> <span class="pl-en">function_2</span>(<span class="pl-s1">f</span>):
+    <span class="pl-k">def</span> <span class="pl-en">inner</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"函数传递进来的是：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">f</span>))
+        <span class="pl-k">return</span> <span class="pl-en">f</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+
+    <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+
+<span class="pl-en">@<span class="pl-s1">function_2</span></span>
+<span class="pl-k">def</span> <span class="pl-en">func_2</span>(<span class="pl-s1">name</span>, <span class="pl-s1">age</span>):
+    <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">name</span><span class="pl-kos">}</span></span>的年龄是<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">age</span><span class="pl-kos">}</span></span>岁~"</span>)
+
+
+<span class="pl-c"># 3. 带参数的装饰器</span>
+<span class="pl-k">def</span> <span class="pl-en">function_3</span>(<span class="pl-s1">name</span>):
+    <span class="pl-k">def</span> <span class="pl-en">param</span>(<span class="pl-s1">f</span>):
+        <span class="pl-k">def</span> <span class="pl-en">inner</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+            <span class="pl-en">print</span>(<span class="pl-s">f"name的值是:<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">name</span><span class="pl-kos">}</span></span>"</span>)
+            <span class="pl-en">print</span>(<span class="pl-s">"函数传递进来的是：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">f</span>))
+            <span class="pl-k">return</span> <span class="pl-en">f</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+
+        <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+    <span class="pl-k">return</span> <span class="pl-s1">param</span>
+
+
+<span class="pl-en">@<span class="pl-en">function_3</span>(<span class="pl-s">"function_3"</span>)</span>
+<span class="pl-k">def</span> <span class="pl-en">func_3</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"func_3"</span>)
+
+
+<span class="pl-c"># 4. 基于类实现装饰器&amp;&amp;可以传递参数的类装饰器</span>
+<span class="pl-k">class</span> <span class="pl-v">Decorator_1</span>():
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">f</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">f</span> <span class="pl-c1">=</span> <span class="pl-s1">f</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">__call__</span>(<span class="pl-s1">self</span>, <span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-k">if</span> <span class="pl-en">callable</span>(<span class="pl-s1">self</span>.<span class="pl-s1">f</span>):
+            <span class="pl-en">print</span>(<span class="pl-s">"函数传递进来的是：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">self</span>.<span class="pl-s1">f</span>))
+            <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">f</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+        <span class="pl-k">raise</span> <span class="pl-v">Exception</span>(<span class="pl-s">"不要瞎搞哦~"</span>)
+
+
+<span class="pl-en">@<span class="pl-v">Decorator_1</span></span>
+<span class="pl-k">def</span> <span class="pl-en">func_4</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"func_4"</span>)
+
+
+<span class="pl-en">@<span class="pl-v">Decorator_1</span></span>
+<span class="pl-k">def</span> <span class="pl-en">func_5</span>(<span class="pl-s1">name</span>, <span class="pl-s1">age</span>):
+    <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">name</span><span class="pl-kos">}</span></span>的年龄是<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">age</span><span class="pl-kos">}</span></span>岁~"</span>)
+
+
+<span class="pl-c"># 5. 函数装饰器对类的装饰</span>
+<span class="pl-k">def</span> <span class="pl-en">function_5</span>(<span class="pl-s1">cls</span>):
+    <span class="pl-k">def</span> <span class="pl-en">inner</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"类传递进来的是：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">cls</span>))
+        <span class="pl-k">return</span> <span class="pl-en">cls</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+
+    <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+
+<span class="pl-en">@<span class="pl-s1">function_5</span></span>
+<span class="pl-k">class</span> <span class="pl-v">A</span>():
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">name</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s1">name</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">__del__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s1">self</span>.<span class="pl-s1">name</span>)
+
+
+<span class="pl-c"># 6. 类装饰器对类的装饰</span>
+<span class="pl-k">class</span> <span class="pl-v">Decorator_2</span>():
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">decorator_class</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">decorator_class</span> <span class="pl-c1">=</span> <span class="pl-s1">decorator_class</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">__call__</span>(<span class="pl-s1">self</span>, <span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"类传递进来的是：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">self</span>.<span class="pl-s1">decorator_class</span>))
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">decorator_class</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+
+
+<span class="pl-en">@<span class="pl-v">Decorator_2</span></span>
+<span class="pl-k">class</span> <span class="pl-v">B</span>():
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">name</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s1">name</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">__del__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s1">self</span>.<span class="pl-s1">name</span>)
+
+
+<span class="pl-c"># 7. 带参数的类的类装饰器</span>
+<span class="pl-k">class</span> <span class="pl-v">Decorator_3</span>():
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">param</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">param</span> <span class="pl-c1">=</span> <span class="pl-s1">param</span>
+
+    <span class="pl-k">class</span> <span class="pl-v">Inner</span>():
+        <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">decorator_class</span>):
+            <span class="pl-s1">self</span>.<span class="pl-s1">decorator_class</span> <span class="pl-c1">=</span> <span class="pl-s1">decorator_class</span>
+
+        <span class="pl-k">def</span> <span class="pl-en">__call__</span>(<span class="pl-s1">self</span>, <span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+            <span class="pl-en">print</span>(<span class="pl-s">"我是类中的类，传进来的是：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">self</span>.<span class="pl-s1">decorator_class</span>))
+            <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">decorator_class</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">__call__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">decorator_class</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-v">Inner</span>(<span class="pl-s1">decorator_class</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">__del__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"参数值为：{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">self</span>.<span class="pl-s1">param</span>))
+
+
+<span class="pl-en">@<span class="pl-v">Decorator_3</span>(<span class="pl-s">"--我是参数--"</span>)</span>
+<span class="pl-k">class</span> <span class="pl-v">C</span>():
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">name</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s1">name</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">__del__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s1">self</span>.<span class="pl-s1">name</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-en">func_1</span>()
+    <span class="pl-en">func_2</span>(<span class="pl-s">"小明"</span>, <span class="pl-c1">23</span>)
+    <span class="pl-en">func_3</span>()
+    <span class="pl-en">func_4</span>()
+    <span class="pl-en">func_5</span>(<span class="pl-s">"小明"</span>, <span class="pl-c1">23</span>)
+    <span class="pl-s1">a</span> <span class="pl-c1">=</span> <span class="pl-v">A</span>(<span class="pl-s">"小明"</span>)
+    <span class="pl-s1">b</span> <span class="pl-c1">=</span> <span class="pl-v">B</span>(<span class="pl-s">"小红"</span>)
+    <span class="pl-s1">c</span> <span class="pl-c1">=</span> <span class="pl-v">C</span>(<span class="pl-s">"小黑"</span>)</pre></div>
+</li>
+<li>
+<p>进阶点玩法咯</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/016.py</span>
+
+<span class="pl-s">"""</span>
+<span class="pl-s">1. 多层级装饰器如何理解~</span>
+<span class="pl-s">    从下往上包装，从上往下执行</span>
+<span class="pl-s"></span>
+<span class="pl-s">2. 装饰器在使用时有什么需要注意的嘛~</span>
+<span class="pl-s">    在你写@时就注定这段代码不再平凡，在你执行之前，Python解释器会主动将装饰效果先装饰完成，方便你后期直接执行，</span>
+<span class="pl-s">    这部分在很多新手在使用时，他们将装饰器函数或者类装饰之后，进行程序调试时感觉很奇怪，明明没有调用被装饰的函数，</span>
+<span class="pl-s">    但是装饰器函数却被执行了</span>
+<span class="pl-s"></span>
+<span class="pl-s">3. 当前存在的问题:</span>
+<span class="pl-s">    被修饰的函数名称会发生改变哦~</span>
+<span class="pl-s">    使用functools中的wraps修复即可</span>
+<span class="pl-s">"""</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">decorator_1</span>(<span class="pl-s1">f</span>):
+    <span class="pl-en">print</span>(<span class="pl-s">"我是1号装饰器，现在在外部工作环境中~"</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">inner</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"我是1号装饰器，现在在内部工作环境中~"</span>)
+        <span class="pl-k">return</span> <span class="pl-en">f</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+
+    <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">decorator_2</span>(<span class="pl-s1">f</span>):
+    <span class="pl-en">print</span>(<span class="pl-s">"我是2号装饰器，现在在外部工作环境中~"</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">inner</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"我是2号装饰器，现在在内部工作环境中~"</span>)
+        <span class="pl-k">return</span> <span class="pl-en">f</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+
+    <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+
+<span class="pl-en">@<span class="pl-s1">decorator_1</span></span>
+<span class="pl-en">@<span class="pl-s1">decorator_2</span></span>
+<span class="pl-k">def</span> <span class="pl-en">func_1</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"~~~~~~我是func_1函数哦~~~~"</span>)
+
+
+<span class="pl-k">def</span> <span class="pl-en">func_2</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"~~~~~~我是func_2函数哦~~~~"</span>)
+
+
+<span class="pl-en">@<span class="pl-s1">decorator_2</span></span>
+<span class="pl-k">def</span> <span class="pl-en">func_3</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"~~~~~~我是func_3函数哦~~~~"</span>)
+
+
+<span class="pl-k">def</span> <span class="pl-en">func_4</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"~~~~~~我是func_4函数哦~~~~"</span>)
+
+
+<span class="pl-k">from</span> <span class="pl-s1">functools</span> <span class="pl-k">import</span> <span class="pl-s1">wraps</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">decorator_3</span>(<span class="pl-s1">f</span>):
+    <span class="pl-en">print</span>(<span class="pl-s">"我是3号装饰器，现在在外部工作环境中~"</span>)
+
+    <span class="pl-en">@<span class="pl-en">wraps</span>(<span class="pl-s1">f</span>)</span>
+    <span class="pl-k">def</span> <span class="pl-en">inner</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"我是3号装饰器，现在在内部工作环境中~"</span>)
+        <span class="pl-k">return</span> <span class="pl-en">f</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+
+    <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+
+<span class="pl-en">@<span class="pl-s1">decorator_3</span></span>
+<span class="pl-k">def</span> <span class="pl-en">func_5</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">"~~~~~~我是func_5函数哦~~~~"</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-en">func_1</span>()
+    <span class="pl-c"># 本质上和第一种没区别的</span>
+    <span class="pl-en">decorator_1</span>(<span class="pl-en">decorator_2</span>(<span class="pl-s1">func_2</span>))()
+
+    <span class="pl-c"># 看看这个</span>
+    <span class="pl-en">print</span>(<span class="pl-s">"当前被执行函数名称："</span>, <span class="pl-s1">func_3</span>.<span class="pl-s1">__name__</span>)  <span class="pl-c"># 当前被执行函数名称： inner</span>
+    <span class="pl-en">print</span>(<span class="pl-s">"当前被执行函数名称："</span>, <span class="pl-s1">func_4</span>.<span class="pl-s1">__name__</span>)  <span class="pl-c"># 当前被执行函数名称： func_4</span>
+    <span class="pl-c"># 遇到这样的情况咱们怎么办?名字被改了~ 请看func_6函数及改造过的装饰器~</span>
+    <span class="pl-en">print</span>(<span class="pl-s">"当前被执行函数名称："</span>, <span class="pl-s1">func_5</span>.<span class="pl-s1">__name__</span>)  <span class="pl-c"># 当前被执行函数名称： func_5</span>
+    <span class="pl-c"># 哦豁~ 使用functools中的wraps修复即可</span></pre></div>
+</li>
+<li>
+<p>看看property装饰器咯~</p>
+<p>方法2好像可以，但是看着好憋扭哦~，怎么办？？   哈哈哈哈，看</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/017.py</span>
+
+<span class="pl-k">class</span> <span class="pl-v">People</span>():
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">name</span>, <span class="pl-s1">age</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">__name</span> <span class="pl-c1">=</span> <span class="pl-s1">name</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">__age</span> <span class="pl-c1">=</span> <span class="pl-s1">age</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">name</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">__name</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">age</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">__age</span>
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s1">people</span> <span class="pl-c1">=</span> <span class="pl-v">People</span>(<span class="pl-s">"小明"</span>, <span class="pl-c1">23</span>)
+    <span class="pl-k">try</span>:
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">people</span>.<span class="pl-s1">__name</span><span class="pl-kos">}</span></span>的年龄是<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">people</span>.<span class="pl-s1">__age</span><span class="pl-kos">}</span></span>"</span>)
+    <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+        <span class="pl-en">print</span>(<span class="pl-s1">e</span>.<span class="pl-s1">args</span>)
+    <span class="pl-c"># 哦豁~，好像没法正常访问哎~那我们怎么办呢</span>
+    <span class="pl-c"># 1. 直接访问 对于私有属性可以使用    对象._类名__属性  不推荐</span>
+    <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">people</span>.<span class="pl-s1">_People__name</span><span class="pl-kos">}</span></span>的年龄是<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">people</span>.<span class="pl-s1">_People__age</span><span class="pl-kos">}</span></span>"</span>)
+    <span class="pl-c"># 2. 定义方法去访问</span>
+    <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">people</span>.<span class="pl-en">name</span>()<span class="pl-kos">}</span></span>的年龄是<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">people</span>.<span class="pl-en">age</span>()<span class="pl-kos">}</span></span>"</span>)</pre></div>
+<p>方法2好像可以，但是看着好憋扭哦 ~ ，怎么办？？   哈哈哈哈，看~</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/018.py</span>
+
+<span class="pl-k">class</span> <span class="pl-v">People</span>():
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">name</span>, <span class="pl-s1">age</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">__name</span> <span class="pl-c1">=</span> <span class="pl-s1">name</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">__age</span> <span class="pl-c1">=</span> <span class="pl-s1">age</span>
+
+    <span class="pl-en">@<span class="pl-s1">property</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">name</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">__name</span>
+
+    <span class="pl-en">@<span class="pl-s1">property</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">age</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">__age</span>
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s1">people</span> <span class="pl-c1">=</span> <span class="pl-v">People</span>(<span class="pl-s">"小明"</span>, <span class="pl-c1">23</span>)
+    <span class="pl-c"># 简单多了吧</span>
+    <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">people</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span>的年龄是<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">people</span>.<span class="pl-s1">age</span><span class="pl-kos">}</span></span>"</span>)</pre></div>
+<p>看看property的高级玩法 ~</p>
+<p>注意上面的我们可以直接使用了，那么可以设置值嘛 ~ 你可以试试，不行哦 ~  怎么办，我们以年龄为例，看~</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/019.py</span>
+
+<span class="pl-k">class</span> <span class="pl-v">People</span>():
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">name</span>, <span class="pl-s1">age</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s1">name</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">__age</span> <span class="pl-c1">=</span> <span class="pl-s1">age</span>
+
+    <span class="pl-en">@<span class="pl-s1">property</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">age</span>(<span class="pl-s1">self</span>):
+        <span class="pl-c"># 读取属性</span>
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">__age</span>
+
+    <span class="pl-en">@<span class="pl-s1">age</span>.<span class="pl-s1">setter</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">age</span>(<span class="pl-s1">self</span>, <span class="pl-s1">val</span>):
+        <span class="pl-c"># 设置属性</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">__age</span> <span class="pl-c1">=</span> <span class="pl-s1">val</span>
+
+    <span class="pl-en">@<span class="pl-s1">age</span>.<span class="pl-s1">deleter</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">age</span>(<span class="pl-s1">self</span>):
+        <span class="pl-c"># 删除属性</span>
+        <span class="pl-k">del</span> <span class="pl-s1">self</span>.<span class="pl-s1">__age</span>
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s1">people</span> <span class="pl-c1">=</span> <span class="pl-v">People</span>(<span class="pl-s">"小明"</span>, <span class="pl-c1">23</span>)
+    <span class="pl-c"># 简单多了吧</span>
+    <span class="pl-s1">people</span>.<span class="pl-s1">age</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span>
+    <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">people</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span>的年龄是<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">people</span>.<span class="pl-s1">age</span><span class="pl-kos">}</span></span>"</span>)</pre></div>
+<p>不过还有一种写法，可以看看，都差不多~</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># PythonDocs/src/020.py</span>
+
+<span class="pl-k">class</span> <span class="pl-v">People</span>():
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">name</span>, <span class="pl-s1">age</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s1">name</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">__age</span> <span class="pl-c1">=</span> <span class="pl-s1">age</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">get_age</span>(<span class="pl-s1">self</span>):
+        <span class="pl-c"># 读取属性</span>
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">__age</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">set_age</span>(<span class="pl-s1">self</span>, <span class="pl-s1">val</span>):
+        <span class="pl-c"># 设置属性</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">__age</span> <span class="pl-c1">=</span> <span class="pl-s1">val</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">del_age</span>(<span class="pl-s1">self</span>):
+        <span class="pl-c"># 删除属性</span>
+        <span class="pl-k">del</span> <span class="pl-s1">self</span>.<span class="pl-s1">__age</span>
+
+    <span class="pl-s1">age</span> <span class="pl-c1">=</span> <span class="pl-en">property</span>(<span class="pl-s1">get_age</span>, <span class="pl-s1">set_age</span>, <span class="pl-s1">del_age</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s1">people</span> <span class="pl-c1">=</span> <span class="pl-v">People</span>(<span class="pl-s">"小明"</span>, <span class="pl-c1">23</span>)
+    <span class="pl-c"># 简单多了吧</span>
+    <span class="pl-s1">people</span>.<span class="pl-s1">age</span> <span class="pl-c1">+=</span> <span class="pl-c1">1</span>
+    <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">people</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span>的年龄是<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">people</span>.<span class="pl-s1">age</span><span class="pl-kos">}</span></span>"</span>)</pre></div>
+</li>
+</ol>
+<h3><a id="user-content-三装饰器应用" class="anchor" aria-hidden="true" href="#三装饰器应用"><span aria-hidden="true" class="octicon octicon-link"></span></a>三、装饰器应用</h3>
+<p>工作之余写的一个小栗子，看看吧，先上源码~</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># LearnGuide/PythonDocs/src/cache.py</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">datetime</span>
+<span class="pl-k">import</span> <span class="pl-s1">json</span>
+<span class="pl-k">from</span> <span class="pl-s1">functools</span> <span class="pl-k">import</span> <span class="pl-s1">wraps</span>, <span class="pl-s1">partial</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">redis</span>
+
+<span class="pl-s1">__all__</span> <span class="pl-c1">=</span> (<span class="pl-s">"cache"</span>)
+
+<span class="pl-s1">pool</span> <span class="pl-c1">=</span> <span class="pl-s1">redis</span>.<span class="pl-v">ConnectionPool</span>(<span class="pl-s1">host</span><span class="pl-c1">=</span><span class="pl-s">'localhost'</span>, <span class="pl-s1">port</span><span class="pl-c1">=</span><span class="pl-c1">6379</span>, <span class="pl-s1">db</span><span class="pl-c1">=</span><span class="pl-c1">15</span>)
+
+
+<span class="pl-k">class</span> <span class="pl-v">DB</span>():
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">exp</span>, <span class="pl-s1">db_type</span><span class="pl-c1">=</span><span class="pl-s">"default"</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">exp</span> <span class="pl-c1">=</span> <span class="pl-s1">exp</span>  <span class="pl-c"># 过期时间</span>
+        <span class="pl-k">if</span> <span class="pl-s1">db_type</span> <span class="pl-c1">==</span> <span class="pl-s">"redis"</span>:
+            <span class="pl-k">import</span> <span class="pl-s1">redis</span>
+            <span class="pl-s1">self</span>.<span class="pl-s1">db</span> <span class="pl-c1">=</span> <span class="pl-s1">redis</span>.<span class="pl-v">Redis</span>(<span class="pl-s1">connection_pool</span><span class="pl-c1">=</span><span class="pl-s1">pool</span>)
+        <span class="pl-k">elif</span> <span class="pl-s1">db_type</span> <span class="pl-c1">==</span> <span class="pl-s">"default"</span>:
+            <span class="pl-s1">self</span>.<span class="pl-s1">db</span> <span class="pl-c1">=</span> {}
+
+    <span class="pl-k">def</span> <span class="pl-en">set</span>(<span class="pl-s1">self</span>, <span class="pl-s1">key</span>, <span class="pl-s1">value</span>):
+        <span class="pl-k">if</span> <span class="pl-en">isinstance</span>(<span class="pl-s1">self</span>.<span class="pl-s1">db</span>, <span class="pl-s1">redis</span>.<span class="pl-v">Redis</span>):
+            <span class="pl-s1">self</span>.<span class="pl-s1">db</span>.<span class="pl-en">setex</span>(<span class="pl-s1">name</span><span class="pl-c1">=</span><span class="pl-s1">key</span>, <span class="pl-s1">value</span><span class="pl-c1">=</span><span class="pl-s1">value</span>, <span class="pl-s1">time</span><span class="pl-c1">=</span><span class="pl-s1">self</span>.<span class="pl-s1">exp</span>)
+        <span class="pl-k">else</span>:
+            <span class="pl-s1">self</span>.<span class="pl-s1">db</span>[<span class="pl-s1">key</span>] <span class="pl-c1">=</span> <span class="pl-s1">value</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">get</span>(<span class="pl-s1">self</span>, <span class="pl-s1">key</span>):
+        <span class="pl-k">if</span> <span class="pl-en">isinstance</span>(<span class="pl-s1">self</span>.<span class="pl-s1">db</span>, <span class="pl-s1">redis</span>.<span class="pl-v">Redis</span>):
+            <span class="pl-k">try</span>:
+                <span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">db</span>.<span class="pl-en">get</span>(<span class="pl-s1">key</span>).<span class="pl-en">decode</span>()
+                <span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">json</span>.<span class="pl-en">loads</span>(<span class="pl-s1">ret</span>)
+            <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+                <span class="pl-k">return</span> <span class="pl-c1">None</span>
+            <span class="pl-k">else</span>:
+                <span class="pl-k">return</span> <span class="pl-s1">ret</span>
+        <span class="pl-k">else</span>:
+            <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">db</span>.<span class="pl-en">get</span>(<span class="pl-s1">key</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">pop</span>(<span class="pl-s1">self</span>, <span class="pl-s1">key</span>):
+        <span class="pl-k">if</span> <span class="pl-en">isinstance</span>(<span class="pl-s1">self</span>.<span class="pl-s1">db</span>, <span class="pl-s1">redis</span>.<span class="pl-v">Redis</span>):
+            <span class="pl-s1">self</span>.<span class="pl-s1">db</span>.<span class="pl-en">delete</span>(<span class="pl-s1">key</span>)
+        <span class="pl-k">else</span>:
+            <span class="pl-s1">self</span>.<span class="pl-s1">db</span>.<span class="pl-en">pop</span>(<span class="pl-s1">key</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">clear</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">pass</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">_cache</span>(<span class="pl-s1">exp</span>, <span class="pl-s1">prefix</span><span class="pl-c1">=</span><span class="pl-s">""</span>, <span class="pl-s1">request</span><span class="pl-c1">=</span><span class="pl-c1">None</span>):
+    <span class="pl-s">"""</span>
+<span class="pl-s">    exp: 过期时间(单位：秒)</span>
+<span class="pl-s">    """</span>
+    <span class="pl-k">try</span>:
+        <span class="pl-s1">db</span> <span class="pl-c1">=</span> <span class="pl-v">DB</span>(<span class="pl-s1">exp</span>, <span class="pl-s">"redis"</span>)
+    <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+        <span class="pl-s1">db</span> <span class="pl-c1">=</span> <span class="pl-v">DB</span>(<span class="pl-s1">exp</span>, <span class="pl-s">"default"</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">cache_func</span>(<span class="pl-s1">f</span>):
+        <span class="pl-en">@<span class="pl-en">wraps</span>(<span class="pl-s1">f</span>)</span>
+        <span class="pl-k">def</span> <span class="pl-en">inner</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+            <span class="pl-k">nonlocal</span> <span class="pl-s1">prefix</span>
+
+            <span class="pl-k">if</span> <span class="pl-c1">not</span> <span class="pl-s1">prefix</span>:
+                <span class="pl-s1">prefix</span> <span class="pl-c1">=</span> <span class="pl-s">"Cache"</span>
+
+            <span class="pl-k">try</span>:
+                <span class="pl-s1">k_fmt</span> <span class="pl-c1">=</span> <span class="pl-s">"{}:{}-{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">prefix</span>, <span class="pl-s1">f</span>.<span class="pl-s1">__name__</span>, <span class="pl-s1">request</span>.<span class="pl-s1">full_path</span>)
+            <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+                <span class="pl-s1">k_fmt</span> <span class="pl-c1">=</span> <span class="pl-s">"{}:{}-{}"</span>.<span class="pl-en">format</span>(<span class="pl-s1">prefix</span>, <span class="pl-s1">f</span>.<span class="pl-s1">__name__</span>, <span class="pl-c1">None</span>)
+
+            <span class="pl-s1">cache_ret</span> <span class="pl-c1">=</span> <span class="pl-s1">db</span>.<span class="pl-en">get</span>(<span class="pl-s1">k_fmt</span>)
+
+            <span class="pl-k">if</span> <span class="pl-s1">cache_ret</span>:
+                <span class="pl-k">if</span> <span class="pl-s1">datetime</span>.<span class="pl-s1">datetime</span>.<span class="pl-en">strptime</span>(<span class="pl-s1">cache_ret</span>.<span class="pl-en">get</span>(<span class="pl-s">"create"</span>), <span class="pl-s">"%Y-%m-%d %H:%M%S"</span>) <span class="pl-c1">+</span> <span class="pl-s1">datetime</span>.<span class="pl-en">timedelta</span>(
+                        <span class="pl-s1">seconds</span><span class="pl-c1">=</span><span class="pl-s1">exp</span>) <span class="pl-c1">&lt;</span> <span class="pl-s1">datetime</span>.<span class="pl-s1">datetime</span>.<span class="pl-en">now</span>():
+                    <span class="pl-c"># 数据过期</span>
+                    <span class="pl-s1">db</span>.<span class="pl-en">pop</span>(<span class="pl-s1">k_fmt</span>)
+                <span class="pl-k">else</span>:
+                    <span class="pl-k">return</span> <span class="pl-s1">json</span>.<span class="pl-en">loads</span>(<span class="pl-s1">cache_ret</span>[<span class="pl-s">"val"</span>])
+
+            <span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-en">f</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+
+            <span class="pl-s1">db</span>.<span class="pl-en">set</span>(<span class="pl-s1">k_fmt</span>, <span class="pl-s1">json</span>.<span class="pl-en">dumps</span>({
+                <span class="pl-s">"val"</span>: <span class="pl-s1">json</span>.<span class="pl-en">dumps</span>(<span class="pl-s1">ret</span>),
+                <span class="pl-s">"exp"</span>: <span class="pl-s1">exp</span>,
+                <span class="pl-s">"create"</span>: <span class="pl-s1">datetime</span>.<span class="pl-s1">datetime</span>.<span class="pl-en">now</span>().<span class="pl-en">strftime</span>(<span class="pl-s">"%Y-%m-%d %H:%M%S"</span>)
+            }))
+            <span class="pl-k">return</span> <span class="pl-s1">ret</span>
+
+        <span class="pl-k">return</span> <span class="pl-s1">inner</span>
+
+    <span class="pl-k">return</span> <span class="pl-s1">cache_func</span>
+
+
+<span class="pl-k">try</span>:
+    <span class="pl-k">from</span> <span class="pl-s1">flask</span> <span class="pl-k">import</span> <span class="pl-s1">request</span>
+
+    <span class="pl-s1">cache</span> <span class="pl-c1">=</span> <span class="pl-en">partial</span>(<span class="pl-s1">_cache</span>, <span class="pl-s1">request</span><span class="pl-c1">=</span><span class="pl-s1">request</span>)
+<span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+    <span class="pl-en">print</span>(<span class="pl-s">"请安装flask环境"</span>)</pre></div>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

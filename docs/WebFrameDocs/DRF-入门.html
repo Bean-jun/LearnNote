@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>DRF-入门.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h3><a id="user-content-1-风格" class="anchor" aria-hidden="true" href="#1-风格"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. 风格</h3>
+<ul>
+<li>GET 获取内容</li>
+<li>POST 增加内容</li>
+<li>PUT 修改内容</li>
+<li>DELETE 删除内容</li>
+<li>PATCH(UPDATE)        在服务器上更新资源</li>
+<li>OPTIONS 获取信息，源于资源的那些属性是客户端可以改变的</li>
+</ul>
+<h4><a id="user-content-11-域名" class="anchor" aria-hidden="true" href="#11-域名"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.1 域名</h4>
+<ul>
+<li>应该尽量将API部署在专用域名下
+<code>https://api.---.com</code>
+</li>
+<li>若是确定API很简单，不会有扩展，可以考虑放在主域名下
+<code>https://www.---.com/api</code>
+</li>
+</ul>
+<h4><a id="user-content-12-版本" class="anchor" aria-hidden="true" href="#12-版本"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.2 版本</h4>
+<ul>
+<li>应该将API版本放在URL中</li>
+<li>或者放入将版本号放在请求头中</li>
+</ul>
+<h4><a id="user-content-13-路径" class="anchor" aria-hidden="true" href="#13-路径"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.3 路径</h4>
+<ul>
+<li>资源作为网址，只能用名词，不能用动词，而且所用名词一般和数据库表名对应</li>
+<li>API中的名词应该使用复数。无论子资源或者所有资源</li>
+</ul>
+<h4><a id="user-content-14-过滤信息" class="anchor" aria-hidden="true" href="#14-过滤信息"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.4 过滤信息</h4>
+<ul>
+<li>?limit=10 指定返回记录的数据</li>
+<li>?offset=10 指定返回数据点开始位置 ...</li>
+</ul>
+<h4><a id="user-content-15-状态码" class="anchor" aria-hidden="true" href="#15-状态码"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.5 状态码</h4>
+<ul>
+<li>200 成功</li>
+<li>201 新建或者修改成功 ...</li>
+</ul>
+<h4><a id="user-content-16-错误处理" class="anchor" aria-hidden="true" href="#16-错误处理"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.6 错误处理</h4>
+<ul>
+<li>对于状态码不正常的情况，服务器一般需要向指定用户返回出错信息</li>
+</ul>
+<h4><a id="user-content-17-返回结果" class="anchor" aria-hidden="true" href="#17-返回结果"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.7 返回结果</h4>
+<ul>
+<li>返回请求结果</li>
+</ul>
+<h4><a id="user-content-18-超媒体" class="anchor" aria-hidden="true" href="#18-超媒体"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.8 超媒体</h4>
+<ul>
+<li>在返回结果中提供链接，使得用户不查文档也知道下一步做什么</li>
+</ul>
+<h4><a id="user-content-19-其他" class="anchor" aria-hidden="true" href="#19-其他"><span aria-hidden="true" class="octicon octicon-link"></span></a>1.9 其他</h4>
+<ul>
+<li>一般返回json结果，不要返回xml</li>
+</ul>
+<h3><a id="user-content-2-序列化和反序列化" class="anchor" aria-hidden="true" href="#2-序列化和反序列化"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. 序列化和反序列化</h3>
+<ul>
+<li>
+<p>序列化 -- 用的较多</p>
+<p>将模型转换为字典为序列化</p>
+</li>
+<li>
+<p>反序列化 -- 一般都在修改put和新增post</p>
+<p>将字典转换为模型</p>
+</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> <span class="pl-s1">django</span>.<span class="pl-s1">db</span> <span class="pl-k">import</span> <span class="pl-s1">models</span>
+<span class="pl-k">from</span> <span class="pl-s1">django</span>.<span class="pl-s1">views</span>.<span class="pl-s1">generic</span> <span class="pl-k">import</span> <span class="pl-v">View</span>
+<span class="pl-k">from</span> <span class="pl-s1">django</span>.<span class="pl-s1">http</span> <span class="pl-k">import</span> <span class="pl-v">JsonResponse</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span> <span class="pl-k">import</span> <span class="pl-s1">serializers</span>
+
+
+<span class="pl-c"># models文件</span>
+<span class="pl-k">class</span> <span class="pl-v">Author</span>(<span class="pl-s1">models</span>.<span class="pl-v">Model</span>):
+    <span class="pl-s">"""图书作者"""</span>
+    <span class="pl-s1">first_name</span> <span class="pl-c1">=</span> <span class="pl-s1">models</span>.<span class="pl-v">CharField</span>(<span class="pl-s1">verbose_name</span><span class="pl-c1">=</span><span class="pl-s">"姓氏"</span>, <span class="pl-s1">max_length</span><span class="pl-c1">=</span><span class="pl-c1">30</span>)
+    <span class="pl-s1">last_name</span> <span class="pl-c1">=</span> <span class="pl-s1">models</span>.<span class="pl-v">CharField</span>(<span class="pl-s1">verbose_name</span><span class="pl-c1">=</span><span class="pl-s">"名称"</span>, <span class="pl-s1">max_length</span><span class="pl-c1">=</span><span class="pl-c1">40</span>)
+    <span class="pl-s1">email</span> <span class="pl-c1">=</span> <span class="pl-s1">models</span>.<span class="pl-v">EmailField</span>(<span class="pl-s1">verbose_name</span><span class="pl-c1">=</span><span class="pl-s">"邮箱"</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">__str__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">first_name</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">Book</span>(<span class="pl-s1">models</span>.<span class="pl-v">Model</span>):
+    <span class="pl-s">"""图书"""</span>
+    <span class="pl-s1">author</span> <span class="pl-c1">=</span> <span class="pl-s1">models</span>.<span class="pl-v">ForeignKey</span>(<span class="pl-s1">to</span><span class="pl-c1">=</span><span class="pl-s">'Author'</span>, <span class="pl-s1">on_delete</span><span class="pl-c1">=</span><span class="pl-s1">models</span>.<span class="pl-v">CASCADE</span>, <span class="pl-s1">verbose_name</span><span class="pl-c1">=</span><span class="pl-s">"作者"</span>)
+    <span class="pl-s1">title</span> <span class="pl-c1">=</span> <span class="pl-s1">models</span>.<span class="pl-v">CharField</span>(<span class="pl-s1">max_length</span><span class="pl-c1">=</span><span class="pl-c1">30</span>)
+    <span class="pl-s1">publication_date</span> <span class="pl-c1">=</span> <span class="pl-s1">models</span>.<span class="pl-v">DateTimeField</span>(<span class="pl-s1">auto_now_add</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+
+
+<span class="pl-c"># serializer文件</span>
+<span class="pl-k">class</span> <span class="pl-v">AuthorSerializer</span>(<span class="pl-s1">serializers</span>.<span class="pl-v">ModelSerializer</span>):
+    <span class="pl-s">"""author序列化器"""</span>
+
+    <span class="pl-k">class</span> <span class="pl-v">Meta</span>:
+        <span class="pl-s1">model</span> <span class="pl-c1">=</span> <span class="pl-v">Author</span>
+        <span class="pl-s1">fields</span> <span class="pl-c1">=</span> <span class="pl-s">"__all__"</span>
+        <span class="pl-c"># 对字段进行功能扩展--修改选项参数</span>
+        <span class="pl-s1">extra_kwargs</span> <span class="pl-c1">=</span> {
+            <span class="pl-c"># xxxxx</span>
+        }
+
+
+<span class="pl-k">class</span> <span class="pl-v">BookSerializer</span>(<span class="pl-s1">serializers</span>.<span class="pl-v">ModelSerializer</span>):
+    <span class="pl-s">"""Book序列化器"""</span>
+
+    <span class="pl-c"># author = serializers.StringRelatedField()  # 将关联对象的__str__方法返回</span>
+    <span class="pl-c"># author = serializers.PrimaryKeyRelatedField() # 设置关联对象主键</span>
+    <span class="pl-c"># author = AuthorSerializer() # 直接将author对象序列化过来哦--注意：一对多时需要加入many=True</span>
+
+    <span class="pl-k">class</span> <span class="pl-v">Meta</span>:
+        <span class="pl-s1">model</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>
+        <span class="pl-s1">fields</span> <span class="pl-c1">=</span> <span class="pl-s">"__all__"</span>
+
+    <span class="pl-c"># 反序列化验证--类似forms验证，但也有些许不同</span>
+
+    <span class="pl-c"># 单一校验某一个字段</span>
+    <span class="pl-k">def</span> <span class="pl-en">validate_title</span>(<span class="pl-s1">self</span>, <span class="pl-s1">value</span>):
+        <span class="pl-c"># value指前端传递过来的数据，校验之后直接返回即可</span>
+
+        <span class="pl-k">return</span> <span class="pl-s1">value</span>
+
+    <span class="pl-c"># 对所有字段进行校验，attrs【字典】中包含了所有传递过来的字段</span>
+    <span class="pl-k">def</span> <span class="pl-en">validate</span>(<span class="pl-s1">self</span>, <span class="pl-s1">attrs</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">attrs</span>
+
+    <span class="pl-c"># 对于继承ModelSerializer的类而言，不需要自己实现create及update方式</span>
+    <span class="pl-c"># # 将反序列化的数据进行创建</span>
+    <span class="pl-c"># def create(self, validated_data):</span>
+    <span class="pl-c">#     '''保存数据'''</span>
+    <span class="pl-c">#     book = Book.objects.create(**validated_data)</span>
+    <span class="pl-c">#     return book</span>
+    <span class="pl-c"># </span>
+    <span class="pl-c"># # 将反序列化的数据进行修改</span>
+    <span class="pl-c"># def update(self, instance, validated_data):</span>
+    <span class="pl-c">#     '''修改数据'''</span>
+    <span class="pl-c">#     instance.update(**validated_data)</span>
+    <span class="pl-c">#     instance.save()</span>
+
+    <span class="pl-c">#     return instance</span>
+
+
+<span class="pl-c"># views文件</span>
+<span class="pl-k">class</span> <span class="pl-v">BookListView</span>(<span class="pl-v">View</span>):
+    <span class="pl-s">"""获取全部数据&amp;增加一条数据"""</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">get</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-s">'''获取全部数据--序列化'''</span>
+        <span class="pl-s1">book</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">all</span>()
+        <span class="pl-s1">serializer</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>(<span class="pl-s1">instance</span><span class="pl-c1">=</span><span class="pl-s1">book</span>, <span class="pl-s1">many</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+        <span class="pl-c"># serializer.data 就是序列化之后的json格式内容</span>
+        <span class="pl-k">return</span> <span class="pl-v">JsonResponse</span>(<span class="pl-s1">serializer</span>.<span class="pl-s1">data</span>, <span class="pl-s1">safe</span><span class="pl-c1">=</span><span class="pl-c1">False</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">post</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-s">'''反序列化'''</span>
+        <span class="pl-k">pass</span></pre></div>
+<h4><a id="user-content-21-在开发rest-api的视图中每一个视图操作的数据不同但是基本套路相同" class="anchor" aria-hidden="true" href="#21-在开发rest-api的视图中每一个视图操作的数据不同但是基本套路相同"><span aria-hidden="true" class="octicon octicon-link"></span></a>2.1 在开发rest api的视图中，每一个视图操作的数据不同，但是基本套路相同</h4>
+<pre><code>增加
+
+  校验数据 --》 执行反序列化 --》保存数据 --》将保存的对象序列化并返回
+
+删除
+
+  判断内容是否存在 --》 执行数据库删除
+
+修改
+
+  判断是否存在 --》 校验请求数据 --》执行反序列化 --》 保存数据 --》 将保存的对象序列化并返回
+
+查询
+
+  查询数据库 --》 数据序列化
+</code></pre>
+<h3><a id="user-content-3-视图" class="anchor" aria-hidden="true" href="#3-视图"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. 视图</h3>
+<h4><a id="user-content-31-request和response" class="anchor" aria-hidden="true" href="#31-request和response"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.1 Request和Response</h4>
+<ul>
+<li>
+<p>Request 在原django框架的基础上添加了Parse解析器，用来解析请求过来的数据</p>
+<ul>
+<li>常用属性</li>
+</ul>
+<div class="highlight highlight-source-gfm"><pre>返回请求体数据 
+
+<span class="pl-v">1.</span> data 
+   
+    包含了POST PUT PATCH请求过来的数据
+
+<span class="pl-v">2.</span> query_params 
+    
+    包含了GET请求过来的数据</pre></div>
+</li>
+<li>
+<p>Response</p>
+<ul>
+<li>使用部分
+<code>rest_framework.response.Response</code>
+</li>
+</ul>
+<div class="highlight highlight-source-gfm"><pre>Response(data=None, status=None,
+            template_name=None, headers=None,
+            exception=False, content_type=None)
+
+data=None,      # 序列化之后的数据
+status=None,    # 状态码
+template_name=None,     # 模板名称
+headers=None,   # 响应头
+exception=False, 
+content_type=None   # 响应数据的content-type</pre></div>
+<ul>
+<li>常用属性</li>
+</ul>
+<div class="highlight highlight-source-gfm"><pre><span class="pl-v">1.</span> data 未处理化的数据
+
+<span class="pl-v">2.</span> content 通过render处理之后返回前端的数据</pre></div>
+</li>
+</ul>
+<h4><a id="user-content-32-apiview" class="anchor" aria-hidden="true" href="#32-apiview"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.2 APIView</h4>
+<ul>
+<li>
+<p>使用部分</p>
+<p><code>rest_framework.view.APIView</code></p>
+</li>
+<li>
+<p>介绍</p>
+<p>APIView 和View 的不同在于，APIView对原View中的request进行了进一步的封装</p>
+</li>
+<li>
+<p>使用</p>
+</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">views</span> <span class="pl-k">import</span> <span class="pl-v">APIView</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">response</span> <span class="pl-k">import</span> <span class="pl-v">Response</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span> <span class="pl-k">import</span> <span class="pl-s1">status</span>
+
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">models</span> <span class="pl-k">import</span> <span class="pl-v">Book</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">serializer</span> <span class="pl-k">import</span> <span class="pl-v">BookSerializer</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">BookListAPIView</span>(<span class="pl-v">APIView</span>):
+    <span class="pl-s">"""获取全部数据&amp;增加数据"""</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">get</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-s">'''获取全部数据'''</span>
+        <span class="pl-s1">book</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">all</span>()
+        <span class="pl-s1">serializer</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>(<span class="pl-s1">instance</span><span class="pl-c1">=</span><span class="pl-s1">book</span>, <span class="pl-s1">many</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+        <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">serializer</span>.<span class="pl-s1">data</span>, <span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_200_OK</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">post</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-s">'''添加数据'''</span>
+        <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">request</span>.<span class="pl-s1">data</span>
+        <span class="pl-s1">serializer</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>(<span class="pl-s1">data</span><span class="pl-c1">=</span><span class="pl-s1">res</span>)
+        <span class="pl-k">if</span> <span class="pl-s1">serializer</span>.<span class="pl-en">is_valid</span>(<span class="pl-s1">raise_exception</span><span class="pl-c1">=</span><span class="pl-c1">True</span>):
+            <span class="pl-c"># 校验成功  开始反序列化</span>
+            <span class="pl-s1">serializer</span>.<span class="pl-en">save</span>()
+            <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">serializer</span>.<span class="pl-s1">data</span>, <span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_201_CREATED</span>)
+
+
+<span class="pl-k">class</span> <span class="pl-v">BookDetailAPIView</span>(<span class="pl-v">APIView</span>):
+    <span class="pl-s">"""获取单条数据&amp;修改单条数据&amp;删除单条数据"""</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">get</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">pk</span>):
+        <span class="pl-s">'''查询单一数据'''</span>
+        <span class="pl-k">try</span>:
+            <span class="pl-s1">book</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">get</span>(<span class="pl-s1">pk</span><span class="pl-c1">=</span><span class="pl-s1">pk</span>)
+        <span class="pl-k">except</span> <span class="pl-v">Book</span>.<span class="pl-v">DoesNotExist</span>:
+            <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_404_NOT_FOUND</span>)
+
+        <span class="pl-s1">serializer</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>(<span class="pl-s1">instance</span><span class="pl-c1">=</span><span class="pl-s1">book</span>)
+        <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">serializer</span>.<span class="pl-s1">data</span>, <span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_200_OK</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">put</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">pk</span>):
+        <span class="pl-s">'''修改数据'''</span>
+        <span class="pl-k">try</span>:
+            <span class="pl-s1">book</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">get</span>(<span class="pl-s1">pk</span><span class="pl-c1">=</span><span class="pl-s1">pk</span>)
+        <span class="pl-k">except</span> <span class="pl-v">Book</span>.<span class="pl-v">DoesNotExist</span>:
+            <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_404_NOT_FOUND</span>)
+
+        <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">request</span>.<span class="pl-s1">data</span>
+        <span class="pl-s1">serializer</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>(<span class="pl-s1">instance</span><span class="pl-c1">=</span><span class="pl-s1">book</span>, <span class="pl-s1">data</span><span class="pl-c1">=</span><span class="pl-s1">res</span>)
+        <span class="pl-k">if</span> <span class="pl-s1">serializer</span>.<span class="pl-en">is_valid</span>(<span class="pl-s1">raise_exception</span><span class="pl-c1">=</span><span class="pl-c1">True</span>):
+            <span class="pl-c"># 校验成功  开始反序列化</span>
+            <span class="pl-s1">serializer</span>.<span class="pl-en">save</span>()
+            <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">serializer</span>.<span class="pl-s1">data</span>, <span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_200_OK</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">delete</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">pk</span>):
+        <span class="pl-s">'''删除数据'''</span>
+        <span class="pl-k">try</span>:
+            <span class="pl-s1">book</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">get</span>(<span class="pl-s1">pk</span><span class="pl-c1">=</span><span class="pl-s1">pk</span>)
+        <span class="pl-k">except</span> <span class="pl-v">Book</span>.<span class="pl-v">DoesNotExist</span>:
+            <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_404_NOT_FOUND</span>)
+
+        <span class="pl-s1">book</span>.<span class="pl-en">delete</span>()
+
+        <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_204_NO_CONTENT</span>)</pre></div>
+<h4><a id="user-content-33-genericapiview" class="anchor" aria-hidden="true" href="#33-genericapiview"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.3 GenericAPIView</h4>
+<ul>
+<li>
+<p>使用部分</p>
+<p><code>rest_framework.generics.GenericAPIView</code></p>
+</li>
+<li>
+<p>介绍</p>
+<p>GenericAPIView继承至APIView,增加了操作序列化器和数据查询的方法</p>
+</li>
+<li>
+<p>提供关于序列化器的属性和方法</p>
+<ul>
+<li>属性
+<ul>
+<li>serializer_class 指明视图使用那个序列化器</li>
+</ul>
+</li>
+<li>方法
+<ul>
+<li>get_serializer_class(self)  返回序列化器类</li>
+<li>get_serializer(self,*args,**kwargs) 返回序列化器对象，主要提供给Mixin扩展类使用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>提供数据库查询的属性和方法</p>
+<ul>
+<li>属性
+<ul>
+<li>queryset 指明数据库的查询集</li>
+</ul>
+</li>
+<li>方法
+<ul>
+<li>get_queryset(self) 返回视图使用的查询集</li>
+<li>get_object(self) 返回详情视图所需要的模型类数据对象</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>其他属性</p>
+<ul>
+<li>pagination_class 指明分页控制类</li>
+<li>filter_backends 指明控制过滤后端</li>
+</ul>
+</li>
+<li>
+<p>使用</p>
+</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">generics</span> <span class="pl-k">import</span> <span class="pl-v">GenericAPIView</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">response</span> <span class="pl-k">import</span> <span class="pl-v">Response</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span> <span class="pl-k">import</span> <span class="pl-s1">status</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">models</span> <span class="pl-k">import</span> <span class="pl-v">Book</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">serializer</span> <span class="pl-k">import</span> <span class="pl-v">BookSerializer</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">BookListGenericAPIView</span>(<span class="pl-v">GenericAPIView</span>):
+    <span class="pl-s">"""使用GenericAPIView实现  获取全部数据&amp;增加数据"""</span>
+    <span class="pl-s1">queryset</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">all</span>()  <span class="pl-c"># 指定查询集</span>
+    <span class="pl-s1">serializer_class</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>  <span class="pl-c"># 指定序列化器</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">get</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-s1">book</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">get_queryset</span>()  <span class="pl-c"># 获取查询集</span>
+        <span class="pl-s1">serializer</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">get_serializer</span>(<span class="pl-s1">book</span>, <span class="pl-s1">many</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)  <span class="pl-c"># 将查询集序列化</span>
+        <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">serializer</span>.<span class="pl-s1">data</span>, <span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_200_OK</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">post</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-s1">serializer</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">get_serializer</span>(<span class="pl-s1">data</span><span class="pl-c1">=</span><span class="pl-s1">request</span>.<span class="pl-s1">data</span>)  <span class="pl-c"># 将查询集序列化</span>
+        <span class="pl-k">if</span> <span class="pl-s1">serializer</span>.<span class="pl-en">is_valid</span>(<span class="pl-s1">raise_exception</span><span class="pl-c1">=</span><span class="pl-c1">True</span>):
+            <span class="pl-s1">serializer</span>.<span class="pl-en">save</span>()
+            <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">serializer</span>.<span class="pl-s1">data</span>, <span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_200_OK</span>)
+
+
+<span class="pl-k">class</span> <span class="pl-v">BookDetailGenericAPIView</span>(<span class="pl-v">GenericAPIView</span>):
+    <span class="pl-s">"""使用GenericAPIView实现  获取单条数据&amp;修改单条数据&amp;删除单条数据"""</span>
+    <span class="pl-s1">queryset</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">all</span>()  <span class="pl-c"># 指定查询集</span>
+    <span class="pl-s1">serializer_class</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>  <span class="pl-c"># 指定序列化器</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">get</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">pk</span>):
+        <span class="pl-s1">book</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">get_object</span>()  <span class="pl-c"># 获取pk对应的结果</span>
+        <span class="pl-s1">serializer</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">get_serializer</span>(<span class="pl-s1">book</span>)
+        <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">serializer</span>.<span class="pl-s1">data</span>, <span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_200_OK</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">put</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">pk</span>):
+        <span class="pl-s">'''修改一条数据'''</span>
+        <span class="pl-s1">book</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">get_object</span>()
+        <span class="pl-s1">serializer</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">get_serializer</span>(<span class="pl-s1">instance</span><span class="pl-c1">=</span><span class="pl-s1">book</span>, <span class="pl-s1">data</span><span class="pl-c1">=</span><span class="pl-s1">request</span>.<span class="pl-s1">data</span>)
+        <span class="pl-k">if</span> <span class="pl-s1">serializer</span>.<span class="pl-en">is_valid</span>():
+            <span class="pl-s1">serializer</span>.<span class="pl-en">save</span>()
+            <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">serializer</span>.<span class="pl-s1">data</span>, <span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_200_OK</span>)</pre></div>
+<h4><a id="user-content-34-mixin-混入genericapiview" class="anchor" aria-hidden="true" href="#34-mixin-混入genericapiview"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.4 Mixin 混入GenericAPIView</h4>
+<ul>
+<li>
+<p>介绍</p>
+<p>简化get、post....中的代码</p>
+</li>
+<li>
+<p>使用</p>
+</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">mixins</span> <span class="pl-k">import</span> (
+    <span class="pl-v">ListModelMixin</span>,
+    <span class="pl-v">CreateModelMixin</span>,
+    <span class="pl-v">RetrieveModelMixin</span>,
+    <span class="pl-v">DestroyModelMixin</span>,
+    <span class="pl-v">UpdateModelMixin</span>
+)
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">generics</span> <span class="pl-k">import</span> <span class="pl-v">GenericAPIView</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">models</span> <span class="pl-k">import</span> <span class="pl-v">Book</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">serializer</span> <span class="pl-k">import</span> <span class="pl-v">BookSerializer</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">BookListGenericAPIViewMixin</span>(<span class="pl-v">ListModelMixin</span>, <span class="pl-v">CreateModelMixin</span>, <span class="pl-v">GenericAPIView</span>):
+    <span class="pl-s">"""GenericAPIView混合Mixin使用"""</span>
+    <span class="pl-s1">queryset</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">all</span>()
+    <span class="pl-s1">serializer_class</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">get</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">list</span>(<span class="pl-s1">request</span>)  <span class="pl-c"># 调用父类方式显示查询集的返回</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">post</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">create</span>(<span class="pl-s1">request</span>)
+
+
+<span class="pl-k">class</span> <span class="pl-v">BookDetailGenericAPIViewMixin</span>(<span class="pl-v">RetrieveModelMixin</span>, <span class="pl-v">UpdateModelMixin</span>, <span class="pl-v">DestroyModelMixin</span>, <span class="pl-v">GenericAPIView</span>):
+    <span class="pl-s">"""GenericAPIView混合Mixin使用"""</span>
+    <span class="pl-s1">queryset</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">all</span>()
+    <span class="pl-s1">serializer_class</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">get</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">pk</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">retrieve</span>(<span class="pl-s1">request</span>, <span class="pl-s1">pk</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">put</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">pk</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">update</span>(<span class="pl-s1">request</span>, <span class="pl-s1">pk</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">delete</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">pk</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">destroy</span>(<span class="pl-s1">request</span>, <span class="pl-s1">pk</span>)</pre></div>
+<h4><a id="user-content-35-关于rest_frameworkgenerics中的其他类" class="anchor" aria-hidden="true" href="#35-关于rest_frameworkgenerics中的其他类"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.5 关于rest_framework.generics中的其他类</h4>
+<p><code>CreateAPIView</code> <code>RetrieveModelMixin</code> 等等，他们继承于Minix及GenericAPIView类，在使用时可以进一步简化代码,可以简化简化get、post....之类的实例方法</p>
+<h4><a id="user-content-36-视图集-viewsets-修改了view的as_view方法将序列化全部和序列化一个内容糅合在一起实现代码的简化" class="anchor" aria-hidden="true" href="#36-视图集-viewsets-修改了view的as_view方法将序列化全部和序列化一个内容糅合在一起实现代码的简化"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.6 视图集 viewsets 修改了View的as_view方法，将序列化全部和序列化一个内容糅合在一起，实现代码的简化</h4>
+<ul>
+<li>
+<p>ViewSet 继承APIView</p>
+<ul>
+<li>代码演示</li>
+</ul>
+</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># url部分</span>
+<span class="pl-k">from</span> <span class="pl-s1">django</span>.<span class="pl-s1">urls</span> <span class="pl-k">import</span> <span class="pl-s1">path</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span> <span class="pl-k">import</span> <span class="pl-s1">views</span>
+
+<span class="pl-c"># 由于查询都写在一个类中，所以需要在路由分发中将其隔开</span>
+<span class="pl-en">path</span>(<span class="pl-s">'books_ViewSet/'</span>, <span class="pl-s1">views</span>.<span class="pl-v">BookViewSet</span>.<span class="pl-en">as_view</span>({<span class="pl-s">'get'</span>: <span class="pl-s">'list'</span>})),
+<span class="pl-en">path</span>(<span class="pl-s">'books_ViewSet/&lt;int:pk&gt;/'</span>, <span class="pl-s1">views</span>.<span class="pl-v">BookViewSet</span>.<span class="pl-en">as_view</span>({<span class="pl-s">'get'</span>: <span class="pl-s">'retrieve'</span>})),
+
+<span class="pl-c"># views部分</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">viewsets</span> <span class="pl-k">import</span> <span class="pl-v">ViewSet</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">response</span> <span class="pl-k">import</span> <span class="pl-v">Response</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span> <span class="pl-k">import</span> <span class="pl-s1">status</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">models</span> <span class="pl-k">import</span> <span class="pl-v">Book</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">serializer</span> <span class="pl-k">import</span> <span class="pl-v">BookSerializer</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">BookViewSet</span>(<span class="pl-v">ViewSet</span>):
+    <span class="pl-s">"""使用ViewSet视图集实现查询全部和查单一"""</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">list</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-s">'''查全部数据'''</span>
+        <span class="pl-s1">book</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">all</span>()
+        <span class="pl-s1">serializer</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>(<span class="pl-s1">instance</span><span class="pl-c1">=</span><span class="pl-s1">book</span>, <span class="pl-s1">many</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+        <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">serializer</span>.<span class="pl-s1">data</span>, <span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_200_OK</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">retrieve</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">pk</span>):
+        <span class="pl-s">'''查单一数据'''</span>
+        <span class="pl-s1">book</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">get</span>(<span class="pl-s1">pk</span><span class="pl-c1">=</span><span class="pl-s1">pk</span>)
+        <span class="pl-s1">serializer</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>(<span class="pl-s1">book</span>)
+        <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">serializer</span>.<span class="pl-s1">data</span>, <span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_200_OK</span>)</pre></div>
+<ul>
+<li>GenericViewSet 继承GenericAPIView
+<ul>
+<li>代码演示</li>
+</ul>
+</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># url部分</span>
+<span class="pl-k">from</span> <span class="pl-s1">django</span>.<span class="pl-s1">urls</span> <span class="pl-k">import</span> <span class="pl-s1">path</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span> <span class="pl-k">import</span> <span class="pl-s1">views</span>
+
+<span class="pl-c"># GenericViewSet使用</span>
+<span class="pl-en">path</span>(<span class="pl-s">'books_GenericViewSet/'</span>, <span class="pl-s1">views</span>.<span class="pl-v">BookGenericViewSet</span>.<span class="pl-en">as_view</span>({<span class="pl-s">'get'</span>: <span class="pl-s">'list'</span>})),
+<span class="pl-en">path</span>(<span class="pl-s">'books_GenericViewSet/&lt;int:pk&gt;/'</span>, <span class="pl-s1">views</span>.<span class="pl-v">BookGenericViewSet</span>.<span class="pl-en">as_view</span>({<span class="pl-s">'get'</span>: <span class="pl-s">'retrieve'</span>})),
+
+<span class="pl-c"># views部分</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">viewsets</span> <span class="pl-k">import</span> <span class="pl-v">ReadOnlyModelViewSet</span>, <span class="pl-v">GenericViewSet</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">models</span> <span class="pl-k">import</span> <span class="pl-v">Book</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">serializer</span> <span class="pl-k">import</span> <span class="pl-v">BookSerializer</span>
+
+
+<span class="pl-c"># class BookGenericViewSet(ReadOnlyModelViewSet, GenericViewSet):</span>
+<span class="pl-k">class</span> <span class="pl-v">BookGenericViewSet</span>(<span class="pl-v">ReadOnlyModelViewSet</span>):
+    <span class="pl-s">"""使用GenericViewSet视图集实现查询全部和查单一"""</span>
+    <span class="pl-c"># ReadOnlyModelViewSet 继承了GenericViewSet类</span>
+    <span class="pl-s1">queryset</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">all</span>()
+    <span class="pl-s1">serializer_class</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span></pre></div>
+<ul>
+<li>ModelViewSet 由于继承GenericAPIView和mixins中的大部分类，在使用时，直接设置查询集合序列化器即可</li>
+</ul>
+<h4><a id="user-content-37-路由设置只能结合视图集使用" class="anchor" aria-hidden="true" href="#37-路由设置只能结合视图集使用"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.7 路由设置【只能结合视图集使用】</h4>
+<ul>
+<li>
+<p>介绍</p>
+<p>在刚刚的设置中，as_view需要在其中设置分发逻辑，这部分可以直接简化</p>
+</li>
+<li>
+<p>代码</p>
+</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># 路由这部分关于as_view部分写着较为麻烦，可以直接配置路由即可</span>
+<span class="pl-c"># from rest_framework.routers import DefaultRouter</span>
+<span class="pl-c"># router = DefaultRouter()  # 创建路由</span>
+<span class="pl-c"># router.register('路由匹配', views.类视图)  # 注册路由</span>
+<span class="pl-c"># urlpatterns += router.urls  # 添加路由</span></pre></div>
+<ul>
+<li>
+<p>注意点</p>
+<p>使用路由时，对于类视图中单独定义<code>其他</code>的接口（抛开最基本的 增删查改的五条）是没办法设置到的，此时需要 设置路由</p>
+<ul>
+<li>方式一：
+<ul>
+<li>直接在urls中写，比如 <code>path('books_GenericViewSet/last', views.BookGenericViewSet.as_view({'get': 'last'}))</code>
+</li>
+</ul>
+</li>
+<li>方式二：
+<ul>
+<li>在类方法中添加装饰器即可</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">viewsets</span> <span class="pl-k">import</span> <span class="pl-v">ModelViewSet</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">response</span> <span class="pl-k">import</span> <span class="pl-v">Response</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span> <span class="pl-k">import</span> <span class="pl-s1">status</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">models</span> <span class="pl-k">import</span> <span class="pl-v">Book</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">serializer</span> <span class="pl-k">import</span> <span class="pl-v">BookSerializer</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">BookModelViewSet</span>(<span class="pl-v">ModelViewSet</span>):
+    <span class="pl-s">"""ModelViewSet实现增删查改"""</span>
+    <span class="pl-s1">queryset</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">all</span>()
+    <span class="pl-s1">serializer_class</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>
+
+    <span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">decorators</span> <span class="pl-k">import</span> <span class="pl-s1">action</span>
+
+    <span class="pl-c"># 将生成路由为BookModelViewSet/last/</span>
+    <span class="pl-en">@<span class="pl-en">action</span>(<span class="pl-s1">methods</span><span class="pl-c1">=</span>[<span class="pl-s">'get'</span>], <span class="pl-s1">detail</span><span class="pl-c1">=</span><span class="pl-c1">False</span>)  <span class="pl-c"># detail设置为False表示当前请求不需要pk,即id</span></span>
+    <span class="pl-c"># 若是将detail设置为True后将生成路由为BookModelViewSet/pk/last/</span>
+    <span class="pl-k">def</span> <span class="pl-en">last</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-s">'''查最后一本书'''</span>
+        <span class="pl-s1">book</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">get_queryset</span>().<span class="pl-en">last</span>()
+        <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">self</span>.<span class="pl-en">get_serializer</span>(<span class="pl-s1">book</span>).<span class="pl-s1">data</span>, <span class="pl-s1">status</span><span class="pl-c1">=</span><span class="pl-s1">status</span>.<span class="pl-v">HTTP_200_OK</span>)</pre></div>
+<h3><a id="user-content-4-认证指针对继承了apiview的视图" class="anchor" aria-hidden="true" href="#4-认证指针对继承了apiview的视图"><span aria-hidden="true" class="octicon octicon-link"></span></a>4. 认证【指针对继承了APIView的视图】</h3>
+<ul>
+<li>认证流程</li>
+</ul>
+<div class="highlight highlight-source-gfm"><pre>当用户发来请求时，找到认证的所有类并实例化成为对象列表，然后将对象列表封装到新的request对象中。
+
+以后在视同中调用request.user
+
+在内部会循环认证的对象列表，并执行每个对象的authenticate方法，该方法用于认证，他会返回两个值分别会赋值给
+request.user/request.auth </pre></div>
+<ul>
+<li>全局认证【可以使用 DEFAULT_AUTHENTICATION_CLASSES 设置全局的默认身份验证方案】</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-v">REST_FRAMEWORK</span> <span class="pl-c1">=</span> {
+    <span class="pl-s">'DEFAULT_AUTHENTICATION_CLASSES'</span>: (
+        <span class="pl-s">'rest_framework.authentication.BasicAuthentication'</span>,
+        <span class="pl-s">'rest_framework.authentication.SessionAuthentication'</span>,
+    )
+}</pre></div>
+<ul>
+<li>局部认证 【针对单一视图进行认证】</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">authentication</span> <span class="pl-k">import</span> <span class="pl-v">SessionAuthentication</span>, <span class="pl-v">BasicAuthentication</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">views</span> <span class="pl-k">import</span> <span class="pl-v">APIView</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">ExpAPIView</span>(<span class="pl-v">APIView</span>):
+    <span class="pl-s">"""认证样例"""</span>
+    <span class="pl-s1">authentication_classes</span> <span class="pl-c1">=</span> (<span class="pl-v">SessionAuthentication</span>, <span class="pl-v">BasicAuthentication</span>)
+    <span class="pl-c"># .......</span></pre></div>
+<ul>
+<li>
+<p>认证失败返回值</p>
+<p>当未经身份验证的请求被拒绝时，有下面两种不同的错误代码可使用。</p>
+<pre><code>HTTP 401 未认证
+HTTP 403 无权限
+</code></pre>
+</li>
+</ul>
+<h3><a id="user-content-5-权限" class="anchor" aria-hidden="true" href="#5-权限"><span aria-hidden="true" class="octicon octicon-link"></span></a>5. 权限</h3>
+<ul>
+<li>类别</li>
+</ul>
+<div class="highlight highlight-source-gfm"><pre>AllowAny
+
+权限类将允许不受限制的访问，而不管该请求是否已通过身份验证或未经身份验证。 此权限不是严格要求的，因为你可以通过使用空列表或元组进行权限设置来获得相同的结果，但你可能会发现指定此类很有用，因为它使意图更明确。
+
+IsAuthenticated
+
+权限类将拒绝任何未经身份验证的用户的权限，并允许其他权限。 如果你希望你的API仅供注册用户访问，则此权限适用。 如果你希望你的API允许匿名用户读取权限，并且只允许对已通过身份验证的用户进行写入权限，则此权限是适合的。
+
+IsAdminUser
+
+除非user.is_staff为True，否则IsAdminUser权限类将拒绝任何用户的权限，在这种情况下将允许权限。 如果你希望你的API只能被部分受信任的管理员访问，则此权限是适合的。
+
+IsAuthenticatedOrReadOnly
+
+将允许经过身份验证的用户执行任何请求。只有当请求方法是“安全”方法（GET, HEAD 或 OPTIONS）之一时，才允许未经授权的用户请求。
+如果你希望你的API允许匿名用户读取权限，并且只允许对已通过身份验证的用户进行写入权限，则此权限是适合的。
+</pre></div>
+<ul>
+<li>全局使用 【不推荐】【默认权限策略可以使用DEFAULT_PERMISSION_CLASSES设置进行全局设置】</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-v">REST_FRAMEWORK</span> <span class="pl-c1">=</span> {
+    <span class="pl-c"># 权限部分</span>
+    <span class="pl-s">'DEFAULT_PERMISSION_CLASSES'</span>: (
+        <span class="pl-s">'rest_framework.permissions.IsAuthenticated'</span>,
+    )
+}</pre></div>
+<ul>
+<li>局部使用</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">permissions</span> <span class="pl-k">import</span> <span class="pl-v">IsAuthenticated</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">views</span> <span class="pl-k">import</span> <span class="pl-v">APIView</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">ExpAPIView</span>(<span class="pl-v">APIView</span>):
+    <span class="pl-s1">permission_classes</span> <span class="pl-c1">=</span> (<span class="pl-v">IsAuthenticated</span>,)
+    <span class="pl-c"># .......</span></pre></div>
+<ul>
+<li>自定义权限</li>
+</ul>
+<p>重写BasePermission并实现以下方法中的一个或两个</p>
+<pre><code>.has_permission(self, request, view)  是否可以访问视图 
+
+.has_object_permission(self, request,
+view, obj)  是否可以访问数据对象
+</code></pre>
+<p>使用时需要自定义权限类，继承于BasePermission，然后重写上面的方式，最后给到permission_classes即可</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">permissions</span> <span class="pl-k">import</span> <span class="pl-v">BasePermission</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">views</span> <span class="pl-k">import</span> <span class="pl-v">APIView</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">MyPermission</span>(<span class="pl-v">BasePermission</span>):
+    <span class="pl-k">def</span> <span class="pl-en">has_permission</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">view</span>):
+        <span class="pl-c"># xxxxxx</span>
+        <span class="pl-k">return</span>  <span class="pl-c"># 想要返回的内容</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">has_object_permission</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">view</span>, <span class="pl-s1">obj</span>):
+        <span class="pl-c"># xxxxxx</span>
+        <span class="pl-k">return</span>  <span class="pl-c"># 想要返回的内容</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">ExpAPIView</span>(<span class="pl-v">APIView</span>):
+    <span class="pl-s1">permission_classes</span> <span class="pl-c1">=</span> (<span class="pl-v">MyPermission</span>,)
+    <span class="pl-c"># .......</span></pre></div>
+<h3><a id="user-content-6-限流-减少接口访问的频次" class="anchor" aria-hidden="true" href="#6-限流-减少接口访问的频次"><span aria-hidden="true" class="octicon octicon-link"></span></a>6. 限流 【减少接口访问的频次】</h3>
+<p><a href="https://www.django-rest-framework.org/api-guide/throttling/" rel="nofollow">限流官方-link</a></p>
+<ul>
+<li>全局</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-v">REST_FRAMEWORK</span> <span class="pl-c1">=</span> {
+    <span class="pl-s">'DEFAULT_THROTTLE_CLASSES'</span>: [  <span class="pl-c"># 配置全局限流方式</span>
+        <span class="pl-s">'rest_framework.throttling.AnonRateThrottle'</span>,  <span class="pl-c"># 匿名用户</span>
+        <span class="pl-s">'rest_framework.throttling.UserRateThrottle'</span>  <span class="pl-c"># 登录用户</span>
+    ],
+    <span class="pl-s">'DEFAULT_THROTTLE_RATES'</span>: {  <span class="pl-c"># 限制频次</span>
+        <span class="pl-s">'anon'</span>: <span class="pl-s">'100/day'</span>,  <span class="pl-c"># 一天100次</span>
+        <span class="pl-s">'user'</span>: <span class="pl-s">'1000/day'</span>  <span class="pl-c"># 一天1000次</span>
+    }
+}</pre></div>
+<h3><a id="user-content-7-过滤排序" class="anchor" aria-hidden="true" href="#7-过滤排序"><span aria-hidden="true" class="octicon octicon-link"></span></a>7. 过滤&amp;排序</h3>
+<p>安装依赖<code>pip install django-filter</code></p>
+<ul>
+<li>使用</li>
+</ul>
+<div class="highlight highlight-source-gfm"><pre><span class="pl-v">1.</span> 注册django_filter
+<span class="pl-v">2.</span> 配置 REST_FRAMEWORK = {
+   'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+   }
+<span class="pl-v">3.</span> 过滤字段
+from django_filters.rest_framework import DjangoFilterBackend
+filter_backends = [DjangoFilterBackend]
+filter_fields = ['title', 'id']     # 针对某一字段过滤
+
+<span class="pl-v">4.</span> 排序字段
+from rest_framework.filters import OrderingFilter
+filter_backends = [OrderingFilter]
+ordering_fields = ['id']    # 针对某一字段排序
+   
+<span class="pl-v">5.</span> 即可以过滤，还可以排序
+from rest_framework.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+filter_backends = [DjangoFilterBackend, OrderingFilter]
+filter_fields = ['id']
+ordering_fields = ['id']</pre></div>
+<h3><a id="user-content-8-分页" class="anchor" aria-hidden="true" href="#8-分页"><span aria-hidden="true" class="octicon octicon-link"></span></a>8. 分页</h3>
+<ul>
+<li>全局</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-v">REST_FRAMEWORK</span> <span class="pl-c1">=</span> {
+    <span class="pl-s">'DEFAULT_PAGINATION_CLASS'</span>: <span class="pl-s">'rest_framework.pagination.PageNumberPagination'</span>,
+    <span class="pl-s">'PAGE_SIZE'</span>: <span class="pl-c1">100</span>
+}</pre></div>
+<ul>
+<li>使用</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">pagination</span> <span class="pl-k">import</span> <span class="pl-v">PageNumberPagination</span>, <span class="pl-v">LimitOffsetPagination</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">viewsets</span> <span class="pl-k">import</span> <span class="pl-v">ModelViewSet</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">models</span> <span class="pl-k">import</span> <span class="pl-v">Book</span>
+<span class="pl-k">from</span> <span class="pl-s1">book_drf</span>.<span class="pl-s1">serializer</span> <span class="pl-k">import</span> <span class="pl-v">BookSerializer</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">LargeResultsSetPagination</span>(<span class="pl-v">PageNumberPagination</span>):
+    <span class="pl-s">"""自定义分页"""</span>
+    <span class="pl-s1">page_size</span> <span class="pl-c1">=</span> <span class="pl-c1">2</span>
+    <span class="pl-s1">page_size_query_param</span> <span class="pl-c1">=</span> <span class="pl-s">'page_size'</span>
+    <span class="pl-s1">max_page_size</span> <span class="pl-c1">=</span> <span class="pl-c1">4</span>
+    
+    
+<span class="pl-k">class</span> <span class="pl-v">BookModelViewSet</span>(<span class="pl-v">ModelViewSet</span>):
+    <span class="pl-s">"""ModelViewSet实现增删查改"""</span>
+    <span class="pl-s1">queryset</span> <span class="pl-c1">=</span> <span class="pl-v">Book</span>.<span class="pl-s1">objects</span>.<span class="pl-en">all</span>()
+    <span class="pl-s1">serializer_class</span> <span class="pl-c1">=</span> <span class="pl-v">BookSerializer</span>
+    <span class="pl-s1">pagination_class</span> <span class="pl-c1">=</span> <span class="pl-v">LargeResultsSetPagination</span>    <span class="pl-c"># 将自定义分页加入即可</span>
+    
+<span class="pl-c"># PageNumberPagination  分页控制</span>
+<span class="pl-c"># LimitOffsetPagination 偏移控制</span></pre></div>
+<h3><a id="user-content-9-版本" class="anchor" aria-hidden="true" href="#9-版本"><span aria-hidden="true" class="octicon octicon-link"></span></a>9. 版本</h3>
+<div class="highlight highlight-source-python"><pre><span class="pl-v">REST_FRAMEWORK</span> <span class="pl-c1">=</span> {
+    <span class="pl-s">'DEFAULT_VERSIONING_CLASS'</span>: <span class="pl-s">'rest_framework.versioning.URLPathVersioning'</span>
+}</pre></div>
+<h3><a id="user-content-10-异常" class="anchor" aria-hidden="true" href="#10-异常"><span aria-hidden="true" class="octicon octicon-link"></span></a>10. 异常</h3>
+<p><a href="https://www.django-rest-framework.org/api-guide/exceptions/" rel="nofollow">参考</a></p>
+<h3><a id="user-content-11-接口文档" class="anchor" aria-hidden="true" href="#11-接口文档"><span aria-hidden="true" class="octicon octicon-link"></span></a>11. 接口文档</h3>
+<ul>
+<li>
+<p>安装依赖
+<code>pip install coreapi</code></p>
+</li>
+<li>
+<p>配置</p>
+</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># setting文件</span>
+<span class="pl-v">REST_FRAMEWORK</span> <span class="pl-c1">=</span> {
+        <span class="pl-s">'DEFAULT_SCHEMA_CLASS'</span>: <span class="pl-s">'rest_framework.schemas.coreapi.AutoSchema'</span>,
+}
+<span class="pl-c"># urls 文件</span>
+<span class="pl-k">from</span> <span class="pl-s1">django</span>.<span class="pl-s1">urls</span> <span class="pl-k">import</span> <span class="pl-s1">path</span>
+<span class="pl-k">from</span> <span class="pl-s1">rest_framework</span>.<span class="pl-s1">documentation</span> <span class="pl-k">import</span> <span class="pl-s1">include_docs_urls</span>
+
+<span class="pl-en">path</span>(<span class="pl-s">'docs/'</span>, <span class="pl-en">include_docs_urls</span>(<span class="pl-s1">title</span><span class="pl-c1">=</span><span class="pl-s">'测试接口文档'</span>)),</pre></div>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

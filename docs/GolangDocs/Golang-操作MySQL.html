@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>Golang-操作MySQL.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <ol>
+<li>
+<p>术语解释：</p>
+<div class="highlight highlight-source-shell"><pre>占位符问题：
+补充：不同的数据库中，SQL语句使用的占位符语法不尽相同。
+    数据库	占位符语法
+    MySQL	<span class="pl-k">?</span>
+    PostgreSQL	<span class="pl-smi">$1</span>, <span class="pl-smi">$2</span>等
+    SQLite	<span class="pl-k">?</span> 和<span class="pl-smi">$1</span>
+    Oracle	:name
+
+什么是预处理？
+    普通SQL语句执行过程：
+
+        客户端对SQL语句进行占位符替换得到完整的SQL语句。
+        客户端发送完整SQL语句到MySQL服务端
+        MySQL服务端执行完整的SQL语句并将结果返回给客户端。
+    预处理执行过程：
+
+        把SQL语句分成两部分，命令部分与数据部分。
+        先把命令部分发送给MySQL服务端，MySQL服务端进行SQL预处理。
+        然后把数据部分发送给MySQL服务端，MySQL服务端对SQL语句进行占位符替换。
+        MySQL服务端执行完整的SQL语句并将结果返回给客户端。
+
+为什么要预处理？
+    优化MySQL服务器重复执行SQL的方法，可以提升服务器性能，提前让服务器编译，一次编译多次执行，节省后续编译的成本。
+    避免SQL注入问题。</pre></div>
+</li>
+<li>
+<p>操作代码</p>
+</li>
+</ol>
+<div class="highlight highlight-source-go"><pre><span class="pl-c">// GolangDocs/src/use_mysql.go</span>
+<span class="pl-k">package</span> db
+
+<span class="pl-c">/*</span>
+<span class="pl-c">操作mysql</span>
+<span class="pl-c">CREATE TABLE `user` (</span>
+<span class="pl-c">    `user_id` int(11) NOT NULL AUTO_INCREMENT,</span>
+<span class="pl-c">    `username` varchar(255) DEFAULT NULL,</span>
+<span class="pl-c">    `sex` varchar(255) DEFAULT NULL,</span>
+<span class="pl-c">    `email` varchar(255) DEFAULT NULL,</span>
+<span class="pl-c">    PRIMARY KEY (`user_id`)</span>
+<span class="pl-c">  ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;</span>
+<span class="pl-c">*/</span>
+<span class="pl-k">import</span> (
+	<span class="pl-s">"database/sql"</span>
+	<span class="pl-s">"errors"</span>
+	<span class="pl-s">"fmt"</span>
+	<span class="pl-s">"log"</span>
+	<span class="pl-s">"time"</span>
+
+	_ <span class="pl-s">"github.com/go-sql-driver/mysql"</span>
+)
+
+<span class="pl-k">var</span> <span class="pl-s1">DB</span> <span class="pl-c1">*</span>sql.<span class="pl-smi">DB</span>
+
+<span class="pl-k">func</span> <span class="pl-en">init</span>() {
+	<span class="pl-c">// 函数初始化</span>
+	<span class="pl-s1">db</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">sql</span>.<span class="pl-en">Open</span>(<span class="pl-s">"mysql"</span>, <span class="pl-s">"root:0009@tcp(localhost:3306)/golang_base?charset=utf8&amp;parseTime=True"</span>)
+	<span class="pl-k">if</span> <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> {
+		<span class="pl-en">panic</span>(<span class="pl-s1">err</span>)
+	}
+	<span class="pl-c">// 最大空闲链接数，默认不配置是2个最大空闲连接数</span>
+	<span class="pl-s1">db</span>.<span class="pl-en">SetMaxIdleConns</span>(<span class="pl-c1">5</span>)
+	<span class="pl-c">// 最大连接数，默认不配置，是不限制最大连接数</span>
+	<span class="pl-s1">db</span>.<span class="pl-en">SetMaxOpenConns</span>(<span class="pl-c1">100</span>)
+	<span class="pl-c">// 空闲链接最大存活时间</span>
+	<span class="pl-s1">db</span>.<span class="pl-en">SetConnMaxIdleTime</span>(<span class="pl-s1">time</span>.<span class="pl-c1">Minute</span> <span class="pl-c1">*</span> <span class="pl-c1">3</span>)
+	<span class="pl-c">// 连接最大存活时间</span>
+	<span class="pl-s1">db</span>.<span class="pl-en">SetConnMaxLifetime</span>(<span class="pl-s1">time</span>.<span class="pl-c1">Minute</span> <span class="pl-c1">*</span> <span class="pl-c1">3</span>)
+	<span class="pl-s1">err</span> <span class="pl-c1">=</span> <span class="pl-s1">db</span>.<span class="pl-en">Ping</span>()
+	<span class="pl-k">if</span> <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> {
+		<span class="pl-s1">db</span>.<span class="pl-en">Close</span>()
+		<span class="pl-en">panic</span>(<span class="pl-s1">err</span>)
+	}
+	<span class="pl-s1">DB</span> <span class="pl-c1">=</span> <span class="pl-s1">db</span>
+}
+
+<span class="pl-k">type</span> <span class="pl-smi">User</span> <span class="pl-k">struct</span> {
+	<span class="pl-c1">UserId</span>   <span class="pl-smi">int</span>    <span class="pl-s">`db:"user_id"`</span>
+	<span class="pl-c1">Username</span> <span class="pl-smi">string</span> <span class="pl-s">`db:"username"`</span>
+	<span class="pl-c1">Sex</span>      <span class="pl-smi">string</span> <span class="pl-s">`db:"sex"`</span>
+	<span class="pl-c1">Email</span>    <span class="pl-smi">string</span> <span class="pl-s">`db:"email"`</span>
+}
+
+<span class="pl-c">// InsertData 数据插入</span>
+<span class="pl-k">func</span> <span class="pl-en">InsertData</span>(<span class="pl-s1">username</span> <span class="pl-smi">string</span>) {
+	<span class="pl-s1">r</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">DB</span>.<span class="pl-en">Exec</span>(<span class="pl-s">"INSERT INTO user (username,sex,email) VALUES(?,?,?)"</span>, <span class="pl-s1">username</span>, <span class="pl-s">"man"</span>, <span class="pl-s">"张三@bean.com"</span>)
+	<span class="pl-k">if</span> <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> {
+		<span class="pl-en">panic</span>(<span class="pl-s1">err</span>)
+	}
+	<span class="pl-s1">id</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">r</span>.<span class="pl-en">LastInsertId</span>()
+	<span class="pl-k">if</span> <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> {
+		<span class="pl-en">panic</span>(<span class="pl-s1">err</span>)
+	}
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"insert success :"</span>, <span class="pl-s1">id</span>)
+}
+
+<span class="pl-c">// query 数据查询多条</span>
+<span class="pl-k">func</span> <span class="pl-en">query</span>() ([]<span class="pl-smi">User</span>, <span class="pl-smi">error</span>) {
+	<span class="pl-s1">rows</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">DB</span>.<span class="pl-en">Query</span>(<span class="pl-s">"select * from user"</span>)
+	<span class="pl-k">if</span> <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> {
+		<span class="pl-s1">log</span>.<span class="pl-en">Println</span>(<span class="pl-s">"查询出现错误:"</span>, <span class="pl-s1">err</span>)
+		<span class="pl-k">return</span> <span class="pl-c1">nil</span>, <span class="pl-s1">errors</span>.<span class="pl-en">New</span>(<span class="pl-s1">err</span>.<span class="pl-en">Error</span>())
+	}
+	<span class="pl-s1">ret</span> <span class="pl-c1">:=</span> []<span class="pl-smi">User</span>{}
+	<span class="pl-s1">user</span> <span class="pl-c1">:=</span> <span class="pl-smi">User</span>{}
+
+	<span class="pl-k">defer</span> <span class="pl-s1">rows</span>.<span class="pl-en">Close</span>()
+	<span class="pl-k">for</span> <span class="pl-s1">rows</span>.<span class="pl-en">Next</span>() {
+		<span class="pl-k">if</span> <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">rows</span>.<span class="pl-en">Scan</span>(<span class="pl-c1">&amp;</span><span class="pl-s1">user</span>.<span class="pl-c1">UserId</span>, <span class="pl-c1">&amp;</span><span class="pl-s1">user</span>.<span class="pl-c1">Username</span>, <span class="pl-c1">&amp;</span><span class="pl-s1">user</span>.<span class="pl-c1">Sex</span>, <span class="pl-c1">&amp;</span><span class="pl-s1">user</span>.<span class="pl-c1">Email</span>); <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> {
+			<span class="pl-s1">log</span>.<span class="pl-en">Println</span>(<span class="pl-s">"scan error:"</span>, <span class="pl-s1">err</span>)
+			<span class="pl-k">return</span> <span class="pl-c1">nil</span>, <span class="pl-s1">errors</span>.<span class="pl-en">New</span>(<span class="pl-s1">err</span>.<span class="pl-en">Error</span>())
+		}
+		<span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-en">append</span>(<span class="pl-s1">ret</span>, <span class="pl-s1">user</span>)
+	}
+	<span class="pl-k">return</span> <span class="pl-s1">ret</span>, <span class="pl-c1">nil</span>
+}
+
+<span class="pl-c">// update update数据</span>
+<span class="pl-k">func</span> <span class="pl-en">update</span>(<span class="pl-s1">username</span> <span class="pl-smi">string</span>, <span class="pl-s1">id</span> <span class="pl-smi">int</span>) {
+	<span class="pl-s1">ret</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">DB</span>.<span class="pl-en">Exec</span>(<span class="pl-s">"update user set username=? where user_id=?"</span>, <span class="pl-s1">username</span>, <span class="pl-s1">id</span>)
+	<span class="pl-k">if</span> <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> {
+		<span class="pl-s1">log</span>.<span class="pl-en">Println</span>(<span class="pl-s">"更新出现问题:"</span>, <span class="pl-s1">err</span>)
+		<span class="pl-k">return</span>
+	}
+	<span class="pl-s1">affected</span>, <span class="pl-s1">_</span> <span class="pl-c1">:=</span> <span class="pl-s1">ret</span>.<span class="pl-en">RowsAffected</span>()
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"更新成功的行数:"</span>, <span class="pl-s1">affected</span>)
+}
+
+<span class="pl-c">// delete</span>
+<span class="pl-k">func</span> <span class="pl-en">delete</span>(<span class="pl-s1">id</span> <span class="pl-smi">int</span>) {
+	<span class="pl-s1">ret</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">DB</span>.<span class="pl-en">Exec</span>(<span class="pl-s">"delete from user where user_id=?"</span>, <span class="pl-s1">id</span>)
+	<span class="pl-k">if</span> <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> {
+		<span class="pl-s1">log</span>.<span class="pl-en">Println</span>(<span class="pl-s">"删除出现问题:"</span>, <span class="pl-s1">err</span>)
+		<span class="pl-k">return</span>
+	}
+	<span class="pl-s1">affected</span>, <span class="pl-s1">_</span> <span class="pl-c1">:=</span> <span class="pl-s1">ret</span>.<span class="pl-en">RowsAffected</span>()
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"删除成功的行数:"</span>, <span class="pl-s1">affected</span>)
+}
+
+<span class="pl-c">// golang数据库预处理`func (db *DB) Prepare(query string) (*Stmt, error)`</span>
+<span class="pl-c">// 预处理插入示例 crud基本一致</span>
+<span class="pl-k">func</span> <span class="pl-en">prepareInsertDemo</span>(<span class="pl-s1">usernames</span> <span class="pl-c1">...</span><span class="pl-smi">string</span>) {
+	<span class="pl-s1">sqlStr</span> <span class="pl-c1">:=</span> <span class="pl-s">"INSERT INTO user (username,sex,email) VALUES(?,?,?)"</span>
+	<span class="pl-s1">stmt</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">DB</span>.<span class="pl-en">Prepare</span>(<span class="pl-s1">sqlStr</span>)
+	<span class="pl-k">if</span> <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> {
+		<span class="pl-en">panic</span>(<span class="pl-s1">err</span>)
+	}
+	<span class="pl-k">defer</span> <span class="pl-s1">stmt</span>.<span class="pl-en">Close</span>()
+	<span class="pl-k">for</span> <span class="pl-s1">_</span>, <span class="pl-s1">username</span> <span class="pl-c1">:=</span> <span class="pl-k">range</span> <span class="pl-s1">usernames</span> {
+		<span class="pl-s1">_</span>, <span class="pl-s1">err</span> <span class="pl-c1">=</span> <span class="pl-s1">stmt</span>.<span class="pl-en">Exec</span>(<span class="pl-s1">username</span>, <span class="pl-s">"man"</span>, <span class="pl-s">"张三@bean.com"</span>)
+		<span class="pl-k">if</span> <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> {
+			<span class="pl-en">panic</span>(<span class="pl-s1">err</span>)
+		}
+	}
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"insert success."</span>)
+}
+
+<span class="pl-c">// go操作mysql事务</span>
+<span class="pl-k">func</span> <span class="pl-en">insertTx</span>(<span class="pl-s1">username</span> <span class="pl-smi">string</span>) {
+	<span class="pl-s1">tx</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">DB</span>.<span class="pl-en">Begin</span>()
+	<span class="pl-k">if</span> <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> {
+		<span class="pl-s1">log</span>.<span class="pl-en">Println</span>(<span class="pl-s">"开启事务错误:"</span>, <span class="pl-s1">err</span>)
+		<span class="pl-k">return</span>
+	}
+	<span class="pl-s1">ret</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-s1">tx</span>.<span class="pl-en">Exec</span>(<span class="pl-s">"insert into user (username,sex,email) values (?,?,?)"</span>, <span class="pl-s1">username</span>, <span class="pl-s">"man"</span>, <span class="pl-s">"test@bean.com"</span>)
+	<span class="pl-k">if</span> <span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span> {
+		<span class="pl-s1">log</span>.<span class="pl-en">Println</span>(<span class="pl-s">"事务sql执行出错:"</span>, <span class="pl-s1">err</span>)
+		<span class="pl-k">return</span>
+	}
+	<span class="pl-s1">id</span>, <span class="pl-s1">_</span> <span class="pl-c1">:=</span> <span class="pl-s1">ret</span>.<span class="pl-en">LastInsertId</span>()
+	<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"插入成功:"</span>, <span class="pl-s1">id</span>)
+	<span class="pl-k">if</span> <span class="pl-s1">username</span> <span class="pl-c1">==</span> <span class="pl-s">"lisi"</span> {
+		<span class="pl-s1">fmt</span>.<span class="pl-en">Println</span>(<span class="pl-s">"回滚..."</span>)
+		<span class="pl-s1">_</span> <span class="pl-c1">=</span> <span class="pl-s1">tx</span>.<span class="pl-en">Rollback</span>()
+	} <span class="pl-k">else</span> {
+		<span class="pl-s1">_</span> <span class="pl-c1">=</span> <span class="pl-s1">tx</span>.<span class="pl-en">Commit</span>()
+	}
+}</pre></div>
+<div class="highlight highlight-source-go"><pre><span class="pl-c">// GolangDocs/src/use_mysql_test.go</span>
+<span class="pl-k">package</span> db
+
+<span class="pl-k">import</span> (
+	<span class="pl-s">"reflect"</span>
+	<span class="pl-s">"testing"</span>
+
+	_ <span class="pl-s">"github.com/go-sql-driver/mysql"</span>
+)
+
+<span class="pl-k">func</span> <span class="pl-en">TestInsertData</span>(<span class="pl-s1">t</span> <span class="pl-c1">*</span>testing.<span class="pl-smi">T</span>) {
+	<span class="pl-s1">tests</span> <span class="pl-c1">:=</span> []<span class="pl-k">struct</span> {
+		<span class="pl-c1">name</span> <span class="pl-smi">string</span>
+	}{
+		{<span class="pl-s">"张三"</span>}, {<span class="pl-s">"李四"</span>}, {<span class="pl-s">"王五"</span>},
+	}
+	<span class="pl-k">for</span> <span class="pl-s1">_</span>, <span class="pl-s1">tt</span> <span class="pl-c1">:=</span> <span class="pl-k">range</span> <span class="pl-s1">tests</span> {
+		<span class="pl-s1">t</span>.<span class="pl-en">Run</span>(<span class="pl-s1">tt</span>.<span class="pl-c1">name</span>, <span class="pl-k">func</span>(<span class="pl-s1">t</span> <span class="pl-c1">*</span>testing.<span class="pl-smi">T</span>) {
+			<span class="pl-en">InsertData</span>(<span class="pl-s1">tt</span>.<span class="pl-c1">name</span>)
+		})
+	}
+}
+
+<span class="pl-k">func</span> <span class="pl-en">Test_query</span>(<span class="pl-s1">t</span> <span class="pl-c1">*</span>testing.<span class="pl-smi">T</span>) {
+	<span class="pl-s1">tests</span> <span class="pl-c1">:=</span> []<span class="pl-k">struct</span> {
+		<span class="pl-c1">name</span>    <span class="pl-smi">string</span>
+		<span class="pl-c1">want</span>    []<span class="pl-smi">User</span>
+		<span class="pl-c1">wantErr</span> <span class="pl-smi">bool</span>
+	}{
+		<span class="pl-c">// TODO: Add test cases.</span>
+	}
+	<span class="pl-k">for</span> <span class="pl-s1">_</span>, <span class="pl-s1">tt</span> <span class="pl-c1">:=</span> <span class="pl-k">range</span> <span class="pl-s1">tests</span> {
+		<span class="pl-s1">t</span>.<span class="pl-en">Run</span>(<span class="pl-s1">tt</span>.<span class="pl-c1">name</span>, <span class="pl-k">func</span>(<span class="pl-s1">t</span> <span class="pl-c1">*</span>testing.<span class="pl-smi">T</span>) {
+			<span class="pl-s1">got</span>, <span class="pl-s1">err</span> <span class="pl-c1">:=</span> <span class="pl-en">query</span>()
+			<span class="pl-k">if</span> (<span class="pl-s1">err</span> <span class="pl-c1">!=</span> <span class="pl-c1">nil</span>) <span class="pl-c1">!=</span> <span class="pl-s1">tt</span>.<span class="pl-c1">wantErr</span> {
+				<span class="pl-s1">t</span>.<span class="pl-en">Errorf</span>(<span class="pl-s">"query() error = %v, wantErr %v"</span>, <span class="pl-s1">err</span>, <span class="pl-s1">tt</span>.<span class="pl-c1">wantErr</span>)
+				<span class="pl-k">return</span>
+			}
+			<span class="pl-k">if</span> <span class="pl-c1">!</span><span class="pl-s1">reflect</span>.<span class="pl-en">DeepEqual</span>(<span class="pl-s1">got</span>, <span class="pl-s1">tt</span>.<span class="pl-c1">want</span>) {
+				<span class="pl-s1">t</span>.<span class="pl-en">Errorf</span>(<span class="pl-s">"query() = %v, want %v"</span>, <span class="pl-s1">got</span>, <span class="pl-s1">tt</span>.<span class="pl-c1">want</span>)
+			}
+		})
+	}
+}
+<span class="pl-k">func</span> <span class="pl-en">Test_update</span>(<span class="pl-s1">t</span> <span class="pl-c1">*</span>testing.<span class="pl-smi">T</span>) {
+	<span class="pl-k">type</span> <span class="pl-smi">args</span> <span class="pl-k">struct</span> {
+		<span class="pl-c1">username</span> <span class="pl-smi">string</span>
+		<span class="pl-c1">id</span>       <span class="pl-smi">int</span>
+	}
+	<span class="pl-s1">tests</span> <span class="pl-c1">:=</span> []<span class="pl-k">struct</span> {
+		<span class="pl-c1">name</span> <span class="pl-smi">string</span>
+		<span class="pl-c1">args</span> <span class="pl-smi">args</span>
+	}{
+		{<span class="pl-s">"li01"</span>, <span class="pl-smi">args</span>{<span class="pl-s">"li01"</span>, <span class="pl-c1">3</span>}},
+	}
+	<span class="pl-k">for</span> <span class="pl-s1">_</span>, <span class="pl-s1">tt</span> <span class="pl-c1">:=</span> <span class="pl-k">range</span> <span class="pl-s1">tests</span> {
+		<span class="pl-s1">t</span>.<span class="pl-en">Run</span>(<span class="pl-s1">tt</span>.<span class="pl-c1">name</span>, <span class="pl-k">func</span>(<span class="pl-s1">t</span> <span class="pl-c1">*</span>testing.<span class="pl-smi">T</span>) {
+			<span class="pl-en">update</span>(<span class="pl-s1">tt</span>.<span class="pl-c1">args</span>.<span class="pl-c1">username</span>, <span class="pl-s1">tt</span>.<span class="pl-c1">args</span>.<span class="pl-c1">id</span>)
+		})
+	}
+}
+
+<span class="pl-k">func</span> <span class="pl-en">Test_delete</span>(<span class="pl-s1">t</span> <span class="pl-c1">*</span>testing.<span class="pl-smi">T</span>) {
+	<span class="pl-k">type</span> <span class="pl-smi">args</span> <span class="pl-k">struct</span> {
+		<span class="pl-c1">id</span> <span class="pl-smi">int</span>
+	}
+	<span class="pl-s1">tests</span> <span class="pl-c1">:=</span> []<span class="pl-k">struct</span> {
+		<span class="pl-c1">name</span> <span class="pl-smi">string</span>
+		<span class="pl-c1">args</span> <span class="pl-smi">args</span>
+	}{
+		{<span class="pl-s">"001"</span>, <span class="pl-smi">args</span>{<span class="pl-c1">3</span>}},
+		{<span class="pl-s">"002"</span>, <span class="pl-smi">args</span>{<span class="pl-c1">4</span>}},
+	}
+	<span class="pl-k">for</span> <span class="pl-s1">_</span>, <span class="pl-s1">tt</span> <span class="pl-c1">:=</span> <span class="pl-k">range</span> <span class="pl-s1">tests</span> {
+		<span class="pl-s1">t</span>.<span class="pl-en">Run</span>(<span class="pl-s1">tt</span>.<span class="pl-c1">name</span>, <span class="pl-k">func</span>(<span class="pl-s1">t</span> <span class="pl-c1">*</span>testing.<span class="pl-smi">T</span>) {
+			<span class="pl-en">delete</span>(<span class="pl-s1">tt</span>.<span class="pl-c1">args</span>.<span class="pl-c1">id</span>)
+		})
+	}
+}
+
+<span class="pl-k">func</span> <span class="pl-en">Test_insertTx</span>(<span class="pl-s1">t</span> <span class="pl-c1">*</span>testing.<span class="pl-smi">T</span>) {
+	<span class="pl-k">type</span> <span class="pl-smi">args</span> <span class="pl-k">struct</span> {
+		<span class="pl-c1">username</span> <span class="pl-smi">string</span>
+	}
+	<span class="pl-s1">tests</span> <span class="pl-c1">:=</span> []<span class="pl-k">struct</span> {
+		<span class="pl-c1">name</span> <span class="pl-smi">string</span>
+		<span class="pl-c1">args</span> <span class="pl-smi">args</span>
+	}{
+		<span class="pl-c">// TODO: Add test cases.</span>
+	}
+	<span class="pl-k">for</span> <span class="pl-s1">_</span>, <span class="pl-s1">tt</span> <span class="pl-c1">:=</span> <span class="pl-k">range</span> <span class="pl-s1">tests</span> {
+		<span class="pl-s1">t</span>.<span class="pl-en">Run</span>(<span class="pl-s1">tt</span>.<span class="pl-c1">name</span>, <span class="pl-k">func</span>(<span class="pl-s1">t</span> <span class="pl-c1">*</span>testing.<span class="pl-smi">T</span>) {
+			<span class="pl-en">insertTx</span>(<span class="pl-s1">tt</span>.<span class="pl-c1">args</span>.<span class="pl-c1">username</span>)
+		})
+	}
+}
+
+<span class="pl-k">func</span> <span class="pl-en">Test_prepareInsertDemo</span>(<span class="pl-s1">t</span> <span class="pl-c1">*</span>testing.<span class="pl-smi">T</span>) {
+	<span class="pl-k">type</span> <span class="pl-smi">args</span> <span class="pl-k">struct</span> {
+		<span class="pl-c1">usernames</span> []<span class="pl-smi">string</span>
+	}
+	<span class="pl-s1">tests</span> <span class="pl-c1">:=</span> []<span class="pl-k">struct</span> {
+		<span class="pl-c1">name</span> <span class="pl-smi">string</span>
+		<span class="pl-c1">args</span> <span class="pl-smi">args</span>
+	}{
+		{<span class="pl-s">"001"</span>, <span class="pl-smi">args</span>{[]<span class="pl-smi">string</span>{<span class="pl-s">"bean001"</span>, <span class="pl-s">"bean002"</span>}}},
+		{<span class="pl-s">"002"</span>, <span class="pl-smi">args</span>{[]<span class="pl-smi">string</span>{<span class="pl-s">"bean003"</span>, <span class="pl-s">"bean004"</span>}}},
+	}
+	<span class="pl-k">for</span> <span class="pl-s1">_</span>, <span class="pl-s1">tt</span> <span class="pl-c1">:=</span> <span class="pl-k">range</span> <span class="pl-s1">tests</span> {
+		<span class="pl-s1">t</span>.<span class="pl-en">Run</span>(<span class="pl-s1">tt</span>.<span class="pl-c1">name</span>, <span class="pl-k">func</span>(<span class="pl-s1">t</span> <span class="pl-c1">*</span>testing.<span class="pl-smi">T</span>) {
+			<span class="pl-en">prepareInsertDemo</span>(<span class="pl-s1">tt</span>.<span class="pl-c1">args</span>.<span class="pl-c1">usernames</span><span class="pl-c1">...</span>)
+		})
+	}
+}</pre></div>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

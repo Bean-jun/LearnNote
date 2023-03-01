@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>基于Socket的TCP协议实现.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <ol>
+<li>
+<p>TCP协议的三握四挥(来源于菜鸟教程)</p>
+<p>先看看图~</p>
+<p><strong>TCP报文首部格式</strong></p>
+</li>
+</ol>
+<p><a target="_blank" rel="noopener noreferrer" href="image/1538030297-3779-20150904110054856-961661137-20210905230123871.png"><img src="image/1538030297-3779-20150904110054856-961661137-20210905230123871.png" alt="img" style="max-width: 100%;"></a></p>
+<p><strong>TCP协议的三次握手和四次挥手</strong></p>
+<p><a target="_blank" rel="noopener noreferrer" href="image/1538030297-7824-20150904110008388-1768388886.gif"><img src="image/1538030297-7824-20150904110008388-1768388886.gif" alt="img" style="max-width: 100%;"></a></p>
+<p><strong>三握四挥过程</strong></p>
+<blockquote>
+<p><strong>TCP连接建立过程：</strong> 首先Client端发送连接请求报文，Server段接受连接后回复ACK报文，并为这次连接分配资源。Client端接收到ACK报文后也向Server段发生ACK报文，并分配资源，这样TCP连接就建立了。</p>
+<p><strong>TCP连接断开过程：</strong> 假设Client端发起中断连接请求，也就是发送FIN报文。Server端接到FIN报文后，意思是说"我Client端没有数据要发给你了"，但是如果你还有数据没有发送完成，则不必急着关闭Socket，可以继续发送数据。所以你先发送ACK，"告诉Client端，你的请求我收到了，但是我还没准备好，请继续你等我的消息"。这个时候Client端就进入FIN_WAIT状态，继续等待Server端的FIN报文。当Server端确定数据已发送完成，则向Client端发送FIN报文，"告诉Client端，好了，我这边数据发完了，准备好关闭连接了"。Client端收到FIN报文后，"就知道可以关闭连接了，但是他还是不相信网络，怕Server端不知道要关闭，所以发送ACK后进入TIME_WAIT状态，如果Server端没有收到ACK则可以重传。"，Server端收到ACK后，"就知道可以断开连接了"。Client端等待了2MSL后依然没有收到回复，则证明Server端已正常关闭，那好，我Client端也可以关闭连接了。Ok，TCP连接就这样关闭了！</p>
+</blockquote>
+<p><strong>为什么握手只要三次，挥手却要四次</strong></p>
+<blockquote>
+<p><strong>为什么要三次握手？</strong></p>
+<p>在只有两次"握手"的情形下，假设Client想跟Server建立连接，但是却因为中途连接请求的数据报丢失了，故Client端不得不重新发送一遍；这个时候Server端仅收到一个连接请求，因此可以正常的建立连接。但是，有时候Client端重新发送请求不是因为数据报丢失了，而是有可能数据传输过程因为网络并发量很大在某结点被阻塞了，这种情形下Server端将先后收到2次请求，并持续等待两个Client请求向他发送数据...问题就在这里，Cient端实际上只有一次请求，而Server端却有2个响应，极端的情况可能由于Client端多次重新发送请求数据而导致Server端最后建立了N多个响应在等待，因而造成极大的资源浪费！所以，"三次握手"很有必要！</p>
+<p><strong>为什么要四次挥手？</strong></p>
+<p>试想一下，假如现在你是客户端你想断开跟Server的所有连接该怎么做？第一步，你自己先停止向Server端发送数据，并等待Server的回复。但事情还没有完，虽然你自身不往Server发送数据了，但是因为你们之前已经建立好平等的连接了，所以此时他也有主动权向你发送数据；故Server端还得终止主动向你发送数据，并等待你的确认。其实，说白了就是保证双方的一个合约的完整执行！</p>
+<p>使用TCP的协议：FTP（文件传输协议）、Telnet（远程登录协议）、SMTP（简单邮件传输协议）、POP3（和SMTP相对，用于接收邮件）、HTTP协议等。</p>
+</blockquote>
+<ol start="2">
+<li>
+<p>源码实现</p>
+<p>别害怕，我边写边加注释~</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># NetworkDocs/TCP/server.py</span>
+<span class="pl-c"># 服务端</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">socket</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">main</span>():
+    <span class="pl-c"># 创建套接字</span>
+    <span class="pl-s1">sock</span> <span class="pl-c1">=</span> <span class="pl-s1">socket</span>.<span class="pl-en">socket</span>(<span class="pl-s1">socket</span>.<span class="pl-v">AF_INET</span>, <span class="pl-s1">socket</span>.<span class="pl-v">SOCK_STREAM</span>)
+
+    <span class="pl-c"># 绑定本地ip</span>
+    <span class="pl-s1">sock</span>.<span class="pl-en">bind</span>((<span class="pl-s">"192.168.1.101"</span>, <span class="pl-c1">8080</span>))
+
+    <span class="pl-c"># 开启监听</span>
+    <span class="pl-s1">sock</span>.<span class="pl-en">listen</span>(<span class="pl-c1">128</span>)
+
+    <span class="pl-k">while</span> <span class="pl-c1">True</span>:
+        <span class="pl-c"># 处理客户端连接</span>
+        <span class="pl-s1">response_client</span>, <span class="pl-s1">response_address</span> <span class="pl-c1">=</span> <span class="pl-s1">sock</span>.<span class="pl-en">accept</span>()
+
+        <span class="pl-k">try</span>:
+            <span class="pl-c"># 开始接收消息</span>
+            <span class="pl-k">while</span> <span class="pl-c1">True</span>:
+                <span class="pl-k">try</span>:
+                    <span class="pl-s1">response_data</span> <span class="pl-c1">=</span> <span class="pl-s1">response_client</span>.<span class="pl-en">recv</span>(<span class="pl-c1">1024</span>)
+                    <span class="pl-k">if</span> <span class="pl-s1">response_data</span>:
+                        <span class="pl-en">print</span>(<span class="pl-s">"当前地址为："</span>, <span class="pl-s1">response_address</span>, <span class="pl-s">"获取到的消息为："</span>, <span class="pl-s1">response_data</span>.<span class="pl-en">decode</span>(<span class="pl-s">"utf-8"</span>))
+                    <span class="pl-k">else</span>:
+                        <span class="pl-k">break</span>
+                <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+                    <span class="pl-en">print</span>(<span class="pl-s1">e</span>.<span class="pl-s1">args</span>)
+                    <span class="pl-k">break</span>
+
+            <span class="pl-c"># 关闭客户端连接</span>
+            <span class="pl-s1">response_client</span>.<span class="pl-en">close</span>()
+
+        <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+            <span class="pl-en">print</span>(<span class="pl-s1">e</span>.<span class="pl-s1">args</span>)
+            <span class="pl-k">break</span>
+
+    <span class="pl-c"># 关闭套接字</span>
+    <span class="pl-s1">sock</span>.<span class="pl-en">close</span>()
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-en">main</span>()</pre></div>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># NetworkDocs/TCP/client.py</span>
+<span class="pl-c"># 客户端</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">socket</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">main</span>():
+    <span class="pl-c"># 创建套接字</span>
+    <span class="pl-s1">sock</span> <span class="pl-c1">=</span> <span class="pl-s1">socket</span>.<span class="pl-en">socket</span>(<span class="pl-s1">socket</span>.<span class="pl-v">AF_INET</span>, <span class="pl-s1">socket</span>.<span class="pl-v">SOCK_STREAM</span>)
+
+    <span class="pl-c"># 连接服务器</span>
+    <span class="pl-s1">sock</span>.<span class="pl-en">connect</span>((<span class="pl-s">"192.168.1.101"</span>, <span class="pl-c1">8080</span>))
+
+    <span class="pl-k">while</span> <span class="pl-c1">True</span>:
+        <span class="pl-s1">msg</span> <span class="pl-c1">=</span> <span class="pl-en">input</span>(<span class="pl-s">"请输入你想要发送的内容(`exit`退出)：<span class="pl-cce">\n</span>"</span>)
+        <span class="pl-k">if</span> <span class="pl-s1">msg</span> <span class="pl-c1">==</span> <span class="pl-s">"exit"</span>:
+            <span class="pl-k">break</span>
+        <span class="pl-s1">sock</span>.<span class="pl-en">send</span>(<span class="pl-s1">msg</span>.<span class="pl-en">encode</span>(<span class="pl-s">'utf-8'</span>))
+
+    <span class="pl-c"># 关闭套接字</span>
+    <span class="pl-s1">sock</span>.<span class="pl-en">close</span>()
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-en">main</span>()</pre></div>
+</li>
+<li>
+<p>应用场景</p>
+<p>当对网络通讯质量有要求的时候，比如：整个数据要准确无误的传递给对方，这往往用于一些要求可靠的应用，比如HTTP、HTTPS、FTP等传输文件的协议，POP、SMTP等邮件传输的协议。</p>
+</li>
+</ol>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

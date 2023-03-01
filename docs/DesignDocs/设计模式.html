@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>设计模式.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h2><a id="user-content-一创建型模式-介绍对象创建" class="anchor" aria-hidden="true" href="#一创建型模式-介绍对象创建"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、创建型模式-&gt;介绍对象创建</h2>
+<h3><a id="user-content-1-工厂模式" class="anchor" aria-hidden="true" href="#1-工厂模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. 工厂模式</h3>
+<blockquote>
+<p>两种模式可以用于以下场景</p>
+<p>a. 追踪对象的创建</p>
+<p>b. 对象的创建与使用进行解耦</p>
+<p>c. 优化应用的性能和资源占用</p>
+</blockquote>
+<p>1.1 工厂方法</p>
+<blockquote>
+<p><strong>工厂方法设计模式负责单一一种类对象的创建</strong></p>
+<p><strong>通过不同的输入参数获得不同的连接对象</strong></p>
+</blockquote>
+<p>在日常开发中，我们多数情况下是需要和数据库进行交互的，那我们就可以使用工厂方法对数据库的交互进行处理！在下方的例子中，我们可能会有三种数据库进行连接<code>MySQL</code>,<code>PgSQL</code>,<code>SQLServer</code>。那么我们在连接数据库部分加入一个工厂方法，用户通过不同的输入参数获得不同的连接对象。</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># DesignDocs/src/factory_factory.py</span>
+<span class="pl-k">from</span> <span class="pl-s1">abc</span> <span class="pl-k">import</span> <span class="pl-v">ABCMeta</span>, <span class="pl-s1">abstractmethod</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">ConnectError</span>(<span class="pl-v">Exception</span>):
+    <span class="pl-k">pass</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">ConnectFactory</span>(<span class="pl-s1">metaclass</span><span class="pl-c1">=</span><span class="pl-v">ABCMeta</span>):
+
+    <span class="pl-en">@<span class="pl-s1">abstractmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">raise</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">MySQLConnect</span>(<span class="pl-v">ConnectFactory</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">"MySQL连接obj"</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">PgSQLConnect</span>(<span class="pl-v">ConnectFactory</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">"PgSQL连接obj"</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">SQLServerConnect</span>(<span class="pl-v">ConnectFactory</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">"SQLServer连接obj"</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">connect_factory</span>(<span class="pl-s1">db_type</span>):
+
+    <span class="pl-k">if</span> <span class="pl-s1">db_type</span> <span class="pl-c1">==</span> <span class="pl-s">"MySQL"</span>:
+        <span class="pl-k">return</span> <span class="pl-v">MySQLConnect</span>()
+    <span class="pl-k">if</span> <span class="pl-s1">db_type</span> <span class="pl-c1">==</span> <span class="pl-s">"PgSQL"</span>:
+        <span class="pl-k">return</span> <span class="pl-v">PgSQLConnect</span>()
+    <span class="pl-k">if</span> <span class="pl-s1">db_type</span> <span class="pl-c1">==</span> <span class="pl-s">"SQLServer"</span>:
+        <span class="pl-k">return</span> <span class="pl-v">SQLServerConnect</span>()
+
+    <span class="pl-k">raise</span> <span class="pl-v">ConnectError</span>(<span class="pl-s">"数据库连接异常"</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-s1">conn</span> <span class="pl-c1">=</span> <span class="pl-en">connect_factory</span>(<span class="pl-s">"MySQL"</span>)
+    <span class="pl-en">print</span>(<span class="pl-s1">conn</span>.<span class="pl-en">connect</span>())
+    <span class="pl-s1">conn</span> <span class="pl-c1">=</span> <span class="pl-en">connect_factory</span>(<span class="pl-s">"PgSQL"</span>)
+    <span class="pl-en">print</span>(<span class="pl-s1">conn</span>.<span class="pl-en">connect</span>())
+    <span class="pl-s1">conn</span> <span class="pl-c1">=</span> <span class="pl-en">connect_factory</span>(<span class="pl-s">"SQLServer"</span>)
+    <span class="pl-en">print</span>(<span class="pl-s1">conn</span>.<span class="pl-en">connect</span>())
+    <span class="pl-s1">conn</span> <span class="pl-c1">=</span> <span class="pl-en">connect_factory</span>(<span class="pl-s">"redis"</span>)
+    <span class="pl-en">print</span>(<span class="pl-s1">conn</span>.<span class="pl-en">connect</span>())</pre></div>
+<p>1.2 抽象工厂</p>
+<blockquote>
+<p><strong>可以理解为是工厂方法的工厂方法，源于工厂方法，本质还是实现同属一种种类的诸多工厂方法的工厂方法</strong></p>
+<p><strong>抽象工厂模式是抽象方法的一种泛化，可以理解为它是一组工厂方法</strong></p>
+</blockquote>
+<p>在下面的例子中，我们将模拟一个数据库存储服务商，我们有一堆数据库服务，同时我们有两个简单工厂，分别帮助咱们创建两种不同费用的数据库实例给到客户端。当然，我们还有一个抽象工厂模型。在这里需要客户端告知我们他将为这个服务付费多少以及需要的数据库实例类型，我们将通过中抽象模型进行数据库实例的建立及分发。</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># DesignDocs/src/abstract_factory.py</span>
+<span class="pl-k">from</span> <span class="pl-s1">abc</span> <span class="pl-k">import</span> <span class="pl-v">ABCMeta</span>, <span class="pl-s1">abstractmethod</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">ConnectError</span>(<span class="pl-v">Exception</span>):
+    <span class="pl-k">pass</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">ConnectFactory</span>(<span class="pl-s1">metaclass</span><span class="pl-c1">=</span><span class="pl-v">ABCMeta</span>):
+
+    <span class="pl-en">@<span class="pl-s1">abstractmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">raise</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">MySQLCommunityConnect</span>(<span class="pl-v">ConnectFactory</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">"MySQL社区版连接obj"</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">MySQLEnterpriseConnect</span>(<span class="pl-v">ConnectFactory</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">"MySQL企业版连接obj"</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">PgSQLCommunityConnect</span>(<span class="pl-v">ConnectFactory</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">"PgSQL社区版连接obj"</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">PgSQLEnterpriseConnect</span>(<span class="pl-v">ConnectFactory</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">"PgSQL企业版连接obj"</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">SQLServerCommunityConnect</span>(<span class="pl-v">ConnectFactory</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">"SQLServer社区版连接obj"</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">SQLServerEnterpriseConnect</span>(<span class="pl-v">ConnectFactory</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">"SQLServer企业版连接obj"</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">connect_community_factory</span>(<span class="pl-s1">db_type</span>):
+
+    <span class="pl-k">if</span> <span class="pl-s1">db_type</span> <span class="pl-c1">==</span> <span class="pl-s">"MySQL"</span>:
+        <span class="pl-k">return</span> <span class="pl-v">MySQLCommunityConnect</span>()
+    <span class="pl-k">if</span> <span class="pl-s1">db_type</span> <span class="pl-c1">==</span> <span class="pl-s">"PgSQL"</span>:
+        <span class="pl-k">return</span> <span class="pl-v">SQLServerCommunityConnect</span>()
+    <span class="pl-k">if</span> <span class="pl-s1">db_type</span> <span class="pl-c1">==</span> <span class="pl-s">"SQLServer"</span>:
+        <span class="pl-k">return</span> <span class="pl-v">SQLServerCommunityConnect</span>()
+
+    <span class="pl-k">raise</span> <span class="pl-v">ConnectError</span>(<span class="pl-s">"数据库连接异常"</span>)
+
+
+<span class="pl-k">def</span> <span class="pl-en">connect_enterprise_factory</span>(<span class="pl-s1">db_type</span>):
+
+    <span class="pl-k">if</span> <span class="pl-s1">db_type</span> <span class="pl-c1">==</span> <span class="pl-s">"MySQL"</span>:
+        <span class="pl-k">return</span> <span class="pl-v">MySQLEnterpriseConnect</span>()
+    <span class="pl-k">if</span> <span class="pl-s1">db_type</span> <span class="pl-c1">==</span> <span class="pl-s">"PgSQL"</span>:
+        <span class="pl-k">return</span> <span class="pl-v">SQLServerEnterpriseConnect</span>()
+    <span class="pl-k">if</span> <span class="pl-s1">db_type</span> <span class="pl-c1">==</span> <span class="pl-s">"SQLServer"</span>:
+        <span class="pl-k">return</span> <span class="pl-v">SQLServerEnterpriseConnect</span>()
+
+    <span class="pl-k">raise</span> <span class="pl-v">ConnectError</span>(<span class="pl-s">"数据库连接异常"</span>)
+
+
+<span class="pl-c"># 抽象工厂集合</span>
+<span class="pl-k">def</span> <span class="pl-en">connect_factory</span>(<span class="pl-s1">price</span>, <span class="pl-s1">db_type</span>):
+    <span class="pl-k">if</span> <span class="pl-s1">price</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">0</span>:
+        <span class="pl-k">return</span> <span class="pl-en">connect_enterprise_factory</span>(<span class="pl-s1">db_type</span>)
+    <span class="pl-k">return</span> <span class="pl-en">connect_community_factory</span>(<span class="pl-s1">db_type</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-c"># 通过预算，我们给这个客户端分配不同的数据库服务器</span>
+    <span class="pl-s1">conn</span> <span class="pl-c1">=</span> <span class="pl-en">connect_factory</span>(<span class="pl-c1">0</span>, <span class="pl-s">"MySQL"</span>)
+    <span class="pl-en">print</span>(<span class="pl-s1">conn</span>.<span class="pl-en">connect</span>())
+    <span class="pl-s1">conn</span> <span class="pl-c1">=</span> <span class="pl-en">connect_factory</span>(<span class="pl-c1">100</span>, <span class="pl-s">"PgSQL"</span>)
+    <span class="pl-en">print</span>(<span class="pl-s1">conn</span>.<span class="pl-en">connect</span>())
+    <span class="pl-s1">conn</span> <span class="pl-c1">=</span> <span class="pl-en">connect_factory</span>(<span class="pl-c1">0</span>, <span class="pl-s">"SQLServer"</span>)
+    <span class="pl-en">print</span>(<span class="pl-s1">conn</span>.<span class="pl-en">connect</span>())</pre></div>
+<h3><a id="user-content-2-建造者模式" class="anchor" aria-hidden="true" href="#2-建造者模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. 建造者模式</h3>
+<blockquote>
+<p>该模式在以下场景较为适用</p>
+<p>a. 若您需要创建一个复杂对象(多步骤，步骤之间还有一定顺序)</p>
+<p>b. 一个对象有不同的表现，希望将对象的构造(这里可以理解为初始传参)和表现解耦</p>
+</blockquote>
+<blockquote>
+<p><strong>该模式中，有两个参与者：建造者builder和指挥者director。建造者负责复杂对象的各个组成部分</strong></p>
+<p><strong>建造者可能需要多个步骤来完成对象的创建</strong></p>
+</blockquote>
+<p>在下面的例子中，我们模拟了一个客户端获取数据库实例对象的过程。整个过程中，客户端只需要告诉我们他需要哪一家的云服务器就可以了，对于指挥者director而言，他需要监督建造者builder按照一定的流程进行建造。而建造者亦是按照一定的规范去设置建造过程中的内容，一步步的完成构建工作。客户端的操作变得及其简单化。思路回过头来，我们这里是建造者模式，不过也是创建型的一种，目的就是为了创建对象，在这里我们可以很清楚的感受到创建对象的过程变得简单多了。</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># DesignDocs/src/factory_builder.py</span>
+<span class="pl-k">from</span> <span class="pl-s1">abc</span> <span class="pl-k">import</span> <span class="pl-v">ABCMeta</span>, <span class="pl-s1">abstractmethod</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">ConnectFactory</span>(<span class="pl-s1">metaclass</span><span class="pl-c1">=</span><span class="pl-v">ABCMeta</span>):
+
+    <span class="pl-en">@<span class="pl-s1">abstractmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">raise</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">MySQLEnterpriseConnect</span>(<span class="pl-v">ConnectFactory</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">connect</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">"MySQL企业版连接obj"</span>
+
+
+<span class="pl-c"># 约束建造者</span>
+<span class="pl-k">class</span> <span class="pl-v">Builder</span>(<span class="pl-s1">metaclass</span><span class="pl-c1">=</span><span class="pl-v">ABCMeta</span>):
+
+    <span class="pl-c"># 帮客户购买机器</span>
+    <span class="pl-en">@<span class="pl-s1">abstractmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">buy</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">raise</span>
+
+    <span class="pl-c"># 帮客户开机</span>
+    <span class="pl-en">@<span class="pl-s1">abstractmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">open</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">raise</span>
+
+    <span class="pl-c"># 帮客户设置机器磁盘大小</span>
+    <span class="pl-en">@<span class="pl-s1">abstractmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">disk</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">raise</span>
+
+    <span class="pl-c"># 帮客户安装数据库软件</span>
+    <span class="pl-en">@<span class="pl-s1">abstractmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">install</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">raise</span>
+
+    <span class="pl-c"># 客户获取数据库实例</span>
+    <span class="pl-en">@<span class="pl-s1">abstractmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">db</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">raise</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">BaseBuilder</span>(<span class="pl-v">Builder</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">_name</span> <span class="pl-c1">=</span> <span class="pl-s">"客服"</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">buy</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">_name</span><span class="pl-kos">}</span></span>帮助客户下单了一台数据库服务器"</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">open</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">_name</span><span class="pl-kos">}</span></span>将服务器进行了开机"</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">disk</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">_name</span><span class="pl-kos">}</span></span>将服务器设置为40GB"</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">install</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">_name</span><span class="pl-kos">}</span></span>将数据库安装进入了服务器"</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">db</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-v">MySQLEnterpriseConnect</span>().<span class="pl-en">connect</span>()
+
+
+<span class="pl-k">class</span> <span class="pl-v">Alibuilder</span>(<span class="pl-v">BaseBuilder</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">_name</span> <span class="pl-c1">=</span> <span class="pl-s">"阿里云客服"</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">disk</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">_name</span><span class="pl-kos">}</span></span>将服务器设置为38GB"</span>)
+
+
+<span class="pl-k">class</span> <span class="pl-v">Huaweibuilder</span>(<span class="pl-v">BaseBuilder</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">_name</span> <span class="pl-c1">=</span> <span class="pl-s">"华为云客服"</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">disk</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">_name</span><span class="pl-kos">}</span></span>将服务器设置为39GB"</span>)
+
+
+<span class="pl-k">class</span> <span class="pl-v">DBDirector</span>():
+    <span class="pl-c"># 数据库指挥者</span>
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">builder</span> <span class="pl-c1">=</span> <span class="pl-c1">None</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">construct_builder</span>(<span class="pl-s1">self</span>, <span class="pl-s1">builder</span>: <span class="pl-v">Builder</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">builder</span> <span class="pl-c1">=</span> <span class="pl-s1">builder</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">builder</span>.<span class="pl-en">buy</span>()
+        <span class="pl-s1">self</span>.<span class="pl-s1">builder</span>.<span class="pl-en">open</span>()
+        <span class="pl-s1">self</span>.<span class="pl-s1">builder</span>.<span class="pl-en">disk</span>()
+        <span class="pl-s1">self</span>.<span class="pl-s1">builder</span>.<span class="pl-en">install</span>()
+
+    <span class="pl-k">def</span> <span class="pl-en">db</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">builder</span>.<span class="pl-en">db</span>()
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-c"># user_choice = "alibuilder"</span>
+    <span class="pl-s1">user_choice</span> <span class="pl-c1">=</span> <span class="pl-s">"huaweibuilder"</span>
+    <span class="pl-k">if</span> <span class="pl-s1">user_choice</span> <span class="pl-c1">==</span> <span class="pl-s">"alibuilder"</span>:
+        <span class="pl-s1">builder</span> <span class="pl-c1">=</span> <span class="pl-v">Alibuilder</span>()
+    <span class="pl-k">else</span>:
+        <span class="pl-s1">builder</span> <span class="pl-c1">=</span> <span class="pl-v">Huaweibuilder</span>()
+
+    <span class="pl-c"># 指挥者指挥建造者进行数据库实例的构建</span>
+    <span class="pl-s1">instance</span> <span class="pl-c1">=</span> <span class="pl-v">DBDirector</span>()
+    <span class="pl-s1">instance</span>.<span class="pl-en">construct_builder</span>(<span class="pl-s1">builder</span>)
+    <span class="pl-s1">conn</span> <span class="pl-c1">=</span> <span class="pl-s1">instance</span>.<span class="pl-en">db</span>()
+    <span class="pl-en">print</span>(<span class="pl-s">"客户端获取连接对象:"</span>, <span class="pl-s1">conn</span>)</pre></div>
+<h3><a id="user-content-3-原型模式" class="anchor" aria-hidden="true" href="#3-原型模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. 原型模式</h3>
+<blockquote>
+<p><strong>该模式中，将帮助我们创建一个对象的克隆</strong></p>
+</blockquote>
+<p>python语言中，对象的克隆是一个内置的特性，在python中<code>变量就是标签</code>。</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># DesignDocs/src/factory_prototype.py</span>
+<span class="pl-k">import</span> <span class="pl-s1">copy</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">User</span>():
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">id</span>, <span class="pl-s1">name</span>, <span class="pl-s1">age</span>, <span class="pl-s1">gender</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">id</span> <span class="pl-c1">=</span> <span class="pl-s1">id</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s1">name</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">age</span> <span class="pl-c1">=</span> <span class="pl-s1">age</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">gender</span> <span class="pl-c1">=</span> <span class="pl-s1">gender</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">__str__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s">"%s-%s-%s-%s"</span> <span class="pl-c1">%</span> (<span class="pl-s1">self</span>.<span class="pl-s1">id</span>, <span class="pl-s1">self</span>.<span class="pl-s1">name</span>, <span class="pl-s1">self</span>.<span class="pl-s1">age</span>, <span class="pl-s1">self</span>.<span class="pl-s1">gender</span>)
+
+
+<span class="pl-k">class</span> <span class="pl-v">Prototype</span>():
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">obj</span> <span class="pl-c1">=</span> <span class="pl-en">dict</span>()
+
+    <span class="pl-k">def</span> <span class="pl-en">register</span>(<span class="pl-s1">self</span>, <span class="pl-s1">identify</span>, <span class="pl-s1">obj</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">obj</span>[<span class="pl-s1">identify</span>] <span class="pl-c1">=</span> <span class="pl-s1">obj</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">unregister</span>(<span class="pl-s1">self</span>, <span class="pl-s1">identify</span>):
+        <span class="pl-k">del</span> <span class="pl-s1">self</span>.<span class="pl-s1">obj</span>[<span class="pl-s1">identify</span>]
+
+    <span class="pl-k">def</span> <span class="pl-en">clone</span>(<span class="pl-s1">self</span>, <span class="pl-s1">identify</span>, <span class="pl-c1">**</span><span class="pl-s1">attrs</span>):
+        <span class="pl-s1">found_obj</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">obj</span>.<span class="pl-en">get</span>(<span class="pl-s1">identify</span>)
+        <span class="pl-k">if</span> <span class="pl-c1">not</span> <span class="pl-s1">found_obj</span>:
+            <span class="pl-k">raise</span>
+        <span class="pl-s1">obj</span> <span class="pl-c1">=</span> <span class="pl-s1">copy</span>.<span class="pl-en">deepcopy</span>(<span class="pl-s1">found_obj</span>)
+        <span class="pl-s1">obj</span>.<span class="pl-s1">__dict__</span>.<span class="pl-en">update</span>(<span class="pl-s1">attrs</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">obj</span>
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-s1">data01</span> <span class="pl-c1">=</span> <span class="pl-v">User</span>(<span class="pl-s">"1"</span>, <span class="pl-s">"张三"</span>, <span class="pl-c1">20</span>, <span class="pl-s">"男"</span>)
+    <span class="pl-en">print</span>(<span class="pl-s1">data01</span>)
+
+    <span class="pl-s1">prototype</span> <span class="pl-c1">=</span> <span class="pl-v">Prototype</span>()
+    <span class="pl-s1">identify</span> <span class="pl-c1">=</span> <span class="pl-s">"data001"</span>
+    <span class="pl-s1">prototype</span>.<span class="pl-en">register</span>(<span class="pl-s1">identify</span>, <span class="pl-s1">data01</span>)
+    <span class="pl-s1">data02</span> <span class="pl-c1">=</span> <span class="pl-s1">prototype</span>.<span class="pl-en">clone</span>(<span class="pl-s1">identify</span>, <span class="pl-c1">**</span>{
+        <span class="pl-s">"id"</span>: <span class="pl-c1">2</span>,
+        <span class="pl-s">"name"</span>: <span class="pl-s">"李四"</span>,
+        <span class="pl-s">"age"</span>: <span class="pl-c1">22</span>,
+        <span class="pl-s">"gender"</span>: <span class="pl-s">"男"</span>,
+    })
+    <span class="pl-en">print</span>(<span class="pl-s1">data01</span>, <span class="pl-s1">data02</span>, <span class="pl-en">id</span>(<span class="pl-s1">data01</span>), <span class="pl-en">id</span>(<span class="pl-s1">data02</span>))</pre></div>
+<h2><a id="user-content-二结构型模式-介绍不同对象之间的关系" class="anchor" aria-hidden="true" href="#二结构型模式-介绍不同对象之间的关系"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、结构型模式-&gt;介绍不同对象之间的关系</h2>
+<h2><a id="user-content-三行为型模式-介绍对象之间通信的关系" class="anchor" aria-hidden="true" href="#三行为型模式-介绍对象之间通信的关系"><span aria-hidden="true" class="octicon octicon-link"></span></a>三、行为型模式-&gt;介绍对象之间通信的关系</h2>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

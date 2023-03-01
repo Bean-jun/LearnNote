@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>Pyinstaller工具小tips.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h1><a id="user-content-pyinstaller打包小技巧" class="anchor" aria-hidden="true" href="#pyinstaller打包小技巧"><span aria-hidden="true" class="octicon octicon-link"></span></a>pyinstaller打包小技巧</h1>
+<ol>
+<li>
+<p>单py文件打包</p>
+<div class="highlight highlight-source-shell"><pre>pyinstaller -F xxx.py</pre></div>
+</li>
+<li>
+<p>含有其他依赖文件的打包</p>
+</li>
+</ol>
+<ul>
+<li>
+<p>代码相关层面的修改</p>
+<div class="highlight highlight-source-shell"><pre>由于项目代码依赖外部文件，而打包之后的二进制执行文件会在系统的临时文件系统中操作，故需要做特殊处理</pre></div>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># 项目未打包时，对于外部库的调用可以这样简单的描述, libs是我目前存放外部库的文件夹</span>
+<span class="pl-k">import</span> <span class="pl-s1">os</span>
+<span class="pl-s1">bin_path</span> <span class="pl-c1">=</span> <span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">join</span>(<span class="pl-s1">os</span>.<span class="pl-en">getcwd</span>(), <span class="pl-s">"libs"</span>, <span class="pl-s">"我是外部库.exe"</span>)
+<span class="pl-s1">os</span>.<span class="pl-en">system</span>(<span class="pl-s1">bin_path</span>)
+
+<span class="pl-c"># 但是项目一旦打包，当前获取的bin_path路径是当前二进制文件所在路径拼接的地址，而pyinstaller打包解压后的文件存档在系统的临时目录中，需要通过 sys._MEIPASS获取，相关公共代码如下:</span>
+
+<span class="pl-k">def</span> <span class="pl-en">resource_path</span>(<span class="pl-s1">relative_path</span>):
+    <span class="pl-k">if</span> <span class="pl-en">getattr</span>(<span class="pl-s1">sys</span>, <span class="pl-s">'frozen'</span>, <span class="pl-c1">False</span>): <span class="pl-c">#是否Bundle Resource</span>
+        <span class="pl-s1">base_path</span> <span class="pl-c1">=</span> <span class="pl-s1">sys</span>.<span class="pl-s1">_MEIPASS</span>
+    <span class="pl-k">else</span>:
+        <span class="pl-s1">base_path</span> <span class="pl-c1">=</span> <span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">abspath</span>(<span class="pl-s">"."</span>)
+    <span class="pl-k">return</span> <span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">join</span>(<span class="pl-s1">base_path</span>, <span class="pl-s1">relative_path</span>)
+
+<span class="pl-c"># 此时相关代码调用如下：</span>
+<span class="pl-c"># resource_path("libs")找到的才是当前被打包之后的外部库的真实地址</span>
+<span class="pl-s1">bin_path</span> <span class="pl-c1">=</span> <span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">join</span>(<span class="pl-en">resource_path</span>(<span class="pl-s">"libs"</span>), <span class="pl-s">"我是外部库.exe"</span>)
+<span class="pl-s1">os</span>.<span class="pl-en">system</span>(<span class="pl-s1">bin_path</span>)</pre></div>
+</li>
+<li>
+<p>打包相关层面的操作</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 1. 生成打包时的spec文件</span>
+<span class="pl-c"><span class="pl-c">#</span> --onefile 单文件</span>
+<span class="pl-c"><span class="pl-c">#</span> --add-data libs;libs 表示添加对应的文件夹到需要打包的环境中</span>
+<span class="pl-c"><span class="pl-c">#</span> --icon static\\icon.ico 打包之后的logo</span>
+<span class="pl-c"><span class="pl-c">#</span> -n 项目打包后的别名</span>
+
+pyi-makespec --console --onefile --add-data libs<span class="pl-k">;</span>libs --icon static<span class="pl-cce">\\</span>icon.ico xxx.py -n build_filename
+
+<span class="pl-c"><span class="pl-c">#</span> 2. 执行相关命令进行打包</span>
+pyinstaller build_filename.spec</pre></div>
+</li>
+</ul>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

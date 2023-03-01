@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>Redis-入门.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h2><a id="user-content-一字符串" class="anchor" aria-hidden="true" href="#一字符串"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、字符串</h2>
+<ul>
+<li>
+<p>添加键值</p>
+<ul>
+<li>set key value</li>
+</ul>
+</li>
+<li>
+<p>查询键值</p>
+<ul>
+<li>get key</li>
+<li>查询所有的键
+<ul>
+<li>keys *</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>往值中添加内容</p>
+<ul>
+<li>append key need_append_data</li>
+</ul>
+</li>
+<li>
+<p>NX操作</p>
+<ul>
+<li>一般用法
+<ul>
+<li>set key value NX 处理之后，内容若是存在则不修改；不存在则添加</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>针对数字可以尝试修改</p>
+<ul>
+<li>incr key  可以将字符串的数字增加1</li>
+<li>decr key 可以将字符串的数字减少1</li>
+<li>incrby key n  可以将字符串的数字增加n</li>
+<li>decr key n   可以将字符串的数字减少n</li>
+</ul>
+</li>
+<li>
+<p>删除</p>
+<ul>
+<li>del key</li>
+</ul>
+</li>
+<li>
+<p>Python中的操作</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> <span class="pl-s1">redis</span>
+
+<span class="pl-c"># 连接数据库</span>
+<span class="pl-s1">client</span> <span class="pl-c1">=</span> <span class="pl-s1">redis</span>.<span class="pl-v">Redis</span>(<span class="pl-s1">host</span><span class="pl-c1">=</span><span class="pl-s">''</span>, <span class="pl-s1">port</span><span class="pl-c1">=</span><span class="pl-c1">6379</span>, <span class="pl-s1">decode_responses</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+<span class="pl-c"># 设置键值对</span>
+<span class="pl-s1">client</span>.<span class="pl-en">set</span>(<span class="pl-s">'name'</span>, <span class="pl-s">'小明'</span>)
+<span class="pl-s1">client</span>.<span class="pl-en">set</span>(<span class="pl-s">'age'</span>, <span class="pl-c1">12</span>)
+<span class="pl-s1">client</span>.<span class="pl-en">incr</span>(<span class="pl-s">'age'</span>, <span class="pl-c1">1</span>) <span class="pl-c"># 对age这个字段进行增加1  </span>
+<span class="pl-k">for</span> <span class="pl-s1">key</span> <span class="pl-c1">in</span> <span class="pl-s1">client</span>.<span class="pl-en">keys</span>():
+		<span class="pl-en">print</span>(<span class="pl-s1">key</span>)</pre></div>
+</li>
+</ul>
+<h2><a id="user-content-二列表" class="anchor" aria-hidden="true" href="#二列表"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、列表</h2>
+<ul>
+<li>
+<p>添加键值</p>
+<ul>
+<li>lpush key value1 value2 value3 ... # 左侧插入</li>
+<li>rpush key value1 value2 value3 ... # 右侧插入</li>
+</ul>
+</li>
+<li>
+<p>查询键值</p>
+<ul>
+<li>llen key # 直接查看键对应值的长度</li>
+<li>lrange key start stop # 支持索引查询 注意：包含stop</li>
+</ul>
+</li>
+<li>
+<p>弹出数据</p>
+<ul>
+<li>lpop # 左侧弹出</li>
+<li>rpop # 右侧弹出</li>
+</ul>
+</li>
+<li>
+<p>修改键值</p>
+<ul>
+<li>lset key index value # 将index位置的values进行更新</li>
+</ul>
+</li>
+<li>
+<p>Python中的操作</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> <span class="pl-s1">redis</span>
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s1">client</span> <span class="pl-c1">=</span> <span class="pl-s1">redis</span>.<span class="pl-v">Redis</span>(<span class="pl-s1">host</span><span class="pl-c1">=</span><span class="pl-s">''</span>, <span class="pl-s1">port</span><span class="pl-c1">=</span><span class="pl-c1">6379</span>, <span class="pl-s1">decode_responses</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+    <span class="pl-c"># 左侧插入</span>
+    <span class="pl-s1">client</span>.<span class="pl-en">lpush</span>(<span class="pl-s">'student'</span>, <span class="pl-s">'小米'</span>, <span class="pl-s">'狗剩'</span>, <span class="pl-s">'郝大力'</span>)
+    <span class="pl-c"># 获取长度</span>
+    <span class="pl-s1">reslen</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">llen</span>(<span class="pl-s">'student'</span>)
+    <span class="pl-c"># 获取结果</span>
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">lrange</span>(<span class="pl-s">'student'</span>, <span class="pl-c1">0</span>, <span class="pl-c1">-</span><span class="pl-c1">1</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">'当前长度为%s  结果为%s'</span> <span class="pl-c1">%</span> (<span class="pl-s1">reslen</span>, <span class="pl-s1">res</span>))
+    <span class="pl-c"># 左侧弹出</span>
+    <span class="pl-s1">client</span>.<span class="pl-en">lpop</span>(<span class="pl-s">'student'</span>)
+    <span class="pl-c"># 右侧弹出</span>
+    <span class="pl-s1">client</span>.<span class="pl-en">rpop</span>(<span class="pl-s">'student'</span>)
+    <span class="pl-s1">reslen</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">llen</span>(<span class="pl-s">'student'</span>)
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">lrange</span>(<span class="pl-s">'student'</span>, <span class="pl-c1">0</span>, <span class="pl-c1">-</span><span class="pl-c1">1</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">'当前长度为%s  结果为%s'</span> <span class="pl-c1">%</span> (<span class="pl-s1">reslen</span>, <span class="pl-s1">res</span>))
+    <span class="pl-c"># 修改内容</span>
+    <span class="pl-s1">client</span>.<span class="pl-en">lset</span>(<span class="pl-s">'student'</span>, <span class="pl-c1">0</span>, <span class="pl-s">'狗大力'</span>)
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">lrange</span>(<span class="pl-s">'student'</span>, <span class="pl-c1">0</span>, <span class="pl-c1">-</span><span class="pl-c1">1</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">'当前长度为%s  结果为%s'</span> <span class="pl-c1">%</span> (<span class="pl-s1">reslen</span>, <span class="pl-s1">res</span>))</pre></div>
+</li>
+</ul>
+<h2><a id="user-content-三集合" class="anchor" aria-hidden="true" href="#三集合"><span aria-hidden="true" class="octicon octicon-link"></span></a>三、集合</h2>
+<ul>
+<li>
+<p>添加键值</p>
+<ul>
+<li>sadd key value1 value2 value3 ... # 往集合中插入数据</li>
+</ul>
+</li>
+<li>
+<p>查询键值</p>
+<ul>
+<li>scard key 	# 查询集合长度</li>
+<li>spop key count      # count表示想要取到的数据个数，默认一条
+<ul>
+<li>注意：这个操作<code>会</code>清空集合中的数据，在Python中以list表现</li>
+</ul>
+</li>
+<li>smembers key      # 获取所有的集合
+<ul>
+<li>注意：这个操作<code>不会</code>清空集合中的数据，在Python中以set表现</li>
+</ul>
+</li>
+<li>sismember key value      # 判断value是否为key中的内容
+<ul>
+<li>注意：存在返回1，不存在返回0</li>
+<li>在Python中交互，存在返回True，不存在返回False</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>删除数据</p>
+<ul>
+<li>srem key value  [value]   # 删除集合中的value值</li>
+</ul>
+</li>
+<li>
+<p>集合的一部分操作</p>
+<ul>
+<li>交集
+<ul>
+<li>sinter key key [key]</li>
+</ul>
+</li>
+<li>并集
+<ul>
+<li>sunion key key [key]</li>
+</ul>
+</li>
+<li>差集
+<ul>
+<li>sdiff sunion key key [key]</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Python 中的操作</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> <span class="pl-s1">redis</span>
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s1">client</span> <span class="pl-c1">=</span> <span class="pl-s1">redis</span>.<span class="pl-v">Redis</span>(<span class="pl-s1">host</span><span class="pl-c1">=</span><span class="pl-s">''</span>, <span class="pl-s1">port</span><span class="pl-c1">=</span><span class="pl-c1">6379</span>, <span class="pl-s1">decode_responses</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+    <span class="pl-c"># 添加数据</span>
+    <span class="pl-s1">client</span>.<span class="pl-en">sadd</span>(<span class="pl-s">'tset'</span>, <span class="pl-s">'西瓜'</span>, <span class="pl-s">'苹果'</span>, <span class="pl-s">'香蕉'</span>, <span class="pl-s">'大栗子'</span>, <span class="pl-s">'西红柿'</span>, <span class="pl-s">'巧克力'</span>)
+    <span class="pl-s1">client</span>.<span class="pl-en">sadd</span>(<span class="pl-s">'tset1'</span>, <span class="pl-s">'西瓜'</span>, <span class="pl-s">'苹果'</span>, <span class="pl-s">'香蕉'</span>, <span class="pl-s">'大栗子'</span>, <span class="pl-s">'西红柿'</span>, <span class="pl-s">'巧克力'</span>)
+    <span class="pl-s1">client</span>.<span class="pl-en">sadd</span>(<span class="pl-s">'tset2'</span>, <span class="pl-s">'苹果'</span>, <span class="pl-s">'香蕉'</span>, <span class="pl-s">'苦瓜'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s1">client</span>.<span class="pl-en">scard</span>(<span class="pl-s">'tset'</span>))
+    <span class="pl-c"># 弹出数据</span>
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">spop</span>(<span class="pl-s">'tset'</span>, <span class="pl-c1">1</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"弹出内容为%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">res</span>)
+    <span class="pl-c"># 查询内容</span>
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">smembers</span>(<span class="pl-s">'tset'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"还有内容%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">res</span>)
+    <span class="pl-c"># 判断内容是否在集合中</span>
+    <span class="pl-s1">flag</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">sismember</span>(<span class="pl-s">'tset'</span>, <span class="pl-s">'香蕉'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"香蕉是否在%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">flag</span>)
+    <span class="pl-c"># 删除内容</span>
+    <span class="pl-s1">client</span>.<span class="pl-en">srem</span>(<span class="pl-s">'tset'</span>, <span class="pl-s">'巧克力'</span>)
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">smembers</span>(<span class="pl-s">'tset'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"还有内容%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">res</span>)
+    <span class="pl-c"># 差看交集</span>
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">sinter</span>(<span class="pl-s">'tset1'</span>, <span class="pl-s">'tset2'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"交集结果为%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">res</span>)
+    <span class="pl-c"># 查看并集</span>
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">sunion</span>(<span class="pl-s">'tset1'</span>, <span class="pl-s">'tset2'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"并集结果为%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">res</span>)
+    <span class="pl-c"># 查看差集</span>
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">sdiff</span>(<span class="pl-s">'tset1'</span>, <span class="pl-s">'tset2'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"差集结果为%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">res</span>)</pre></div>
+</li>
+</ul>
+<h2><a id="user-content-四哈希表" class="anchor" aria-hidden="true" href="#四哈希表"><span aria-hidden="true" class="octicon octicon-link"></span></a>四、哈希表</h2>
+<ul>
+<li>
+<p>常见业务场景：对象缓存</p>
+</li>
+<li>
+<p>添加键值</p>
+<ul>
+<li>hset key field value # 添加键值</li>
+<li>hmet key field1 value1 [field2 value2] # 添加多个键值</li>
+</ul>
+</li>
+<li>
+<p>查询内容</p>
+<ul>
+<li>hkeys key # 获取字段</li>
+<li>hget key field # 获取字段的值</li>
+<li>hmget key field1 field2 ... # 获取多个字段的值</li>
+<li>hgetall # 获取所有字段和值</li>
+</ul>
+</li>
+<li>
+<p>other</p>
+<ul>
+<li>hexists key  field # 判断字段是否存在</li>
+<li>hlen key # 获取键值长度</li>
+</ul>
+</li>
+<li>
+<p>Python中的操作</p>
+</li>
+</ul>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> <span class="pl-s1">redis</span>
+<span class="pl-k">import</span> <span class="pl-s1">json</span>
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">'__main__'</span>:
+    <span class="pl-s1">client</span> <span class="pl-c1">=</span> <span class="pl-s1">redis</span>.<span class="pl-v">Redis</span>(<span class="pl-s1">host</span><span class="pl-c1">=</span><span class="pl-s">'139.224.46.213'</span>, <span class="pl-s1">port</span><span class="pl-c1">=</span><span class="pl-c1">6379</span>, <span class="pl-s1">decode_responses</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+    <span class="pl-c"># 添加数据</span>
+    <span class="pl-s1">client</span>.<span class="pl-en">hset</span>(<span class="pl-s">'thash'</span>, <span class="pl-s">'tom'</span>, <span class="pl-c1">1</span>)  <span class="pl-c"># 单条</span>
+    <span class="pl-s1">user_info</span> <span class="pl-c1">=</span> {
+        <span class="pl-s">'tom'</span>: <span class="pl-s1">json</span>.<span class="pl-en">dumps</span>({<span class="pl-s">'age'</span>: <span class="pl-c1">20</span>, <span class="pl-s">'score'</span>: <span class="pl-c1">89</span>, <span class="pl-s">'address'</span>: <span class="pl-s">"武汉市"</span>}, <span class="pl-s1">ensure_ascii</span><span class="pl-c1">=</span><span class="pl-c1">False</span>),
+        <span class="pl-s">'jerry'</span>: <span class="pl-s1">json</span>.<span class="pl-en">dumps</span>({<span class="pl-s">'age'</span>: <span class="pl-c1">21</span>, <span class="pl-s">'score'</span>: <span class="pl-c1">79</span>, <span class="pl-s">'address'</span>: <span class="pl-s">"江西省"</span>}),
+        <span class="pl-s">'tim'</span>: <span class="pl-s1">json</span>.<span class="pl-en">dumps</span>({<span class="pl-s">'age'</span>: <span class="pl-c1">20</span>, <span class="pl-s">'score'</span>: <span class="pl-c1">94</span>, <span class="pl-s">'address'</span>: <span class="pl-s">"天门市"</span>}),
+        <span class="pl-s">'武松'</span>: <span class="pl-s1">json</span>.<span class="pl-en">dumps</span>({<span class="pl-s">'age'</span>: <span class="pl-c1">23</span>, <span class="pl-s">'score'</span>: <span class="pl-c1">84</span>, <span class="pl-s">'address'</span>: <span class="pl-s">"钟祥市"</span>}, <span class="pl-s1">ensure_ascii</span><span class="pl-c1">=</span><span class="pl-c1">False</span>),
+    }
+    <span class="pl-s1">client</span>.<span class="pl-en">hmset</span>(<span class="pl-s">'tmhash'</span>, <span class="pl-s1">user_info</span>)   <span class="pl-c"># 多条</span>
+    <span class="pl-c"># 查询所有的字段</span>
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">hkeys</span>(<span class="pl-s">'thash'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"当前内容为%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">res</span>)
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">hkeys</span>(<span class="pl-s">'tmhash'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"当前内容为%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">res</span>)
+    <span class="pl-c"># 查询字段值</span>
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">hget</span>(<span class="pl-s">'tmhash'</span>, <span class="pl-s">'武松'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"当前内容为%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">res</span>)
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">hmget</span>(<span class="pl-s">'tmhash'</span>, <span class="pl-s">'tom'</span>, <span class="pl-s">'武松'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"当前查询多个值的内容为%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">res</span>)
+    <span class="pl-s1">res</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">hgetall</span>(<span class="pl-s">'tmhash'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"当前内容为%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">res</span>)
+    <span class="pl-c"># 判断内容是否在集合中</span>
+    <span class="pl-s1">flag</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">hexists</span>(<span class="pl-s">'thash'</span>, <span class="pl-s">'tom'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"存在情况 %s"</span> <span class="pl-c1">%</span> <span class="pl-s1">flag</span>)
+    <span class="pl-c"># 获取长度</span>
+    <span class="pl-s1">length</span> <span class="pl-c1">=</span> <span class="pl-s1">client</span>.<span class="pl-en">hlen</span>(<span class="pl-s">'tmhash'</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">"长度为%s"</span> <span class="pl-c1">%</span> <span class="pl-s1">length</span>)</pre></div>
+<h2><a id="user-content-五-有序集合" class="anchor" aria-hidden="true" href="#五-有序集合"><span aria-hidden="true" class="octicon octicon-link"></span></a>五、 有序集合</h2>
+<p>元素都是string类型，并具有唯一性；每个元素都会关联一个double类型的score，表示元素的权重</p>
+<ul>
+<li>
+<p>常用业务场景：排行榜单（根据时间、播放量...进行排行）</p>
+</li>
+<li>
+<p>添加键值</p>
+<ul>
+<li>zadd key score1 member1 score2 member2 ...</li>
+</ul>
+</li>
+<li>
+<p>获取键值</p>
+<ul>
+<li>获取指定范围的元素
+<ul>
+<li>zrange key start stop</li>
+</ul>
+</li>
+<li>获取score在指定范围的元素
+<ul>
+<li>zrangebyscore key min max</li>
+</ul>
+</li>
+<li>获取元素的score
+<ul>
+<li>zscore key member</li>
+</ul>
+</li>
+<li>删除指定范围的元素
+<ul>
+<li>zrem key member1 member2 ...</li>
+</ul>
+</li>
+<li>删除指定score范围的元素
+<ul>
+<li>zremrangegyscore key min max</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2><a id="user-content-六bitmaps" class="anchor" aria-hidden="true" href="#六bitmaps"><span aria-hidden="true" class="octicon octicon-link"></span></a>六、Bitmaps</h2>
+<p>通过一个bit位来表示某个元素对应的值或者状态，其中key是元素本身，offset表示位置，value表示值。</p>
+<p><code>setbit key offset value</code></p>
+<ul>
+<li>
+<p>常见业务场景：签到、统计活跃用户、用户在线/离线状态</p>
+</li>
+<li>
+<p>设置值</p>
+<ul>
+<li>setbit key offset value</li>
+</ul>
+</li>
+<li>
+<p>获取值</p>
+<ul>
+<li>getbit key offset</li>
+</ul>
+</li>
+<li>
+<p>统计值</p>
+<ul>
+<li>bitcount key</li>
+</ul>
+</li>
+</ul>
+<h2><a id="user-content-七hyperloglogs" class="anchor" aria-hidden="true" href="#七hyperloglogs"><span aria-hidden="true" class="octicon octicon-link"></span></a>七、HyperLogLogs</h2>
+<p>做基数统计处理，相比较set集合将占用更小的空间使用量，注意：有一定的范围误差</p>
+<p><code>pfadd key value</code></p>
+<ul>
+<li>
+<p>常见业务场景：访客统计</p>
+</li>
+<li>
+<p>添加元素到HyperLogLog中</p>
+<ul>
+<li>pfadd key value</li>
+</ul>
+</li>
+<li>
+<p>返回对应数量值</p>
+<ul>
+<li>pfcount key</li>
+</ul>
+</li>
+<li>
+<p>将多个HyperLogLog合并</p>
+<ul>
+<li>pfmerge destkey sourcekey</li>
+</ul>
+</li>
+</ul>
+<h2><a id="user-content-八geospatial" class="anchor" aria-hidden="true" href="#八geospatial"><span aria-hidden="true" class="octicon octicon-link"></span></a>八、geospatial</h2>
+<p>将指定的地理空间位置（纬度、经度、名称）添加到指定的<code>key</code>中。这些数据将会存储到<code>sorted set</code>这样的目的是为了方便使用GEORADIUS或者GEORADIUSBYMEMBER命令对数据进行半径查询等操作。</p>
+<ul>
+<li>
+<p>常见业务场景：附近的人筛选功能</p>
+</li>
+<li>
+<p>添加地理位置坐标</p>
+<ul>
+<li>geoadd key longitude latitude member</li>
+</ul>
+</li>
+<li>
+<p>获取地理位置坐标</p>
+<ul>
+<li>geopos key member</li>
+</ul>
+</li>
+<li>
+<p>计算两个坐标之间的距离</p>
+<ul>
+<li>geodist key member1 member2</li>
+</ul>
+</li>
+<li>
+<p>根据指定坐标获取指点范围坐标集合</p>
+<ul>
+<li>georadius key longitude latitude radius</li>
+</ul>
+</li>
+<li>
+<p>根据储存在位置集合里面的某个地点获取指定范围内的地理位置集合</p>
+<ul>
+<li>georadiusbymember key member radius</li>
+</ul>
+</li>
+<li>
+<p>返回一个或多个位置对象的 geohash 值</p>
+<ul>
+<li>geohash key member</li>
+</ul>
+</li>
+</ul>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

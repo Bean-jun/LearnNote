@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>Python-多进程.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h3><a id="user-content-一多进程基础" class="anchor" aria-hidden="true" href="#一多进程基础"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、多进程基础</h3>
+<ol>
+<li>
+<p>创建一个多进程并启动进程</p>
+<p>方式一【基于multiprocessing模块的创建】：</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># src/PythonProcess/001.py</span>
+<span class="pl-k">import</span> <span class="pl-s1">multiprocessing</span>
+<span class="pl-k">import</span> <span class="pl-s1">os</span>
+
+<span class="pl-k">def</span> <span class="pl-en">func</span>(<span class="pl-s1">num</span>):
+    <span class="pl-en">print</span>(<span class="pl-s">"当前获取数字："</span>, <span class="pl-s1">num</span>, <span class="pl-s">"当前获取进程ID: "</span>, <span class="pl-s1">os</span>.<span class="pl-en">getpid</span>())
+
+<span class="pl-k">def</span> <span class="pl-en">main</span>():
+    <span class="pl-s1">tasks</span> <span class="pl-c1">=</span> []
+    <span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">10</span>):
+        <span class="pl-s1">p</span> <span class="pl-c1">=</span> <span class="pl-s1">multiprocessing</span>.<span class="pl-v">Process</span>(<span class="pl-s1">target</span><span class="pl-c1">=</span><span class="pl-s1">func</span>, <span class="pl-s1">args</span><span class="pl-c1">=</span>(<span class="pl-s1">i</span>,))
+        <span class="pl-s1">tasks</span>.<span class="pl-en">append</span>(<span class="pl-s1">p</span>)
+
+    [<span class="pl-s1">p</span>.<span class="pl-en">start</span>() <span class="pl-k">for</span> <span class="pl-s1">p</span> <span class="pl-c1">in</span> <span class="pl-s1">tasks</span>]
+
+    [<span class="pl-s1">p</span>.<span class="pl-en">join</span>() <span class="pl-k">for</span> <span class="pl-s1">p</span> <span class="pl-c1">in</span> <span class="pl-s1">tasks</span>]
+
+    <span class="pl-en">print</span>(<span class="pl-s">"进程结束"</span>)
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-en">main</span>()</pre></div>
+<p>方式二【通过对multiprocessing模块Process的继承的创建】：</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># src/PythonProcess/002.py</span>
+<span class="pl-k">import</span> <span class="pl-s1">multiprocessing</span>
+<span class="pl-k">import</span> <span class="pl-s1">os</span>
+
+<span class="pl-k">class</span> <span class="pl-v">ProcessChild</span>(<span class="pl-s1">multiprocessing</span>.<span class="pl-v">Process</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">group</span><span class="pl-c1">=</span><span class="pl-c1">None</span>, <span class="pl-s1">target</span><span class="pl-c1">=</span><span class="pl-c1">None</span>, <span class="pl-s1">name</span><span class="pl-c1">=</span><span class="pl-c1">None</span>, <span class="pl-s1">args</span><span class="pl-c1">=</span>()):
+        <span class="pl-en">super</span>().<span class="pl-en">__init__</span>(<span class="pl-s1">group</span><span class="pl-c1">=</span><span class="pl-s1">group</span>, <span class="pl-s1">target</span><span class="pl-c1">=</span><span class="pl-s1">target</span>, <span class="pl-s1">name</span><span class="pl-c1">=</span><span class="pl-s1">name</span>, <span class="pl-s1">args</span><span class="pl-c1">=</span><span class="pl-s1">args</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">run</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"当前获取数字："</span>, <span class="pl-s1">self</span>.<span class="pl-s1">_args</span>, <span class="pl-s">"当前获取进程ID: "</span>, <span class="pl-s1">os</span>.<span class="pl-en">getpid</span>())
+
+<span class="pl-k">def</span> <span class="pl-en">main</span>():
+    <span class="pl-s1">tasks</span> <span class="pl-c1">=</span> []
+    <span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">10</span>):
+        <span class="pl-s1">tasks</span>.<span class="pl-en">append</span>(<span class="pl-v">ProcessChild</span>(<span class="pl-s1">args</span><span class="pl-c1">=</span>(<span class="pl-s1">i</span>, )))
+
+    [<span class="pl-s1">i</span>.<span class="pl-en">start</span>() <span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-s1">tasks</span>]
+
+    [<span class="pl-s1">i</span>.<span class="pl-en">join</span>() <span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-s1">tasks</span>]
+
+    <span class="pl-en">print</span>(<span class="pl-s">"进程结束"</span>)
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-en">main</span>()</pre></div>
+</li>
+<li>
+<p>进程相关函数</p>
+<p>同线程, 见文档<a href="https://docs.python.org/zh-cn/3/library/multiprocessing.html" rel="nofollow">https://docs.python.org/zh-cn/3/library/multiprocessing.html</a></p>
+</li>
+</ol>
+<h3><a id="user-content-二进程同步" class="anchor" aria-hidden="true" href="#二进程同步"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、进程同步</h3>
+<ol>
+<li>
+<p>Demo</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># src/PythonProcess/003.py</span>
+<span class="pl-k">import</span> <span class="pl-s1">multiprocessing</span>
+<span class="pl-k">import</span> <span class="pl-s1">os</span>
+
+<span class="pl-k">def</span> <span class="pl-en">func</span>(<span class="pl-s1">l</span>, <span class="pl-s1">num</span>):
+    <span class="pl-k">with</span> <span class="pl-s1">l</span>:
+        <span class="pl-en">print</span>(<span class="pl-s">"当前获取到的数据结果为: "</span>, <span class="pl-s1">num</span>, <span class="pl-s">"当前进程ID: "</span>, <span class="pl-s1">os</span>.<span class="pl-en">getpid</span>())
+
+<span class="pl-k">def</span> <span class="pl-en">main</span>():
+    <span class="pl-s1">l</span> <span class="pl-c1">=</span> <span class="pl-s1">multiprocessing</span>.<span class="pl-v">Lock</span>()
+    <span class="pl-s1">tasks</span> <span class="pl-c1">=</span> []
+    <span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">10</span>):
+        <span class="pl-s1">p</span> <span class="pl-c1">=</span> <span class="pl-s1">multiprocessing</span>.<span class="pl-v">Process</span>(<span class="pl-s1">target</span><span class="pl-c1">=</span><span class="pl-s1">func</span>, <span class="pl-s1">args</span><span class="pl-c1">=</span>(<span class="pl-s1">l</span>, <span class="pl-s1">i</span>))
+        <span class="pl-c"># p = multiprocessing.Process(target=func, args=(i,))</span>
+        <span class="pl-s1">tasks</span>.<span class="pl-en">append</span>(<span class="pl-s1">p</span>)
+
+    [<span class="pl-s1">p</span>.<span class="pl-en">start</span>() <span class="pl-k">for</span> <span class="pl-s1">p</span> <span class="pl-c1">in</span> <span class="pl-s1">tasks</span>]
+
+    [<span class="pl-s1">p</span>.<span class="pl-en">join</span>() <span class="pl-k">for</span> <span class="pl-s1">p</span> <span class="pl-c1">in</span> <span class="pl-s1">tasks</span>]
+
+    <span class="pl-en">print</span>(<span class="pl-s">"进程结束"</span>)
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-en">main</span>()</pre></div>
+</li>
+</ol>
+<h3><a id="user-content-三进程通信" class="anchor" aria-hidden="true" href="#三进程通信"><span aria-hidden="true" class="octicon octicon-link"></span></a>三、进程通信</h3>
+<ol>
+<li>
+<p>Queue通信</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># src/PythonProcess/004.py</span>
+<span class="pl-k">from</span> <span class="pl-s1">multiprocessing</span> <span class="pl-k">import</span> <span class="pl-v">Process</span>, <span class="pl-v">Queue</span>
+<span class="pl-k">import</span> <span class="pl-s1">datetime</span>
+<span class="pl-k">import</span> <span class="pl-s1">os</span>
+<span class="pl-k">import</span> <span class="pl-s1">time</span>
+
+<span class="pl-k">def</span> <span class="pl-en">func_1</span>(<span class="pl-s1">q</span>):
+    <span class="pl-s1">n</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span>
+    <span class="pl-k">while</span> <span class="pl-c1">True</span>:
+        <span class="pl-k">if</span> <span class="pl-s1">n</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">0</span>:
+            <span class="pl-k">break</span>
+        <span class="pl-s1">msg</span> <span class="pl-c1">=</span> <span class="pl-s1">datetime</span>.<span class="pl-s1">datetime</span>.<span class="pl-en">now</span>()
+        <span class="pl-en">print</span>(<span class="pl-s">"func_1-"</span><span class="pl-c1">+</span><span class="pl-en">str</span>(<span class="pl-s1">os</span>.<span class="pl-en">getpid</span>())<span class="pl-c1">+</span><span class="pl-s">"-发送数据:"</span><span class="pl-c1">+</span><span class="pl-en">str</span>(<span class="pl-s1">msg</span>))
+        <span class="pl-s1">q</span>.<span class="pl-en">put</span>(<span class="pl-s1">msg</span>)
+        <span class="pl-s1">time</span>.<span class="pl-en">sleep</span>(<span class="pl-c1">1</span>)
+        <span class="pl-s1">n</span> <span class="pl-c1">-=</span> <span class="pl-c1">1</span>
+
+<span class="pl-k">def</span> <span class="pl-en">func_2</span>(<span class="pl-s1">q</span>):
+    <span class="pl-k">try</span>:
+        <span class="pl-k">while</span> <span class="pl-c1">True</span>:
+            <span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">q</span>.<span class="pl-en">get</span>(<span class="pl-s1">timeout</span><span class="pl-c1">=</span><span class="pl-c1">5</span>)
+            <span class="pl-en">print</span>(<span class="pl-s">"func_2-"</span><span class="pl-c1">+</span><span class="pl-en">str</span>(<span class="pl-s1">os</span>.<span class="pl-en">getpid</span>())<span class="pl-c1">+</span><span class="pl-s">"-接受数据:"</span><span class="pl-c1">+</span><span class="pl-en">str</span>(<span class="pl-s1">ret</span>))
+    <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+        <span class="pl-en">print</span>(<span class="pl-s1">e</span>.<span class="pl-s1">args</span>)
+
+<span class="pl-k">def</span> <span class="pl-en">main</span>():
+    <span class="pl-s1">q</span> <span class="pl-c1">=</span> <span class="pl-v">Queue</span>(<span class="pl-c1">10</span>)
+    <span class="pl-s1">tasks</span> <span class="pl-c1">=</span> []
+    <span class="pl-k">for</span> <span class="pl-s1">_</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">2</span>):
+        <span class="pl-k">if</span> <span class="pl-s1">_</span> <span class="pl-c1">==</span> <span class="pl-c1">0</span>:
+            <span class="pl-s1">p</span> <span class="pl-c1">=</span> <span class="pl-v">Process</span>(<span class="pl-s1">target</span><span class="pl-c1">=</span><span class="pl-s1">func_1</span>, <span class="pl-s1">args</span><span class="pl-c1">=</span>(<span class="pl-s1">q</span>,))
+        <span class="pl-k">else</span>:
+            <span class="pl-s1">p</span> <span class="pl-c1">=</span> <span class="pl-v">Process</span>(<span class="pl-s1">target</span><span class="pl-c1">=</span><span class="pl-s1">func_2</span>, <span class="pl-s1">args</span><span class="pl-c1">=</span>(<span class="pl-s1">q</span>,))
+        <span class="pl-s1">tasks</span>.<span class="pl-en">append</span>(<span class="pl-s1">p</span>)
+
+    [<span class="pl-s1">p</span>.<span class="pl-en">start</span>() <span class="pl-k">for</span> <span class="pl-s1">p</span> <span class="pl-c1">in</span> <span class="pl-s1">tasks</span>]
+
+    [<span class="pl-s1">p</span>.<span class="pl-en">join</span>() <span class="pl-k">for</span> <span class="pl-s1">p</span> <span class="pl-c1">in</span> <span class="pl-s1">tasks</span>]
+
+    <span class="pl-en">print</span>(<span class="pl-s">"进程结束"</span>)
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-en">main</span>()
+    <span class="pl-c"># func_1-60058-发送数据:2022-08-14 16:15:21.445148</span>
+    <span class="pl-c"># func_2-60059-接受数据:2022-08-14 16:15:21.445148</span>
+    <span class="pl-c"># func_1-60058-发送数据:2022-08-14 16:15:22.454947</span>
+    <span class="pl-c"># func_2-60059-接受数据:2022-08-14 16:15:22.454947</span>
+    <span class="pl-c"># func_1-60058-发送数据:2022-08-14 16:15:23.457649</span>
+    <span class="pl-c"># func_2-60059-接受数据:2022-08-14 16:15:23.457649</span>
+    <span class="pl-c"># func_1-60058-发送数据:2022-08-14 16:15:24.463014</span>
+    <span class="pl-c"># func_2-60059-接受数据:2022-08-14 16:15:24.463014</span>
+    <span class="pl-c"># func_1-60058-发送数据:2022-08-14 16:15:25.464202</span>
+    <span class="pl-c"># func_2-60059-接受数据:2022-08-14 16:15:25.464202</span>
+    <span class="pl-c"># func_1-60058-发送数据:2022-08-14 16:15:26.467098</span>
+    <span class="pl-c"># func_2-60059-接受数据:2022-08-14 16:15:26.467098</span>
+    <span class="pl-c"># func_1-60058-发送数据:2022-08-14 16:15:27.468392</span>
+    <span class="pl-c"># func_2-60059-接受数据:2022-08-14 16:15:27.468392</span>
+    <span class="pl-c"># func_1-60058-发送数据:2022-08-14 16:15:28.473154</span>
+    <span class="pl-c"># func_2-60059-接受数据:2022-08-14 16:15:28.473154</span>
+    <span class="pl-c"># func_1-60058-发送数据:2022-08-14 16:15:29.475600</span>
+    <span class="pl-c"># func_2-60059-接受数据:2022-08-14 16:15:29.475600</span>
+    <span class="pl-c"># func_1-60058-发送数据:2022-08-14 16:15:30.476320</span>
+    <span class="pl-c"># func_2-60059-接受数据:2022-08-14 16:15:30.476320</span>
+    <span class="pl-c"># func_1-60058-发送数据:2022-08-14 16:15:31.477738</span>
+    <span class="pl-c"># func_2-60059-接受数据:2022-08-14 16:15:31.477738</span>
+    <span class="pl-c"># ()</span>
+    <span class="pl-c"># 进程结束</span></pre></div>
+</li>
+<li>
+<p>Pipe通信</p>
+<p>Pipe() 函数返回一个由管道连接的连接对象，默认情况下是双工（双向）。Pipe() 表示管道的两端。每个连接对象都有 send() 和 recv() 方法（相互之间的）。请注意，如果两个进程（或线程）同时尝试读取或写入管道的 同一 端，则管道中的数据可能会损坏。当然，在不同进程中同时使用管道的不同端的情况下不存在损坏的风险。</p>
+</li>
+</ol>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># src/PythonProcess/005.py</span>
+<span class="pl-k">from</span> <span class="pl-s1">multiprocessing</span> <span class="pl-k">import</span> <span class="pl-v">Process</span>, <span class="pl-v">Pipe</span>
+<span class="pl-k">import</span> <span class="pl-s1">datetime</span>
+<span class="pl-k">import</span> <span class="pl-s1">os</span>
+<span class="pl-k">import</span> <span class="pl-s1">time</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">func_1</span>(<span class="pl-s1">p</span>):
+
+    <span class="pl-s1">n</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span>
+    <span class="pl-k">while</span> <span class="pl-c1">True</span>:
+        <span class="pl-k">if</span> <span class="pl-s1">n</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">0</span>:
+            <span class="pl-k">break</span>
+        <span class="pl-s1">msg</span> <span class="pl-c1">=</span> <span class="pl-s1">datetime</span>.<span class="pl-s1">datetime</span>.<span class="pl-en">now</span>()
+        <span class="pl-en">print</span>(<span class="pl-s">"func_1-"</span><span class="pl-c1">+</span><span class="pl-en">str</span>(<span class="pl-s1">os</span>.<span class="pl-en">getpid</span>())<span class="pl-c1">+</span><span class="pl-s">"-发送数据:"</span><span class="pl-c1">+</span><span class="pl-en">str</span>(<span class="pl-s1">msg</span>))
+        <span class="pl-s1">p</span>.<span class="pl-en">send</span>(<span class="pl-s1">msg</span>)
+        <span class="pl-s1">time</span>.<span class="pl-en">sleep</span>(<span class="pl-c1">1</span>)
+        <span class="pl-s1">n</span> <span class="pl-c1">-=</span> <span class="pl-c1">1</span>
+    <span class="pl-k">try</span>:
+        <span class="pl-s1">time</span>.<span class="pl-en">sleep</span>(<span class="pl-c1">10</span>)
+        <span class="pl-en">print</span>(<span class="pl-s">"func_1-"</span><span class="pl-c1">+</span><span class="pl-en">str</span>(<span class="pl-s1">os</span>.<span class="pl-en">getpid</span>())<span class="pl-c1">+</span><span class="pl-s">"-接受数据:"</span>, <span class="pl-s1">p</span>.<span class="pl-en">recv</span>())
+    <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+        <span class="pl-en">print</span>(<span class="pl-s1">e</span>.<span class="pl-s1">args</span>, <span class="pl-s">"func_1"</span>)
+
+
+<span class="pl-k">def</span> <span class="pl-en">func_2</span>(<span class="pl-s1">p</span>):
+    <span class="pl-s1">n</span> <span class="pl-c1">=</span> <span class="pl-c1">10</span>
+    <span class="pl-k">try</span>:
+        <span class="pl-k">while</span> <span class="pl-c1">True</span>:
+            <span class="pl-k">if</span> <span class="pl-s1">n</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">0</span>:
+                <span class="pl-k">break</span>
+            <span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-s1">p</span>.<span class="pl-en">recv</span>()
+            <span class="pl-en">print</span>(<span class="pl-s">"func_2-"</span><span class="pl-c1">+</span><span class="pl-en">str</span>(<span class="pl-s1">os</span>.<span class="pl-en">getpid</span>())<span class="pl-c1">+</span><span class="pl-s">"-接受数据:"</span><span class="pl-c1">+</span><span class="pl-en">str</span>(<span class="pl-s1">ret</span>))
+            <span class="pl-s1">n</span> <span class="pl-c1">-=</span> <span class="pl-c1">1</span>
+    <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+        <span class="pl-en">print</span>(<span class="pl-s1">e</span>.<span class="pl-s1">args</span>)
+    <span class="pl-k">else</span>:
+        <span class="pl-s1">msg</span> <span class="pl-c1">=</span> <span class="pl-s">"你是不是发送结束了？？？"</span>
+        <span class="pl-en">print</span>(<span class="pl-s">"func_2-"</span><span class="pl-c1">+</span><span class="pl-en">str</span>(<span class="pl-s1">os</span>.<span class="pl-en">getpid</span>())<span class="pl-c1">+</span><span class="pl-s">"-发送数据:"</span><span class="pl-c1">+</span><span class="pl-en">str</span>(<span class="pl-s1">msg</span>))
+        <span class="pl-s1">p</span>.<span class="pl-en">send</span>(<span class="pl-s1">msg</span>)
+
+
+<span class="pl-k">def</span> <span class="pl-en">main</span>():
+    <span class="pl-s1">l_p</span>, <span class="pl-s1">r_p</span> <span class="pl-c1">=</span> <span class="pl-v">Pipe</span>()
+    <span class="pl-s1">tasks</span> <span class="pl-c1">=</span> []
+    <span class="pl-k">for</span> <span class="pl-s1">_</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">2</span>):
+        <span class="pl-k">if</span> <span class="pl-s1">_</span> <span class="pl-c1">==</span> <span class="pl-c1">0</span>:
+            <span class="pl-s1">p</span> <span class="pl-c1">=</span> <span class="pl-v">Process</span>(<span class="pl-s1">target</span><span class="pl-c1">=</span><span class="pl-s1">func_1</span>, <span class="pl-s1">args</span><span class="pl-c1">=</span>(<span class="pl-s1">l_p</span>,))
+        <span class="pl-k">else</span>:
+            <span class="pl-s1">p</span> <span class="pl-c1">=</span> <span class="pl-v">Process</span>(<span class="pl-s1">target</span><span class="pl-c1">=</span><span class="pl-s1">func_2</span>, <span class="pl-s1">args</span><span class="pl-c1">=</span>(<span class="pl-s1">r_p</span>,))
+        <span class="pl-s1">tasks</span>.<span class="pl-en">append</span>(<span class="pl-s1">p</span>)
+
+    [<span class="pl-s1">p</span>.<span class="pl-en">start</span>() <span class="pl-k">for</span> <span class="pl-s1">p</span> <span class="pl-c1">in</span> <span class="pl-s1">tasks</span>]
+
+    [<span class="pl-s1">p</span>.<span class="pl-en">join</span>() <span class="pl-k">for</span> <span class="pl-s1">p</span> <span class="pl-c1">in</span> <span class="pl-s1">tasks</span>]
+
+    <span class="pl-en">print</span>(<span class="pl-s">"进程结束"</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-en">main</span>()</pre></div>
+<ol start="3">
+<li>
+<p>管理器共享进程状态</p>
+<p><a href="https://docs.python.org/zh-cn/3/library/multiprocessing.html#sharing-state-between-processes" rel="nofollow">https://docs.python.org/zh-cn/3/library/multiprocessing.html#sharing-state-between-processes</a></p>
+</li>
+</ol>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

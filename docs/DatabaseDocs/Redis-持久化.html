@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+
+  <title>Redis-持久化.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h2><a id="user-content-一rdb" class="anchor" aria-hidden="true" href="#一rdb"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、RDB</h2>
+<p>在不同的时间点，将 redis 存储的数据生成快照并存储到磁盘等介质上</p>
+<ul>
+<li>优点
+<ul>
+<li>RDB在保存RDB文件时父进程唯一需要做的就是fork出一个子进程,接下来的工作全部由子进程来做，父进程不需要再做其他IO操作，所以RDB持久化方式可以最大化redis的性能.</li>
+<li>与AOF相比,在恢复大的数据集的时候，RDB方式会更快一些.</li>
+</ul>
+</li>
+<li>缺点
+<ul>
+<li>对数据完整性敏感的业务，RDB的持久化数据相对于AOF稍逊色。即持久化时间配置限定时间内，由于某种原因导致关机情况，那么这段时间内的数据将会被丢失。</li>
+<li>RDB 需要经常fork子进程来保存数据集到硬盘上,当数据集比较大的时候,fork的过程是非常耗时的,可能会导致Redis在一些毫秒级内不能响应客户端的请求.</li>
+</ul>
+</li>
+</ul>
+<h2><a id="user-content-二aof" class="anchor" aria-hidden="true" href="#二aof"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、AOF</h2>
+<p>将 redis 执行过的所有写指令记录下来，在下次 redis 重新启动时，只要把这些写指令从前到后再重复执行一遍</p>
+<ul>
+<li>优点
+<ul>
+<li>使用不同的fsync策略：无fsync,每秒fsync,每次写的时候fsync；一旦出现故障，最多丢失1秒的数据</li>
+<li>AOF 文件有序地保存了对数据库执行的所有写入操作， 这些写入操作以 Redis 协议的格式保存， 因此 AOF 文件的内容非常容易被人读懂， 对文件进行分析也很轻松</li>
+<li>Redis 可以在 AOF 文件体积变得过大时，自动地在后台对 AOF 进行重写</li>
+</ul>
+</li>
+<li>缺点
+<ul>
+<li>AOF 文件的体积通常要大于 RDB 文件的体积</li>
+<li>根据所使用的 fsync 策略，AOF 的速度可能会慢于 RDB 。 在一般情况下， 每秒 fsync 的性能依然非常高， 而关闭 fsync 可以让 AOF 的速度和 RDB 一样快， 即使在高负荷之下也是如此。 不过在处理巨大的写入载入时，RDB 可以提供更有保证的最大延迟时间（latency）</li>
+</ul>
+</li>
+</ul>
+
+      </article>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>
