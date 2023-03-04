@@ -1,0 +1,48 @@
+li {
+    list-style: none;
+}
+
+#markdown-body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+/* 文章字数 阅读时间 */
+.article-size {
+    margin-right: 10px;
+    line-height: 32px;
+}
+
+.to-home {
+    margin-left: 10px;
+    line-height: 32px;
+    padding: 0 10px;
+}
+
+.container-nav {
+    max-width: 300px;
+}
+
+.container-xl {
+    max-width: 1280px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* 右侧导航栏 */
+.container-right-nav {
+    max-width: 300px;
+    min-width: 200px;
+    color: black;
+}
+
+.container-right-nav-logo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.content-title-nav>ul>li {
+    margin: 20px;
+}

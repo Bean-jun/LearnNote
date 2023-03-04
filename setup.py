@@ -1,14 +1,15 @@
 import os
 import re
+import shutil
+import string
 import sys
 import time
 from contextlib import contextmanager
-from os.path import split
 
 import requests
 
 TARGET_PAGES = "docs"
-
+READ_SPEND = 400
 
 Authorization = os.getenv("TOKEN")
 
@@ -67,18 +68,22 @@ def walk(path=".", exclude=None):
         yield __func(folder)
 
 
-def get_md(workspace):
-    if os.path.isfile(workspace):
-        return [workspace]
-
+def get_type_file(workspace, file_type):
     exclude = ['.git', ".env", TARGET_PAGES]
     path_list = []
     for dirpath, _, filenames in walk(workspace, exclude):
         for filename in filenames:
-            if filename.endswith((".md", ".MD")):
+            if filename.endswith(file_type):
                 path = os.path.join(dirpath, filename)
                 path_list.append(path)
     return path_list
+
+
+def get_md(workspace):
+    if os.path.isfile(workspace):
+        return [workspace]
+
+    return get_type_file(workspace, (".md", ".MD"))
 
 
 def convert_link_md_to_html(path):
@@ -101,8 +106,25 @@ def make_folder(path):
     return path
 
 
-def do_mdcat(md_file_path):
-    md_file_dir, md_file_name = split(md_file_path)
+def get_article_length(content):
+    # 获取文章字数
+    other = string.ascii_letters+string.digits+string.punctuation+" "
+    size = 0
+    for _char in content:
+        if _char not in other:
+            size += 1
+    return size
+
+
+def get_article_read_spend(size):
+    spend = size // READ_SPEND
+    if spend <= 1:
+        return "1"
+    return str(int(spend))
+
+
+def do_mdcat(md_file_path, title_list):
+    md_file_dir, md_file_name = os.path.split(md_file_path)
 
     with open(md_file_path, "r", encoding="utf-8") as md_file:
         md_file_content = md_file.read()
@@ -127,8 +149,19 @@ def do_mdcat(md_file_path):
     if response.status_code == 200:
         with open(".static/template.tml", "r", encoding="utf-8") as template_file:
             template_content = template_file.read()
+
+        title_strs = ""
+        for title in title_list:
+            _str = "<li><a href=\"#%s\">%s</a></li>" % (title, title)
+            title_strs += _str
+
+        content = response.text
+        content_len = get_article_length(content)
         html_content = template_content.replace("$MD_TITLE", md_file_name).\
-            replace("$MD_HTML", response.text)
+            replace("$MD_HTML", content).\
+            replace("$MD_LINK", title_strs).\
+            replace("$MD_SIZE", str(content_len)).\
+            replace("$MD_TIME", get_article_read_spend(content_len))
 
         md_file_dir = make_folder(md_file_dir)
         target_path = os.path.join(TARGET_PAGES, md_file_dir)
@@ -144,38 +177,59 @@ def do_mdcat(md_file_path):
         print("ERROR:", response.json()["message"])
 
 
-def do_mdcat2(md_file_path):
-    md_file_dir, md_file_name = split(md_file_path)
+def match_value(c, symbol):
+    rex = re.match(symbol, c)
+    if not rex:
+        return ""
+    return c.lstrip("#").lstrip()
 
-    with open(md_file_path, "r", encoding="utf-8") as md_file:
-        md_file_content = md_file.read()
-        status, c = convert_link_md_to_html(md_file_path)
-        if not status:
-            md_file_content = c
 
-    with open(".static/template.tml", "r", encoding="utf-8") as template_file:
-        template_content = template_file.read()
-    html_content = template_content.replace("$MD_TITLE", md_file_name).\
-        replace("$MD_HTML", md_file_content)
+def scan_article_title(path):
 
-    md_file_dir = make_folder(md_file_dir)
-    target_path = os.path.join(TARGET_PAGES, md_file_dir)
-    mkdirs(target_path)
+    with open(path, "r", encoding="utf-8") as md_file:
+        content = md_file.readlines()
 
-    new_filename = md_file_name.rstrip(".md") + ".html"
-    if new_filename == "README.html":
-        new_filename = "index.html"
-    path = os.path.join(target_path, new_filename)
-    with open(path, "w", encoding="utf-8") as export_file:
-        export_file.write(html_content)
+    titles = []
+    for symbol in ("## ", "### ", "\d+\."):
+        status = False
+        for x in content:
+            x = x.rstrip()
+            rex = match_value(x, symbol)
+            if not rex:
+                continue
+            titles.append(rex)
+            status = True
+        if status:
+            break
+    return titles
+
+
+def get_static_file(workspace):
+    file_type = (".png", ".PNG", ".jpg", ".JPG",
+                 ".jpeg", ".gif", ".JPEG", ".GIF")
+    return get_type_file(workspace, file_type)
+
+
+def do_static_file(workspace):
+    paths = get_static_file(workspace)
+    for _path in paths:
+        path = make_folder(_path)
+        target_path = os.path.join(TARGET_PAGES, path)
+        folder_path, _ = os.path.split(target_path)
+        mkdirs(folder_path)
+        shutil.copy(_path, target_path)
 
 
 def main(workspace):
     path_list = get_md(workspace)
     for path in path_list:
         print("do:", path)
-        do_mdcat(path)
+        titles = scan_article_title(path)
+        # print(titles)
+        do_mdcat(path, titles)
         time.sleep(1)
+    # 收集静态文件
+    do_static_file(workspace)
 
 
 if __name__ == "__main__":
