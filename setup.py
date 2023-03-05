@@ -205,6 +205,10 @@ def scan_article_title(path):
 
 
 def get_static_file(workspace):
+    if os.path.isfile(workspace):
+        _workspace, _ = os.path.split(workspace)
+        workspace = os.path.join(get_base_path(), _workspace)
+    
     file_type = (".png", ".PNG", ".jpg", ".JPG",
                  ".jpeg", ".gif", ".JPEG", ".GIF")
     return get_type_file(workspace, file_type)

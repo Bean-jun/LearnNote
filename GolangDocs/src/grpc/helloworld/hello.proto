@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+// 解析为go可调用包 可选用参数
+option go_package = ".;helloworld";
+
+// 定义服务
+service RouteGuide {
+  // 定义方法 普通模式
+  rpc GetFeature(Point) returns (Feature) {}
+  // 服务端流模式 服务端向客户端推流
+  rpc GetServeStream(Point) returns (stream Feature){}
+  // 客户端流模式 客户端向服务端推流
+  rpc PutServeStream(stream Point) returns (Feature){}
+  // 双向流模式 服务端客户端双向推流
+  rpc AllServeStream(stream Point) returns (stream Feature){}
+}
+
+message Point {
+  int32 x = 1;
+  int32 y = 2;
+}
+
+message Feature {
+  int32 z = 3;
+}

@@ -56,7 +56,7 @@
 
       - 👉	[常见代码](PythonDocs/Python-常见代码.md)👈
 
-      - 👉	[grpc&protobuf使用](PythonDocs/grpc&protobuf使用.md)👈
+      - 👉	[Python-grpc&protobuf使用](PythonDocs/grpc&protobuf使用.md)👈
    
    - 1.5 Python相关文章推荐
 
@@ -71,6 +71,10 @@
       - 👉	[基础语法-操作MySQL](GolangDocs/Golang-操作MySQL.md)👈
 
       - 👉	[基础语法-RPC](GolangDocs/Golang-RPC.md)👈
+   
+   - 2.2 和grpc相关的内容
+
+      - 👉	[Golang-grpc使用](GolangDocs/Golang-grpc使用.md)👈
 
 3. 前端那些事【 仅学习笔记🙄 】
 
