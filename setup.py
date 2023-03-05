@@ -100,7 +100,10 @@ def convert_link_md_to_html(path):
 
 
 def make_folder(path):
-    path = path[len(get_base_path()):]
+    current_path = get_base_path()
+    if not path.startswith(current_path):
+        return path
+    path = path[len(current_path):]
     if path.startswith("\\"):
         return path[1:]
     return path
@@ -167,7 +170,7 @@ def do_mdcat(md_file_path, title_list):
         target_path = os.path.join(TARGET_PAGES, md_file_dir)
         mkdirs(target_path)
 
-        new_filename = md_file_name.strip(".md") + ".html"
+        new_filename = md_file_name.rstrip(".md") + ".html"
         if new_filename == "README.html":
             new_filename = "index.html"
         path = os.path.join(target_path, new_filename)
