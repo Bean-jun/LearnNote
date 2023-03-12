@@ -662,3 +662,12 @@ func BenchmarkAdd2(b *testing.B) {
 	}
 }
 ```
+
+### 17. new和make的区别
+
+![](images/2023-03-09-22-39-39.png)
+
+### 18. init函数
+
+![](images/2023-03-09-22-40-49.png)
+
