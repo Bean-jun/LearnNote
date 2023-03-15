@@ -80,6 +80,8 @@
 
       - 👉	[自定义Golang Web Frame](GolangDocs/Golang-自定义Web框架.md) [| 视频介绍](https://www.bilibili.com/video/BV18D4y1k78d)👈
 
+      - 👉	[手搓HTTP制作短链接生成器](GolangDocs/Golang-手搓HTTP制作短链接生成器.md) [| 视频介绍](https://www.bilibili.com/video/BV1Cs4y1H79U)👈
+
 3. 前端那些事【 仅学习笔记🙄 】
 
    - 3.1 前端基础

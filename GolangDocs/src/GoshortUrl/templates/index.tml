@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .name }}</title>
+</head>
+<body>
+<form action="/short" method="post">
+    <label>
+        <input type="text" name="url"/>
+    </label>
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>
