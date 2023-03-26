@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+  <link rel="stylesheet" href="/.static/css/main.css">
+  <title>解决文件名冲突的工具函数竟是slow的元凶.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <!-- <div class="
+  Box
+  md
+  js-code-block-container
+  Box--responsive
+  container-nav
+  container-left-nav
+  mt-5
+  d-none d-lg-block
+">
+    <div class="Box-body p-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <h1>填充...</h1>
+      </div>
+    </div>
+    <div>填充</div>
+  </div> -->
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div class="border rounded-3 to-home">
+          <a href="/">返回主页</a>
+        </div>
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+        <div class="article-size">
+          <span>869字 | 2分钟</span>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <ol>
+<li>
+<p>起因</p>
+<p>客户：A工啊，怎么回事啊，这个按钮怎么点了之后老是没有反应啊，最后还和我说什么超时了，怎么回事啊？于是乎开始进行问题的排查。</p>
+</li>
+<li>
+<p>问题表现</p>
+<p>打开界面之后，点击提交按钮会出现卡顿，最总表现的结果就是卡死，无响应...</p>
+</li>
+<li>
+<p>问题排查</p>
+<p>使用F12进行查看，当点击之后发现它会发送11个请求，其中10个上传base64的请求，1个上传报告数据的接口。10个上传base64的接口一直处于padding中，并且会在接近1分钟之后给出响应结果。既然没有报错，还是在正常处理的，难道是后端解析base64时内存不够导致的？（客户的服务器内存很小），cpu占用过高？</p>
+<p>本着发现问题，就地复现的原则，我准备直接上客户服务器上看看，这样更容易发现问题。</p>
+<p>登录了客户的机器，使用<code>htop</code>查看机器的CPU和memory的情况，点击按钮之后发现占用几乎没有什么波动？？？纳尼？？？什么情况啊，这....</p>
+<p>于是准备查一下日志，在这个上传base64和上传报告的接口上开始入手，看看是什么情况，结果发现上传base64的接口居然使用了1分钟左右？？？</p>
+<p>嗯？回到最开始的点了，到底是啥情况？服务器的资源没啥变化啊？于是开始在这个接口不同的地方写入日志，请求后查看结果。最终锁定到一个函数上了</p>
+<p><code>resolve_conflict</code></p>
+<p>嗯？一个文件名称重命名的工具函数罢了，还能闹出什么事情？这么离谱？怎么回事？点开源码看一下</p>
+<div class="highlight highlight-source-python"><pre>    <span class="pl-k">def</span> <span class="pl-en">resolve_conflict</span>(<span class="pl-s1">self</span>, <span class="pl-s1">target_folder</span>, <span class="pl-s1">basename</span>):
+
+        <span class="pl-s1">name</span>, <span class="pl-s1">ext</span> <span class="pl-c1">=</span> <span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">splitext</span>(<span class="pl-s1">basename</span>)
+        <span class="pl-s1">count</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span>
+        <span class="pl-k">while</span> <span class="pl-c1">True</span>:
+            <span class="pl-s1">count</span> <span class="pl-c1">=</span> <span class="pl-s1">count</span> <span class="pl-c1">+</span> <span class="pl-c1">1</span>
+            <span class="pl-s1">newname</span> <span class="pl-c1">=</span> <span class="pl-s">'%s_%d%s'</span> <span class="pl-c1">%</span> (<span class="pl-s1">name</span>, <span class="pl-s1">count</span>, <span class="pl-s1">ext</span>)
+            <span class="pl-k">if</span> <span class="pl-c1">not</span> <span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">exists</span>(<span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">join</span>(<span class="pl-s1">target_folder</span>, <span class="pl-s1">newname</span>)):
+                <span class="pl-k">return</span> <span class="pl-s1">newname</span></pre></div>
+<p>注：这是flask-uploads官方的源码<a href="https://github.com/maxcountryman/flask-uploads">源码地址</a>，我们的业务中完全抄了这个方法，不过是写成了函数。</p>
+<p>看起来没啥问题啊，但是为啥用while True啊，看着好瘆人啊，这不是死循环么，于是去瞟了一眼文件资源保存的地方，这一看吓一跳，文件名基本都是<code>image_xxx.png</code>的，并且还有2万张，好家伙，知道问题了</p>
+<p>我们的“前端”比较偷懒，上传的base64图片文件名称全部都叫<code>image</code>,而后端解析之后就很直接的使用了这个名称来保存文件....，结果在保存时，由于文件重名了，就会自动调用这个重命名的函数进行重命名。你想一下每上传一张图片都需要循环2万多次咧，关键客户的机器还是机械硬盘，你品，你细品....</p>
+</li>
+<li>
+<p>解决方案</p>
+<p>既然知道了问题所在，解决问题就很简单了，在保存文件时给文件名加上一个时间戳，这样即使是并发执行，对于小业务的场景，咱们也不用空转2万多次啊，而且图片会越来越多的，这样不至于让它空转那么久啊。</p>
+</li>
+</ol>
+
+      </article>
+    </div>
+  </div>
+  <div class="
+    side
+    Box
+    md
+    js-code-block-container
+    Box--responsive
+    container-right-nav
+    mt-5
+    d-none d-lg-block
+  " style="overflow: hidden;">
+    <div class="Box-body p-5">
+      <div class="container-right-nav-logo">
+        <a href="https://www.github.com/Bean-jun"><svg height="32" class="octicon octicon-mark-github anim-pulse"
+            viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+            </path>
+          </svg></a>
+      </div>
+    </div>
+    <div class="content-title-nav">
+      <ul>
+        <li><a href="#1. 起因">1. 起因</a></li><li><a href="#2. 问题表现">2. 问题表现</a></li><li><a href="#3. 问题排查">3. 问题排查</a></li><li><a href="#4. 解决方案">4. 解决方案</a></li>
+      </ul>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>
