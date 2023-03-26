@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+  <link rel="stylesheet" href="/.static/css/main.css">
+  <title>go加密库执行慢的bug.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <!-- <div class="
+  Box
+  md
+  js-code-block-container
+  Box--responsive
+  container-nav
+  container-left-nav
+  mt-5
+  d-none d-lg-block
+">
+    <div class="Box-body p-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <h1>填充...</h1>
+      </div>
+    </div>
+    <div>填充</div>
+  </div> -->
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div class="border rounded-3 to-home">
+          <a href="/">返回主页</a>
+        </div>
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+        <div class="article-size">
+          <span>435字 | 1分钟</span>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <ol>
+<li>
+<p>起因</p>
+<p>之前项目都是基于python+flask开发，由于业务需要，有部分业务需要使用golang进行重构(小白刚接触golang一个月<a target="_blank" rel="noopener noreferrer" href="image/2023-03-26-11-46-38.png"><img src="image/2023-03-26-11-46-38.png" alt="" style="max-width: 100%;"></a>)，在重构之后的测试过程中，发现重构之后的性能反倒没有提升，竟然下滑了....</p>
+</li>
+<li>
+<p>问题表现</p>
+<p>所有源码地址：BugDocs/src/goEncrypt</p>
+<p>在做登录接口测试时，发现接口响应居然很慢，我这里放出一张移除业务的代码测试结果：</p>
+<p>测试环境：</p>
+<div class="highlight highlight-source-shell"><pre>Go 1.19
+Python 3.9.13
+werkzeug 2.2.3
+循环迭代次数 1024</pre></div>
+<p><a target="_blank" rel="noopener noreferrer" href="image/2023-03-26-11-06-46.png"><img src="image/2023-03-26-11-06-46.png" alt="" style="max-width: 100%;"></a></p>
+<p>上图中，左右两个框是golang编译前后的执行耗时，中间的是Python的执行耗时，golang用时92s左右，Python用时70s左右，相差20几秒？？？纳尼，什么情况？？？</p>
+</li>
+<li>
+<p>问题排查</p>
+<p>由于是Web项目，使用go提供的pprof进行排查。在server启动中导入CPU占用分析工具<code>import _ "net/http/pprof"</code>, 开始对server进行性能测试，测试过程中使用<code>go tool pprof http://127.0.0.1:8080/debug/pprof/profile</code>在命令行中获取当前cpu执行情况，通过<code>top 10</code> 及<code>top cum 10</code>查看cpu占用及过去cpu占用情况，得到的结果如下：</p>
+<div class="highlight highlight-source-shell"><pre>Showing top 10 nodes out of 35
+    flat  flat%   sum%        cum   cum%
+    295.63s 62.87% 62.87%    295.64s 62.88%  crypto/sha256.block
+    29.22s  6.21% 69.09%    453.22s 96.39%  golang.org/x/crypto/pbkdf2.Key
+    22.54s  4.79% 73.88%    328.80s 69.93%  crypto/sha256.(<span class="pl-k">*</span>digest).Write
+    19.77s  4.20% 78.09%    341.29s 72.59%  crypto/sha256.(<span class="pl-k">*</span>digest).checkSum
+    18s  3.83% 81.92%        18s  3.83%  runtime.memmove
+    16.01s  3.41% 85.32%     17.08s  3.63%  runtime.(<span class="pl-k">*</span>itabTableType).find
+    13.21s  2.81% 88.13%     13.24s  2.82%  crypto/sha256.consumeUint32
+    6.66s  1.42% 89.55%     27.11s  5.77%  crypto/sha256.(<span class="pl-k">*</span>digest).UnmarshalBinary
+    6.45s  1.37% 90.92%    390.41s 83.03%  crypto/hmac.(<span class="pl-k">*</span>hmac).Sum
+    6.30s  1.34% 92.26%       355s 75.50%  crypto/sha256.(<span class="pl-k">*</span>digest).Sum
+(pprof) top -cum 10
+Showing nodes accounting <span class="pl-k">for</span> 42.15s, 8.96% of 470.19s total
+Dropped 561 nodes (cum <span class="pl-k">&lt;</span>= 2.35s)
+Showing top 10 nodes out of 35
+    flat  flat%   sum%        cum   cum%
+    0.05s 0.011% 0.011%    464.12s 98.71%  net/http.(<span class="pl-k">*</span>conn).serve
+    0.01s 0.0021% 0.013%    460.42s 97.92%  net/http.(<span class="pl-k">*</span>ServeMux).ServeHTTP
+        0     0% 0.013%    460.42s 97.92%  net/http.serverHandler.ServeHTTP
+    0.03s 0.0064% 0.019%    460.39s 97.92%  net/http.HandlerFunc.ServeHTTP
+    0.08s 0.017% 0.036%    460.35s 97.91%  goweb/views.Login
+        0     0% 0.036%    453.26s 96.40%  goweb/utils.CheckPasswordHash
+    0.01s 0.0021% 0.038%    453.25s 96.40%  goweb/utils.hashInternal
+    29.22s  6.21%  6.25%    453.22s 96.39%  golang.org/x/crypto/pbkdf2.Key
+    6.45s  1.37%  7.62%    390.41s 83.03%  crypto/hmac.(<span class="pl-k">*</span>hmac).Sum
+    6.30s  1.34%  8.96%       355s 75.50%  crypto/sha256.(<span class="pl-k">*</span>digest).Sum</pre></div>
+</li>
+<li>
+<p>解决过程</p>
+<p>baidu....,得到一篇帖子<a href="https://github.com/golang/go/issues/34037">crypto/sha256: optimize sha256 implementation #34037</a></p>
+<p>尝试修改，修改代码如下：</p>
+<div class="highlight highlight-source-go"><pre><span class="pl-k">import</span> (
+    <span class="pl-c">// "crypto/sha256"              // 不用这个包了</span>
+    <span class="pl-s">"github.com/minio/sha256-simd"</span>  <span class="pl-c">// 改用这个</span>
+)</pre></div>
+<p>继续测试，测试结果如下,测试环境同上：</p>
+<p><a target="_blank" rel="noopener noreferrer" href="image/2023-03-26-11-10-20.png"><img src="image/2023-03-26-11-10-20.png" alt="" style="max-width: 100%;"></a></p>
+<p>此时，时间来到了55s左右</p>
+</li>
+<li>
+<p>解决方案</p>
+<p>尝试修改，修改代码如下：</p>
+<div class="highlight highlight-source-go"><pre><span class="pl-k">import</span> (
+    <span class="pl-c">// "crypto/sha256"              // 不用这个包了</span>
+    <span class="pl-s">"github.com/minio/sha256-simd"</span>  <span class="pl-c">// 改用这个</span>
+)</pre></div>
+</li>
+</ol>
+
+      </article>
+    </div>
+  </div>
+  <div class="
+    side
+    Box
+    md
+    js-code-block-container
+    Box--responsive
+    container-right-nav
+    mt-5
+    d-none d-lg-block
+  " style="overflow: hidden;">
+    <div class="Box-body p-5">
+      <div class="container-right-nav-logo">
+        <a href="https://www.github.com/Bean-jun"><svg height="32" class="octicon octicon-mark-github anim-pulse"
+            viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+            </path>
+          </svg></a>
+      </div>
+    </div>
+    <div class="content-title-nav">
+      <ul>
+        <li><a href="#1. 起因">1. 起因</a></li><li><a href="#2. 问题表现">2. 问题表现</a></li><li><a href="#3. 问题排查">3. 问题排查</a></li><li><a href="#4. 解决过程">4. 解决过程</a></li><li><a href="#6. 解决方案">6. 解决方案</a></li>
+      </ul>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

@@ -315,6 +315,9 @@
 
       👉 [cookie离谱的生效范围](BugDocs/cookies/cookie离谱的生效范围.md)👈
 
+ 2. go 加密库 slow bug
+
+      👉 [go加密库执行慢的bug](BugDocs/go加密库执行慢的bug.md)👈
 
 ### 十一、其他
 
