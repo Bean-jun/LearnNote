@@ -61,6 +61,10 @@
    - 1.5 Python相关文章推荐
 
       - 👉	[【知乎】-Python部分魔法方法一览](https://zhuanlan.zhihu.com/p/344951719)👈
+   
+   - 1.6 无聊的轮子
+
+      - 👉	[自定义Python Web Frame](https://github.com/Bean-jun/simple_server)👈
 
 2. Golang从入门到入土
 
@@ -82,9 +86,16 @@
 
       - 👉	[手搓HTTP制作短链接生成器](GolangDocs/Golang-手搓HTTP制作短链接生成器.md) [| 视频介绍](https://www.bilibili.com/video/BV1Cs4y1H79U)👈
 
-3. 前端那些事【 仅学习笔记🙄 】
+3. Java从入门到入土
 
-   - 3.1 前端基础
+   - 3.1 基础点的内容
+
+      - 👉	[基础语法](JavaDocs/Java-基础语法.md)👈
+
+
+4. 前端那些事【 仅学习笔记🙄 】
+
+   - 4.1 前端基础
 
       - 👉	[HTML基础语法](FrontDocs/HTML-基础语法.md)👈
 
