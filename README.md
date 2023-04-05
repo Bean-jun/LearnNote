@@ -58,14 +58,15 @@
 
       - 👉	[Python-grpc&protobuf使用](PythonDocs/grpc&protobuf使用.md)👈
    
-   - 1.5 Python相关文章推荐
+   - 1.5 无聊的轮子
+
+      - 👉	[自定义Python Web Frame](https://github.com/Bean-jun/bframe) 【使用 `pip install bframe` 进行体验】👈
+
+   - 1.6 Python相关文章推荐
 
       - 👉	[【知乎】-Python部分魔法方法一览](https://zhuanlan.zhihu.com/p/344951719)👈
+      - 👉	[【知乎】-Python包发布指南](https://zhuanlan.zhihu.com/p/115302375)👈
    
-   - 1.6 无聊的轮子
-
-      - 👉	[自定义Python Web Frame](https://github.com/Bean-jun/simple_server)👈
-
 2. Golang从入门到入土
 
    - 2.1 基础点的内容
