@@ -228,5 +228,41 @@
        b.run()
    ```
 
-   
+10. 面向对象-03 多继承
+
+    理解下方两段code
+
+    ```python
+    class A():
+        def say(self):
+            print("A say")
+    class B(A):
+        pass
+    class C():
+        def say(self):
+            print("C say")
+    class D(B, C):
+        pass
+
+    d=D()
+    d.say()
+    print(D.__mro__)
+    ```
+    
+    ```python
+    class A():
+        def say(self):
+            print("A say")
+    class B(A):
+        pass
+    class C(A):
+        def say(self):
+            print("C say")
+    class D(B, C):
+        pass
+
+    d=D()
+    d.say()
+    print(D.__mro__)
+    ```
 

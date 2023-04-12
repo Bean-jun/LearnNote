@@ -49,7 +49,7 @@
           </button>
         </div>
         <div class="article-size">
-          <span>982字 | 2分钟</span>
+          <span>1027字 | 2分钟</span>
         </div>
       </div>
       <article class="markdown-body entry-content container-lg" itemprop="text">
@@ -266,6 +266,38 @@
     <span class="pl-s1">b</span> <span class="pl-c1">=</span> <span class="pl-v">B</span>(<span class="pl-s">"小明"</span>)
     <span class="pl-s1">b</span>.<span class="pl-en">run</span>()</pre></div>
 </li>
+<li>
+<p>面向对象-03 多继承</p>
+<p>理解下方两段code</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">class</span> <span class="pl-v">A</span>():
+    <span class="pl-k">def</span> <span class="pl-en">say</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"A say"</span>)
+<span class="pl-k">class</span> <span class="pl-v">B</span>(<span class="pl-v">A</span>):
+    <span class="pl-k">pass</span>
+<span class="pl-k">class</span> <span class="pl-v">C</span>():
+    <span class="pl-k">def</span> <span class="pl-en">say</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"C say"</span>)
+<span class="pl-k">class</span> <span class="pl-v">D</span>(<span class="pl-v">B</span>, <span class="pl-v">C</span>):
+    <span class="pl-k">pass</span>
+
+<span class="pl-s1">d</span><span class="pl-c1">=</span><span class="pl-v">D</span>()
+<span class="pl-s1">d</span>.<span class="pl-en">say</span>()
+<span class="pl-en">print</span>(<span class="pl-v">D</span>.<span class="pl-s1">__mro__</span>)</pre></div>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">class</span> <span class="pl-v">A</span>():
+    <span class="pl-k">def</span> <span class="pl-en">say</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"A say"</span>)
+<span class="pl-k">class</span> <span class="pl-v">B</span>(<span class="pl-v">A</span>):
+    <span class="pl-k">pass</span>
+<span class="pl-k">class</span> <span class="pl-v">C</span>(<span class="pl-v">A</span>):
+    <span class="pl-k">def</span> <span class="pl-en">say</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"C say"</span>)
+<span class="pl-k">class</span> <span class="pl-v">D</span>(<span class="pl-v">B</span>, <span class="pl-v">C</span>):
+    <span class="pl-k">pass</span>
+
+<span class="pl-s1">d</span><span class="pl-c1">=</span><span class="pl-v">D</span>()
+<span class="pl-s1">d</span>.<span class="pl-en">say</span>()
+<span class="pl-en">print</span>(<span class="pl-v">D</span>.<span class="pl-s1">__mro__</span>)</pre></div>
+</li>
 </ol>
 
       </article>
@@ -293,7 +325,7 @@
     </div>
     <div class="content-title-nav">
       <ul>
-        <li><a href="#1. 查看Python版本">1. 查看Python版本</a></li><li><a href="#2. 第一个HelloWord程序">2. 第一个HelloWord程序</a></li><li><a href="#3. 变量赋值">3. 变量赋值</a></li><li><a href="#4. 运算符">4. 运算符</a></li><li><a href="#5. 条件语句">5. 条件语句</a></li><li><a href="#6. 循环语句">6. 循环语句</a></li><li><a href="#7. 函数">7. 函数</a></li><li><a href="#8. 面向对象-01">8. 面向对象-01</a></li><li><a href="#9. 面向对象-02">9. 面向对象-02</a></li>
+        <li><a href="#1. 查看Python版本">1. 查看Python版本</a></li><li><a href="#2. 第一个HelloWord程序">2. 第一个HelloWord程序</a></li><li><a href="#3. 变量赋值">3. 变量赋值</a></li><li><a href="#4. 运算符">4. 运算符</a></li><li><a href="#5. 条件语句">5. 条件语句</a></li><li><a href="#6. 循环语句">6. 循环语句</a></li><li><a href="#7. 函数">7. 函数</a></li><li><a href="#8. 面向对象-01">8. 面向对象-01</a></li><li><a href="#9. 面向对象-02">9. 面向对象-02</a></li><li><a href="#10. 面向对象-03 多继承">10. 面向对象-03 多继承</a></li>
       </ul>
     </div>
   </div>

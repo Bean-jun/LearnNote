@@ -64,6 +64,7 @@
 
    - 1.6 Python相关文章推荐
 
+      - 👉	[Python3多继承](https://www.python.org/download/releases/2.3/mro/) | [译文](https://lotabout.me/2020/C3-Algorithm/) | [见栗子-10](PythonDocs/Python-基础语法.md)👈
       - 👉	[【知乎】-Python部分魔法方法一览](https://zhuanlan.zhihu.com/p/344951719)👈
       - 👉	[【知乎】-Python包发布指南](https://zhuanlan.zhihu.com/p/115302375)👈
    
