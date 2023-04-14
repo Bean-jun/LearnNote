@@ -92,7 +92,8 @@
 │   └── 工具集合.md
 ├── TryDocs
 │   ├── Jetson_Nano_环境搭建.md
-│   └── Pyinstaller工具小tips.md
+│   ├── Pyinstaller工具小tips.md
+│   └── Py快速将py脚本编译为pyd.md
 ├── WebFrameDocs
 │   ├── image
 │   ├── src
@@ -108,4 +109,4 @@
 ├── setup.py
 └── sitemap.txt
 
-44 directories, 64 files
+44 directories, 65 files

@@ -346,3 +346,7 @@
  2. pyinstaller打包小技巧
 
       👉 [Pyinstaller工具小Tips](TryDocs/Pyinstaller工具小tips.md)👈
+ 
+ 3. py to pyd
+
+      👉 [Py快速将py脚本编译为pyd](TryDocs/Py快速将py脚本编译为pyd.md)👈
