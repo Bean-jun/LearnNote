@@ -170,7 +170,8 @@ def do_mdcat(md_file_path, title_list):
         target_path = os.path.join(TARGET_PAGES, md_file_dir)
         mkdirs(target_path)
 
-        new_filename = md_file_name.rstrip(".md") + ".html"
+        # new_filename = md_file_name.rstrip(".md") + ".html"
+        new_filename = md_file_name[:len(md_file_name)-3] + ".html"
         if new_filename == "README.html":
             new_filename = "index.html"
         path = os.path.join(target_path, new_filename)
