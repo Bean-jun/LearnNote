@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+  <link rel="stylesheet" href="/.static/css/main.css">
+  <title>Java-面向对象.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <!-- <div class="
+  Box
+  md
+  js-code-block-container
+  Box--responsive
+  container-nav
+  container-left-nav
+  mt-5
+  d-none d-lg-block
+">
+    <div class="Box-body p-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <h1>填充...</h1>
+      </div>
+    </div>
+    <div>填充</div>
+  </div> -->
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div class="border rounded-3 to-home">
+          <a href="/">返回主页</a>
+        </div>
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+        <div class="article-size">
+          <span>2709字 | 6分钟</span>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <ol>
+<li>
+<p>面向对象基础代码</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// Phone.java</span>
+<span class="pl-k">package</span> <span class="pl-s1">chapter05</span>.<span class="pl-s1">oop1</span>;
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">Phone</span> {
+
+    <span class="pl-c">// 属性</span>
+    <span class="pl-smi">String</span> <span class="pl-s1">name</span>;<span class="pl-c">// 品牌</span>
+    <span class="pl-smi">double</span> <span class="pl-s1">price</span>;<span class="pl-c">// 价格</span>
+
+    <span class="pl-c">// 方法</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">call</span>() {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"打电话"</span>);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">sendMsg</span>(<span class="pl-smi">String</span> <span class="pl-s1">msg</span>) {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"发送消息结果为："</span> + <span class="pl-s1">msg</span>);
+    }
+}
+
+<span class="pl-c">// PhoneTest.java</span>
+<span class="pl-k">package</span> <span class="pl-s1">chapter05</span>.<span class="pl-s1">oop1</span>;
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">PhoneTest</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-c">// 创建Phone对象</span>
+        <span class="pl-smi">Phone</span> <span class="pl-s1">phone</span> = <span class="pl-k">new</span> <span class="pl-smi">Phone</span>();
+        <span class="pl-s1">phone</span>.<span class="pl-en">call</span>();
+        <span class="pl-s1">phone</span>.<span class="pl-en">sendMsg</span>(<span class="pl-s">"hello"</span>);
+    }
+}</pre></div>
+</li>
+<li>
+<p>面向对象说明</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-c1">1.</span> <span class="pl-s1">Java</span>类中，创建<span class="pl-s1">一</span>个对象，对象将被保存至栈中，而对象信息将会被保存在堆中，由栈中的对象指向堆中的对象信息
+
+<span class="pl-c1">2.</span> 属性：声明在类中，方法之外；局部变量：声明在方法、构造器内的变量
+
+属性存在堆中，局部变量存在栈中
+属性在整个类的内部都有效，局部变量只能在声明的方法、构造器中使用
+属性可以使用权限修饰符，局部变量不可以使用修饰符
+属性都有默认值，局部便利都没有默认初始值</pre></div>
+</li>
+<li>
+<p>方法的重载</p>
+<p>方法的重载与形参的名、权限修饰符、返回值没有关系；
+方法的重载与方法名、参数列表有关，方法名相同，且形参列表不相同</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">overloadTest</span> {
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">add</span>(<span class="pl-smi">int</span> <span class="pl-s1">i</span>, <span class="pl-smi">int</span> <span class="pl-s1">j</span>) {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">i</span> + <span class="pl-s1">j</span>);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">add</span>(<span class="pl-smi">String</span> <span class="pl-s1">i</span>, <span class="pl-smi">String</span> <span class="pl-s1">j</span>) {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">i</span> + <span class="pl-s1">j</span>);
+
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">overloadTest</span> <span class="pl-s1">o</span> = <span class="pl-k">new</span> <span class="pl-smi">overloadTest</span>();
+        <span class="pl-s1">o</span>.<span class="pl-en">add</span>(<span class="pl-c1">10</span>, <span class="pl-c1">30</span>);
+        <span class="pl-s1">o</span>.<span class="pl-en">add</span>(<span class="pl-s">"hello"</span>, <span class="pl-s">"world"</span>);
+    }
+}</pre></div>
+</li>
+<li>
+<p>可变个数的形参</p>
+<p>可变参的本质就是传递一个数组引用</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">ArgsTest</span> {
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">pprint01</span>(<span class="pl-smi">int</span> ... <span class="pl-s1">num</span>) {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">num</span>);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">pprint02</span>(<span class="pl-smi">double</span>[] <span class="pl-s1">num</span>) {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">num</span>);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">ArgsTest</span> <span class="pl-s1">a</span>= <span class="pl-k">new</span> <span class="pl-smi">ArgsTest</span>();
+        <span class="pl-s1">a</span>.<span class="pl-en">pprint01</span>(<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>,<span class="pl-c1">5</span>);
+        <span class="pl-smi">double</span>[] <span class="pl-s1">b</span> = <span class="pl-k">new</span> <span class="pl-smi">double</span>[]{<span class="pl-c1">12.1</span>,  <span class="pl-c1">121.2</span>, <span class="pl-c1">1.1</span>};
+        <span class="pl-s1">a</span>.<span class="pl-en">pprint02</span>(<span class="pl-s1">b</span>);
+    }
+}</pre></div>
+</li>
+<li>
+<p>java权限修饰符</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-04-05-11-12-29.png"><img src="images/2023-04-05-11-12-29.png" alt="" style="max-width: 100%;"></a></p>
+</li>
+<li>
+<p>java构造器（constructor）</p>
+<p>在没有明确定义构造器时，系统会自动分配一个构造器</p>
+<p>Java中类在进行实例化时，将走构造方法，类似于python中的__init__方法，需要注意的是，Java中走类的初始化时是先走父类的构造函数，然后走子类的构造函数，即使你的子类中定义了构造函数</p>
+<p>子类继承父类时，不会继承父类的构造器;子类实例化时，会直接或间接的调用父类的构造器</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">People</span> {
+    <span class="pl-smi">String</span> <span class="pl-s1">name</span>;
+    <span class="pl-smi">byte</span> <span class="pl-s1">age</span>;
+
+    <span class="pl-c">// 定义构造器</span>
+    <span class="pl-k">public</span> <span class="pl-smi">People</span>() {
+    }
+
+    <span class="pl-c">// 构造器重载</span>
+    <span class="pl-k">public</span> <span class="pl-smi">People</span>(<span class="pl-smi">byte</span> <span class="pl-s1">a</span>) {
+        <span class="pl-s1">age</span> = <span class="pl-s1">a</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">eat</span>(<span class="pl-smi">String</span> <span class="pl-s1">str</span>) {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"吃"</span> + <span class="pl-s1">str</span>);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">People</span> <span class="pl-s1">p1</span> = <span class="pl-k">new</span> <span class="pl-smi">People</span>((<span class="pl-smi">byte</span>)(<span class="pl-c1">1</span>));
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">p1</span>.<span class="pl-s1">age</span>);
+        <span class="pl-s1">p1</span>.<span class="pl-en">eat</span>(<span class="pl-s">"面包干"</span>);
+        <span class="pl-smi">People</span> <span class="pl-s1">p2</span> = <span class="pl-k">new</span> <span class="pl-smi">People</span>();
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">p2</span>.<span class="pl-s1">age</span>);
+    }
+}</pre></div>
+</li>
+<li>
+<p>this 代指当前对象，类似python中的self</p>
+<p>this调用构造器：格式"this(形参列表)"，调用当前类中指定的构造器，必须在当前构造器的首行。</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">User</span> {
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> <span class="pl-s1">name</span>;
+    <span class="pl-k">private</span> <span class="pl-smi">int</span> <span class="pl-s1">age</span>;
+
+    <span class="pl-k">public</span> <span class="pl-smi">User</span>() {
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">User</span>(<span class="pl-smi">String</span> <span class="pl-s1">name</span>) {
+        <span class="pl-smi">this</span>.<span class="pl-s1">name</span> = <span class="pl-s1">name</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">User</span>(<span class="pl-smi">String</span> <span class="pl-s1">name</span>, <span class="pl-smi">int</span> <span class="pl-s1">age</span>) {
+        <span class="pl-smi">this</span>(<span class="pl-s1">name</span>);<span class="pl-c">// 调用User(String name)构造器</span>
+        <span class="pl-smi">this</span>.<span class="pl-s1">age</span> = <span class="pl-s1">age</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">getName</span>() {
+        <span class="pl-k">return</span> <span class="pl-s1">name</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">setName</span>(<span class="pl-smi">String</span> <span class="pl-s1">name</span>) {
+        <span class="pl-smi">this</span>.<span class="pl-s1">name</span> = <span class="pl-s1">name</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">int</span> <span class="pl-en">getAge</span>() {
+        <span class="pl-k">return</span> <span class="pl-s1">age</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">setAge</span>(<span class="pl-smi">int</span> <span class="pl-s1">age</span>) {
+        <span class="pl-smi">this</span>.<span class="pl-s1">age</span> = <span class="pl-s1">age</span>;
+    }
+
+}</pre></div>
+<p>练习：银行-用户-账户关系
+chapter05-&gt;oop7</p>
+</li>
+<li>
+<p>继承</p>
+<p>extends</p>
+<p>重写 override规则</p>
+<ol>
+<li>父类被子类重写的方法名和形参列表必须一致；</li>
+<li>子类重写的权限修饰符不可以小于父类的，同时父类的private不可以被重写；</li>
+<li>没有返回值的，重写的也必须没有返回值；有返回值的，返回基础类型的必须和父类一致，返回引用类型的可以与父类返回类型相同，或者是被重写的返回值的子类</li>
+<li>静态方法不能被重写</li>
+</ol>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">Person</span> {
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> <span class="pl-s1">name</span>;
+    <span class="pl-k">private</span> <span class="pl-smi">int</span> <span class="pl-s1">age</span>;
+
+    <span class="pl-k">public</span> <span class="pl-smi">Person</span>() {
+
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">Person</span>(<span class="pl-smi">String</span> <span class="pl-s1">name</span>, <span class="pl-smi">int</span> <span class="pl-s1">age</span>) {
+        <span class="pl-smi">this</span>.<span class="pl-s1">name</span> = <span class="pl-s1">name</span>;
+        <span class="pl-smi">this</span>.<span class="pl-s1">age</span> = <span class="pl-s1">age</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">getName</span>() {
+        <span class="pl-k">return</span> <span class="pl-s1">name</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">setName</span>(<span class="pl-smi">String</span> <span class="pl-s1">name</span>) {
+        <span class="pl-smi">this</span>.<span class="pl-s1">name</span> = <span class="pl-s1">name</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">int</span> <span class="pl-en">getAge</span>() {
+        <span class="pl-k">return</span> <span class="pl-s1">age</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">setAge</span>(<span class="pl-smi">int</span> <span class="pl-s1">age</span>) {
+        <span class="pl-smi">this</span>.<span class="pl-s1">age</span> = <span class="pl-s1">age</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">showInfo</span>() {
+        <span class="pl-k">return</span> <span class="pl-s">"user:"</span> + <span class="pl-smi">this</span>.<span class="pl-s1">name</span> + <span class="pl-s">",age:"</span> + <span class="pl-smi">this</span>.<span class="pl-s1">age</span>;
+    }
+}
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">Student</span> <span class="pl-k">extends</span> <span class="pl-smi">Person</span> {
+    <span class="pl-k">public</span> <span class="pl-smi">Student</span>(<span class="pl-smi">String</span> <span class="pl-s1">name</span>, <span class="pl-smi">int</span> <span class="pl-s1">age</span>) {
+        <span class="pl-en">super</span>(<span class="pl-s1">name</span>, <span class="pl-s1">age</span>);
+    }
+
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">showInfo</span>() {
+        <span class="pl-k">return</span> <span class="pl-s">"我在重写父类的方法"</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">Student</span> <span class="pl-s1">s</span> = <span class="pl-k">new</span> <span class="pl-smi">Student</span>(<span class="pl-s">"张三"</span>, <span class="pl-c1">20</span>);
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">s</span>.<span class="pl-en">showInfo</span>());
+    }
+}</pre></div>
+</li>
+<li>
+<p>多态性</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-04-10-21-34-51.png"><img src="images/2023-04-10-21-34-51.png" alt="" style="max-width: 100%;"></a>
+父类的引用指向子类的对象；
+针对方法：编译看左边，运行看右边；
+针对属性：看当前的编译类型；</p>
+<p>向下转型可能出现类型转换异常，建议使用instanceof判断一下</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">Person</span> {
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">say</span>(<span class="pl-smi">String</span> <span class="pl-s1">msg</span>) {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"person say"</span> + <span class="pl-s1">msg</span>);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">eat</span>() {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"person eat"</span>);
+    }
+}
+
+<span class="pl-k">class</span> <span class="pl-smi">Man</span> <span class="pl-k">extends</span> <span class="pl-smi">Person</span> {
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">say</span>(<span class="pl-smi">String</span> <span class="pl-s1">msg</span>) {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"man say"</span> + <span class="pl-s1">msg</span>);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">eat</span>() {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"man eat"</span>);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">sleep</span>() {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"man sleep"</span>);
+    }
+}
+
+<span class="pl-k">class</span> <span class="pl-smi">Woman</span> <span class="pl-k">extends</span> <span class="pl-smi">Person</span> {
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">say</span>(<span class="pl-smi">String</span> <span class="pl-s1">msg</span>) {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"Woman say"</span> + <span class="pl-s1">msg</span>);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">eat</span>() {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"Woman eat"</span>);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">watch</span>() {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"woman watch"</span>);
+    }
+}
+
+<span class="pl-k">class</span> <span class="pl-smi">Programmer</span> {
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">run</span>(<span class="pl-smi">Person</span> <span class="pl-s1">p</span>) {
+        <span class="pl-s1">p</span>.<span class="pl-en">say</span>(<span class="pl-s">"hello world"</span>);
+        <span class="pl-s1">p</span>.<span class="pl-en">eat</span>();
+
+        <span class="pl-c">// 尝试 向下转型</span>
+        <span class="pl-k">if</span> (<span class="pl-s1">p</span> <span class="pl-k">instanceof</span> <span class="pl-smi">Man</span>) {
+            <span class="pl-c">// 判断当前类型是man类型，进行转换</span>
+            <span class="pl-smi">Man</span> <span class="pl-s1">mp</span> = (<span class="pl-smi">Man</span>)<span class="pl-s1">p</span>;
+            <span class="pl-s1">mp</span>.<span class="pl-en">sleep</span>();
+        }
+
+        <span class="pl-k">if</span> (<span class="pl-s1">p</span> <span class="pl-k">instanceof</span> <span class="pl-smi">Woman</span>){
+            <span class="pl-smi">Woman</span> <span class="pl-s1">wp</span> = (<span class="pl-smi">Woman</span>)<span class="pl-s1">p</span>;
+            <span class="pl-s1">wp</span>.<span class="pl-en">watch</span>();
+        }
+    }
+}
+
+<span class="pl-k">class</span> <span class="pl-smi">PersonTest</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">Programmer</span> <span class="pl-s1">p</span> = <span class="pl-k">new</span> <span class="pl-smi">Programmer</span>();
+        <span class="pl-c">// p.run中调用的say、eat还是根据当前对象来进行调用的</span>
+        <span class="pl-c">// 初始化Person类</span>
+        <span class="pl-s1">p</span>.<span class="pl-en">run</span>(<span class="pl-k">new</span> <span class="pl-smi">Person</span>());
+        <span class="pl-c">// 初始化Man类，其为Person的子类，</span>
+        <span class="pl-c">// 故此处为向上转型</span>
+        <span class="pl-s1">p</span>.<span class="pl-en">run</span>(<span class="pl-k">new</span> <span class="pl-smi">Man</span>());
+        <span class="pl-c">// 初始化Woman类，其为Person的子类，</span>
+        <span class="pl-c">// 故此处为向上转型</span>
+        <span class="pl-s1">p</span>.<span class="pl-en">run</span>(<span class="pl-k">new</span> <span class="pl-smi">Woman</span>());
+    }
+}</pre></div>
+</li>
+<li>
+<p>Object类</p>
+<ul>
+<li>
+<p>finalize方法：当GC要回收此对象时，将执行此方法</p>
+</li>
+<li>
+<p>equals方法：
+任何引用类型都可以使用
+==是判断当前对象所在栈地址是否相等，equals则是判断当前对象所在堆内容是否一致</p>
+</li>
+<li>
+<p>toString方法：
+类比python中的__str__方法</p>
+</li>
+</ul>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">equalTest</span> {
+    <span class="pl-smi">String</span> <span class="pl-s1">name</span>;
+    <span class="pl-smi">int</span> <span class="pl-s1">age</span>;
+
+    <span class="pl-k">public</span> <span class="pl-smi">equalTest</span>(<span class="pl-smi">String</span> <span class="pl-s1">name</span>, <span class="pl-smi">int</span> <span class="pl-s1">age</span>) {
+        <span class="pl-smi">this</span>.<span class="pl-s1">name</span> = <span class="pl-s1">name</span>;
+        <span class="pl-smi">this</span>.<span class="pl-s1">age</span> = <span class="pl-s1">age</span>;
+    }
+
+    <span class="pl-c">// 重写equals后 两个对象比较</span>
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">boolean</span> <span class="pl-en">equals</span>(<span class="pl-smi">Object</span> <span class="pl-s1">obj</span>) {
+        <span class="pl-k">if</span> (<span class="pl-smi">this</span> == <span class="pl-s1">obj</span>) {
+            <span class="pl-k">return</span> <span class="pl-c1">true</span>;
+        }
+
+        <span class="pl-k">if</span> (<span class="pl-s1">obj</span> <span class="pl-k">instanceof</span> <span class="pl-smi">equalTest</span>) {
+            <span class="pl-smi">equalTest</span> <span class="pl-s1">objE</span> = (<span class="pl-smi">equalTest</span>) <span class="pl-s1">obj</span>;
+            <span class="pl-k">return</span> <span class="pl-smi">this</span>.<span class="pl-s1">age</span> == <span class="pl-s1">objE</span>.<span class="pl-s1">age</span>;
+        }
+
+        <span class="pl-k">return</span> <span class="pl-c1">false</span>;
+    }
+}
+
+<span class="pl-k">class</span> <span class="pl-smi">Main</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">equalTest</span> <span class="pl-s1">e1</span> = <span class="pl-k">new</span> <span class="pl-smi">equalTest</span>(<span class="pl-s">"张三"</span>, <span class="pl-c1">10</span>);
+        <span class="pl-smi">equalTest</span> <span class="pl-s1">e2</span> = <span class="pl-k">new</span> <span class="pl-smi">equalTest</span>(<span class="pl-s">"李四"</span>, <span class="pl-c1">10</span>);
+        <span class="pl-c">// Object equals方法比较e1 e2栈地址</span>
+        <span class="pl-c">// 重写equals方法，比较两个对象的值</span>
+        <span class="pl-smi">boolean</span> <span class="pl-s1">x</span> = <span class="pl-s1">e1</span>.<span class="pl-en">equals</span>(<span class="pl-s1">e2</span>);
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"e1 == e2 ?"</span> + <span class="pl-s1">x</span>);
+    }
+}</pre></div>
+</li>
+<li>
+<p>static关键字</p>
+<p>Java类中，static变量（方法）是静态变量（方法），类似于python中的类属性和类方法；在Java中，可以直接使用类名调用；java中的static关键字主要用于内存管理。我们可以应用java static关键字在变量，方法，块和嵌套类中。 static关键字属于类，而不是类的实例；</p>
+<p>static 实现单例模式</p>
+<p>饿汉式，此种单例会伴随类的出现而出现，类的消亡而消亡，线程安全</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">class</span> <span class="pl-smi">Bank</span> {
+
+    <span class="pl-c">// 构造器私有化，禁止被new出来</span>
+    <span class="pl-k">private</span> <span class="pl-smi">Bank</span>() {
+    }
+
+    <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-smi">Bank</span> <span class="pl-s1">Instance</span> = <span class="pl-k">new</span> <span class="pl-smi">Bank</span>();
+
+    <span class="pl-c">// 通过静态方法返回当前对象</span>
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">Bank</span> <span class="pl-en">getBank</span>() {
+        <span class="pl-k">return</span> <span class="pl-s1">Instance</span>;
+    }
+}
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">BankTest</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">Bank</span> <span class="pl-s1">b1</span> = <span class="pl-s1">Bank</span>.<span class="pl-en">getBank</span>();
+        <span class="pl-smi">Bank</span> <span class="pl-s1">b2</span> = <span class="pl-s1">Bank</span>.<span class="pl-en">getBank</span>();
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">b1</span> == <span class="pl-s1">b2</span>);
+    }
+}</pre></div>
+<p>懒汉式，此种单例会伴随对象的创建而分配，可能存在线程安全问题</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">class</span> <span class="pl-smi">Bank</span> {
+    <span class="pl-k">private</span> <span class="pl-smi">Bank</span>() {
+    }
+
+    <span class="pl-k">private</span> <span class="pl-k">static</span> <span class="pl-smi">Bank</span> <span class="pl-s1">Instance</span> = <span class="pl-c1">null</span>;
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">Bank</span> <span class="pl-en">getBank</span>() {
+        <span class="pl-k">if</span> (<span class="pl-s1">Instance</span> == <span class="pl-c1">null</span>) {
+            <span class="pl-s1">Instance</span> = <span class="pl-k">new</span> <span class="pl-smi">Bank</span>();
+        }
+        <span class="pl-k">return</span> <span class="pl-s1">Instance</span>;
+    }
+}
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">BankTest02</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">Bank</span> <span class="pl-s1">b1</span> = <span class="pl-s1">Bank</span>.<span class="pl-en">getBank</span>();
+        <span class="pl-smi">Bank</span> <span class="pl-s1">b2</span> = <span class="pl-s1">Bank</span>.<span class="pl-en">getBank</span>();
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">b1</span> == <span class="pl-s1">b2</span>);
+    }
+}</pre></div>
+</li>
+<li>
+<p>代码块</p>
+<p>执行先后顺序：
+静态代码块 -&gt; 非静态代码块</p>
+<p>静态代码块：
+随着类的加载而执行；
+可以用来初始化类的信息;
+只能调用静态的属性、方法</p>
+<p>非静态代码块：
+随这对象的创建而执行；
+可以用来初始化对象的信息；
+可以调用静态的属性、方法，也可以调用非静态的属性、方法</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">class</span> <span class="pl-smi">Bank</span> {
+
+    <span class="pl-c">// 非静态代码块</span>
+    {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"我是非静态代码块"</span>);
+    }
+
+    <span class="pl-c">// 静态代码块</span>
+    <span class="pl-k">static</span> {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"我是静态代码块"</span>);
+    }
+}
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">staticTest</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">Bank</span> <span class="pl-s1">b</span> = <span class="pl-k">new</span> <span class="pl-smi">Bank</span>();
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">b</span>);
+    }
+}</pre></div>
+</li>
+<li>
+<p>类加载顺序</p>
+<p>静态代码块-&gt;代码块-&gt;构造器初始化</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-04-16-22-04-18.png"><img src="images/2023-04-16-22-04-18.png" alt="" style="max-width: 100%;"></a></p>
+<p>对于继承的对象，应该是由父及子，静态先行</p>
+</li>
+<li>
+<p>final关键字 - 修饰 变量 方法 类</p>
+<ul>
+<li>
+<p>final修饰的类 不可以被继承</p>
+</li>
+<li>
+<p>final修饰的方法 不可以被重写</p>
+</li>
+<li>
+<p>final修饰的变量 此时的变量就变成了常量 不可以修改</p>
+<ul>
+<li>成员变量
+<ul>
+<li>只能显示赋值</li>
+<li>代码块中赋值</li>
+<li>构造器中赋值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>abstract 抽象类  不能实例化对象</p>
+<p>抽象类不能够实例化</p>
+<p>抽象类中 加入abstract即可
+抽象方法中 加入abstract即可</p>
+<p>子类必须重写父类所有的抽象方法后，才能创建对象</p>
+<p>不可以使用abstract修饰private方法、静态方法、final方法、final修饰的类</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// 加上abstract 就变成了一个抽象类</span>
+<span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-k">class</span> <span class="pl-smi">Person</span> {
+    <span class="pl-c">// 抽象方法 可以没有方法体</span>
+    <span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-smi">void</span> <span class="pl-en">eat</span>();
+}
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">Man</span> <span class="pl-k">extends</span> <span class="pl-smi">Person</span> {
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">eat</span>() {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"男人吃饭"</span>);
+    }
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">Man</span> <span class="pl-s1">man</span> = <span class="pl-k">new</span> <span class="pl-smi">Man</span>();
+        <span class="pl-s1">man</span>.<span class="pl-en">eat</span>();
+    }
+}</pre></div>
+</li>
+<li>
+<p>接口 interface 不能实例化对象 可多继承</p>
+<p>接口里面的属性是全局类型的常量，即别的类可以直接用接口名就可以访问里面的属性了，接口里面的所有方法都是抽象方法，没有方法体；和抽象类不同的是接口里面的抽象方法不需要加 abstract 关键字</p>
+<p>接口的多态性
+接口名 变量名 = new 实现类对象;</p>
+<p>类和类之间是继承关系，类和接口之间是实现关系，接口和接口之间是多继承关系</p>
+<p>jdk8之后的特性
+接口中可以声明静态方法，此静态方法只能被接口调用，不能被实现类调用</p>
+<p>接口中实现的默认方法，可以被实现类继承，当然也可以被实现类重写</p>
+<p>接口冲突：类实现了两个及以上的接口，但有两个接口定义了同名同参数的默认方法，而刚好实现类没有重写此两个接口的方法，就会报错</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-04-17-23-01-26.png"><img src="images/2023-04-17-23-01-26.png" alt="" style="max-width: 100%;"></a></p>
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// 接口</span>
+<span class="pl-k">interface</span> <span class="pl-smi">Usb</span> {
+    <span class="pl-c">// 接口方法</span>
+    <span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-smi">void</span> <span class="pl-en">comin</span>();
+
+    <span class="pl-c">// 接口方法</span>
+    <span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-smi">void</span> <span class="pl-en">comout</span>();
+}
+
+<span class="pl-c">// 接口的继承</span>
+<span class="pl-k">interface</span> <span class="pl-smi">UsbA</span> <span class="pl-k">extends</span> <span class="pl-smi">Usb</span> {
+    <span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-smi">String</span> <span class="pl-en">getUsbA</span>();
+}
+
+<span class="pl-c">// 接口的继承</span>
+<span class="pl-k">interface</span> <span class="pl-smi">UsbB</span> <span class="pl-k">extends</span> <span class="pl-smi">Usb</span> {
+    <span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-smi">String</span> <span class="pl-en">getUsbB</span>();
+}
+
+<span class="pl-c">// 接口的继承</span>
+<span class="pl-k">interface</span> <span class="pl-smi">UsbC</span> <span class="pl-k">extends</span> <span class="pl-smi">Usb</span> {
+    <span class="pl-k">public</span> <span class="pl-k">abstract</span> <span class="pl-smi">String</span> <span class="pl-en">getUsbC</span>();
+}
+
+<span class="pl-c">// 接口的多继承</span>
+<span class="pl-k">interface</span> <span class="pl-smi">SuperUsb</span> <span class="pl-k">extends</span> <span class="pl-smi">UsbA</span>, <span class="pl-smi">UsbB</span>, <span class="pl-smi">UsbC</span> {
+
+}
+
+<span class="pl-c">// 实现UsbA的接口</span>
+<span class="pl-k">class</span> <span class="pl-smi">Phone</span> <span class="pl-k">implements</span> <span class="pl-smi">UsbA</span> {
+
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">comin</span>() {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"我是手机，插入了USB"</span>);
+    }
+
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">comout</span>() {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"我是手机，弹出了USB"</span>);
+    }
+
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">getUsbA</span>() {
+        <span class="pl-k">return</span> <span class="pl-s">"Phone A"</span>;
+    }
+
+}
+
+<span class="pl-c">// 继承Phone类，实现UsbC接口</span>
+<span class="pl-k">class</span> <span class="pl-smi">SmartPhone</span> <span class="pl-k">extends</span> <span class="pl-smi">Phone</span> <span class="pl-k">implements</span> <span class="pl-smi">UsbC</span> {
+
+    <span class="pl-c1">@</span><span class="pl-c1">Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">getUsbC</span>() {
+        <span class="pl-k">return</span> <span class="pl-s">"SmartPhone C"</span>;
+    }
+
+}
+
+<span class="pl-k">class</span> <span class="pl-smi">Computer</span> {
+    <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">link</span>(<span class="pl-smi">Usb</span> <span class="pl-s1">usb</span>) {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"---连接电脑中----"</span>);
+        <span class="pl-s1">usb</span>.<span class="pl-en">comin</span>();
+        <span class="pl-s1">usb</span>.<span class="pl-en">comout</span>();
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"----断开电脑连接----"</span>);
+    }
+}
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">InterfaceTest</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">Phone</span> <span class="pl-s1">p</span> = <span class="pl-k">new</span> <span class="pl-smi">Phone</span>();
+        <span class="pl-s1">p</span>.<span class="pl-en">comin</span>();
+        <span class="pl-s1">p</span>.<span class="pl-en">comout</span>();
+
+        <span class="pl-smi">SmartPhone</span> <span class="pl-s1">p2</span> = <span class="pl-k">new</span> <span class="pl-smi">SmartPhone</span>();
+        <span class="pl-s1">p2</span>.<span class="pl-en">comin</span>();
+        <span class="pl-s1">p2</span>.<span class="pl-en">comout</span>();
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">p2</span>.<span class="pl-en">getUsbA</span>());
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">p2</span>.<span class="pl-en">getUsbC</span>());
+
+        <span class="pl-c">// 接口的多态性</span>
+        <span class="pl-smi">UsbA</span> <span class="pl-s1">p3</span> = <span class="pl-k">new</span> <span class="pl-smi">Phone</span>();
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">p3</span>.<span class="pl-en">getUsbA</span>());
+
+        <span class="pl-smi">Computer</span> <span class="pl-s1">c</span> = <span class="pl-k">new</span> <span class="pl-smi">Computer</span>();
+        <span class="pl-s1">c</span>.<span class="pl-en">link</span>(<span class="pl-s1">p</span>);
+        <span class="pl-s1">c</span>.<span class="pl-en">link</span>(<span class="pl-s1">p2</span>);
+    }
+}</pre></div>
+</li>
+<li>
+<p>匿名类的操作  认为是当前类的的子类实现</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">ClassTest</span>{
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-c">// 创建一个匿名对象</span>
+        <span class="pl-c">// 通过这种方式，其实是创建的Object的子类，并实现了一个show方法</span>
+        <span class="pl-c">// 由于是匿名类，没有名称，故调用可以直接在创建的对象上调用</span>
+        <span class="pl-k">new</span> <span class="pl-smi">Object</span>(){
+            <span class="pl-k">public</span> <span class="pl-smi">void</span> <span class="pl-en">show</span>(){
+                <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s">"我是show方法"</span>);
+            }
+        }.<span class="pl-en">show</span>();
+    }
+}</pre></div>
+</li>
+<li>
+<p>枚举类</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// 枚举类的定义方法</span>
+<span class="pl-k">enum</span> <span class="pl-smi">Score</span> {
+    <span class="pl-s1">A</span>(<span class="pl-s">"优秀"</span>, <span class="pl-c1">90</span>),
+    <span class="pl-s1">B</span>(<span class="pl-s">"良好"</span>, <span class="pl-c1">80</span>),
+    <span class="pl-s1">C</span>(<span class="pl-s">"及格"</span>, <span class="pl-c1">60</span>);
+
+    <span class="pl-c">// 配置当前枚举对象中包含的字段</span>
+    <span class="pl-k">private</span> <span class="pl-k">final</span> <span class="pl-smi">String</span> <span class="pl-s1">desc</span>;
+    <span class="pl-k">private</span> <span class="pl-k">final</span> <span class="pl-smi">int</span> <span class="pl-s1">code</span>;
+
+    <span class="pl-k">public</span> <span class="pl-smi">String</span> <span class="pl-en">getDesc</span>() {
+        <span class="pl-k">return</span> <span class="pl-s1">desc</span>;
+    }
+
+    <span class="pl-k">public</span> <span class="pl-smi">int</span> <span class="pl-en">getCode</span>() {
+        <span class="pl-k">return</span> <span class="pl-s1">code</span>;
+    }
+
+    <span class="pl-c">// 私有化构造器</span>
+    <span class="pl-k">private</span> <span class="pl-smi">Score</span>(<span class="pl-smi">String</span> <span class="pl-s1">desc</span>, <span class="pl-smi">int</span> <span class="pl-s1">code</span>) {
+        <span class="pl-smi">this</span>.<span class="pl-s1">desc</span> = <span class="pl-s1">desc</span>;
+        <span class="pl-smi">this</span>.<span class="pl-s1">code</span> = <span class="pl-s1">code</span>;
+    }
+}
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">enumTest</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-smi">Score</span>.<span class="pl-s1">A</span>);
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-smi">Score</span>.<span class="pl-s1">A</span>.<span class="pl-en">getDesc</span>());
+
+        <span class="pl-c">// valueof 返回当前枚举类的对象</span>
+        <span class="pl-smi">Score</span> <span class="pl-s1">x</span> = <span class="pl-s1">Score</span>.<span class="pl-en">valueOf</span>(<span class="pl-s">"A"</span>);
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">x</span>.<span class="pl-en">getDesc</span>() + <span class="pl-s1">x</span>.<span class="pl-en">getCode</span>());
+
+        <span class="pl-c">// values返回枚举类型的数组</span>
+        <span class="pl-smi">Score</span>[] <span class="pl-s1">xx</span> = <span class="pl-s1">Score</span>.<span class="pl-en">values</span>();
+        <span class="pl-k">for</span> (<span class="pl-smi">int</span> <span class="pl-s1">i</span> = <span class="pl-c1">0</span>; <span class="pl-s1">i</span> &lt; <span class="pl-s1">xx</span>.<span class="pl-s1">length</span>; <span class="pl-s1">i</span>++) {
+            <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">xx</span>[<span class="pl-s1">i</span>].<span class="pl-en">getDesc</span>() + <span class="pl-s1">xx</span>[<span class="pl-s1">i</span>].<span class="pl-en">getCode</span>());
+        }
+    }
+}</pre></div>
+</li>
+<li>
+<p>包装类</p>
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-smi">WrapperTest</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-smi">void</span> <span class="pl-en">main</span>(<span class="pl-smi">String</span>[] <span class="pl-s1">args</span>) {
+        <span class="pl-c">// 包装类的自动装箱 拆箱</span>
+
+        <span class="pl-c">// 装箱</span>
+        <span class="pl-smi">Integer</span> <span class="pl-s1">a</span> = <span class="pl-c1">5</span>;
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">a</span> + <span class="pl-s">"&lt;&gt;"</span> + <span class="pl-s1">a</span>.<span class="pl-en">intValue</span>());
+        <span class="pl-c">// 拆箱</span>
+        <span class="pl-smi">int</span> <span class="pl-s1">b</span> = <span class="pl-s1">a</span>;
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-s1">b</span>);
+
+        <span class="pl-c">// 包装类列举</span>
+        <span class="pl-c">// Boolean -&gt; boolean</span>
+        <span class="pl-c">// Character-&gt;char</span>
+        <span class="pl-c">// Byte -&gt; byte</span>
+        <span class="pl-c">// Short -&gt; short</span>
+        <span class="pl-c">// Integer -&gt; int</span>
+        <span class="pl-c">// Long -&gt; long</span>
+        <span class="pl-c">// Float -&gt; float</span>
+        <span class="pl-c">// Double -&gt; double</span>
+        <span class="pl-smi">System</span>.<span class="pl-s1">out</span>.<span class="pl-en">println</span>(<span class="pl-smi">Byte</span>.<span class="pl-c1">MAX_VALUE</span>);
+    }
+}</pre></div>
+<p>基本类型、包装类-&gt;String 使用 String.valueOf(xxx)方法</p>
+<p>String-&gt;基本数据类型  使用包装类的parsexxx方法</p>
+</li>
+</ol>
+
+      </article>
+    </div>
+  </div>
+  <div class="
+    side
+    Box
+    md
+    js-code-block-container
+    Box--responsive
+    container-right-nav
+    mt-5
+    d-none d-lg-block
+  " style="overflow: hidden;">
+    <div class="Box-body p-5">
+      <div class="container-right-nav-logo">
+        <a href="https://www.github.com/Bean-jun"><svg height="32" class="octicon octicon-mark-github anim-pulse"
+            viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+            </path>
+          </svg></a>
+      </div>
+    </div>
+    <div class="content-title-nav">
+      <ul>
+        <li><a href="#1. 面向对象基础代码">1. 面向对象基础代码</a></li><li><a href="#2. 面向对象说明">2. 面向对象说明</a></li><li><a href="#3. 方法的重载">3. 方法的重载</a></li><li><a href="#4. 可变个数的形参">4. 可变个数的形参</a></li><li><a href="#5. java权限修饰符">5. java权限修饰符</a></li><li><a href="#6. java构造器（constructor）">6. java构造器（constructor）</a></li><li><a href="#7. this 代指当前对象，类似python中的self">7. this 代指当前对象，类似python中的self</a></li><li><a href="#8. 继承">8. 继承</a></li><li><a href="#9. 多态性">9. 多态性</a></li><li><a href="#10. Object类">10. Object类</a></li><li><a href="#11. static关键字">11. static关键字</a></li><li><a href="#12. 代码块">12. 代码块</a></li><li><a href="#13. 类加载顺序">13. 类加载顺序</a></li><li><a href="#14. final关键字 - 修饰 变量 方法 类">14. final关键字 - 修饰 变量 方法 类</a></li><li><a href="#15. abstract 抽象类  不能实例化对象">15. abstract 抽象类  不能实例化对象</a></li><li><a href="#16. 接口 interface 不能实例化对象 可多继承">16. 接口 interface 不能实例化对象 可多继承</a></li><li><a href="#17. 匿名类的操作  认为是当前类的的子类实现">17. 匿名类的操作  认为是当前类的的子类实现</a></li><li><a href="#18. 枚举类">18. 枚举类</a></li><li><a href="#19. 包装类">19. 包装类</a></li>
+      </ul>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>
