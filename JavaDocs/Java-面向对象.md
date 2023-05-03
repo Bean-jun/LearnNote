@@ -401,7 +401,7 @@
     }
     ```
 
-    懒汉式，此种单例会伴随对象的创建而分配，可能存在线程安全问题
+    懒汉式，此种单例会伴随对象的创建而分配，~~可能存在线程安全问题~~
     ```java
     class Bank {
         private Bank() {
@@ -409,7 +409,8 @@
 
         private static Bank Instance = null;
 
-        public static Bank getBank() {
+        // 添加synchronized关键词 解决线程安全问题
+        public static synchronized Bank getBank() {
             if (Instance == null) {
                 Instance = new Bank();
             }

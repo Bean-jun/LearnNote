@@ -322,7 +322,7 @@ docker-compose up .
    # 将当前用户加入到docker用户组中
    sudo groupadd docker
    sudo gpasswd -a $USER docker
-   newgrep docker
+   newgrp docker
    ```
 
 2. docker 常见时区设置
