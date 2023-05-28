@@ -52,6 +52,8 @@
 
       - 👉	[限流-简单滑动窗口](PythonDocs/Python-简单滑动窗口.md)👈
 
+      - 👉	[一个带进度条的下载小工具](PythonDocs/Python-一个带进度条的下载小工具.md)👈
+
    - 1.4 工作中常见
 
       - 👉	[常见代码](PythonDocs/Python-常见代码.md)👈
