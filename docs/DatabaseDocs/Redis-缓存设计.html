@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+  <link rel="stylesheet" href="/.static/css/main.css">
+  <title>Redis-缓存设计.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <!-- <div class="
+  Box
+  md
+  js-code-block-container
+  Box--responsive
+  container-nav
+  container-left-nav
+  mt-5
+  d-none d-lg-block
+">
+    <div class="Box-body p-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <h1>填充...</h1>
+      </div>
+    </div>
+    <div>填充</div>
+  </div> -->
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div class="border rounded-3 to-home">
+          <a href="/">返回主页</a>
+        </div>
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+        <div class="article-size">
+          <span>792字 | 1分钟</span>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h2><a id="user-content-一缓存的目的" class="anchor" aria-hidden="true" href="#一缓存的目的"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、缓存的目的</h2>
+<p>加速读写，减少对后端数据库（比如MySQL、postgres）的负载</p>
+<p>缓存更新策略</p>
+<ul>
+<li>
+<p>LRU算法</p>
+<p>通过配置maxmemory-policy来实现数据的自动淘汰清除策略，维护成本较低，数据一致性差</p>
+</li>
+<li>
+<p>超时剔除</p>
+<p>通过对数据设置超时，过期自动淘汰，数据一致性较差</p>
+</li>
+<li>
+<p>主动更新</p>
+<p>在数据更新后，实时更新缓存，数据一致性较好</p>
+</li>
+</ul>
+<h2><a id="user-content-二缓存常见问题" class="anchor" aria-hidden="true" href="#二缓存常见问题"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、缓存常见问题</h2>
+<ol>
+<li>
+<p>缓存穿透</p>
+<p>描述：具体指查询一条不存在的数据，此时会穿过缓存直接打到数据库中。下一次查询请求时，还是会继续穿透缓存，直接打在数据库中。</p>
+<p>触发场景：一般业务存在漏洞或者恶意攻击、爬虫导致的大量的缓存穿透问题。</p>
+<p>解决方案：</p>
+<ul>
+<li>
+<p>缓存空对象</p>
+<p>即对不存在的数据进行缓存，即使再次请求，我们就可以命中缓存。当然，这部分缓存最好设置一个过期时间，避免大量空对象一直存储在Redis中。</p>
+<p>适用场景：数据变化频率高</p>
+<p>缺点：可能在Redis中产生大量的空对象</p>
+</li>
+<li>
+<p>布隆过滤器</p>
+<p>即对存在的键配置在一个集合中，当查询请求过来时，直接判断当前请求键是否在集合中，如果在，继续请求缓存中的数据，否则直接返回空</p>
+<p>使用场景：数据相对固定</p>
+<p>缺点：代码维护相对较为复杂</p>
+</li>
+</ul>
+</li>
+<li>
+<p>缓存雪崩</p>
+<p>描述: 具体指查询时，缓存层无法提供服务，或者数据全部失效，导致查询请求全部打到数据库上。</p>
+<p>触发场景：Redis服务不可用或者数据同一时刻都失效了</p>
+<p>解决方案：</p>
+<ul>
+<li>
+<p>保证Redis缓存层服务的高可用</p>
+</li>
+<li>
+<p>通过一些组件对后端应用做限流</p>
+</li>
+<li>
+<p>对数据尽可能设置不同的过期时长</p>
+</li>
+</ul>
+</li>
+<li>
+<p>缓存击穿</p>
+<p>描述：具体指查询时，缓存层的这个数据刚好失效，大量的查询请求直接打在了数据库服务上。</p>
+<p>触发场景：缓存的数据刚好过期</p>
+<p>解决方案：</p>
+<ul>
+<li>
+<p>可以在业务允许的范围内，对数据做“永久”不过期配置</p>
+</li>
+<li>
+<p>使用互斥锁。如果缓存失效的情况，只有拿到锁才可以查询数据库，降低了在同一时刻打在数据库上的请求，数据的一致性较高，但也存在降低系统并发的风险。</p>
+</li>
+</ul>
+</li>
+</ol>
+
+      </article>
+    </div>
+  </div>
+  <div class="
+    side
+    Box
+    md
+    js-code-block-container
+    Box--responsive
+    container-right-nav
+    mt-5
+    d-none d-lg-block
+  " style="overflow: hidden;">
+    <div class="Box-body p-5">
+      <div class="container-right-nav-logo">
+        <a href="https://www.github.com/Bean-jun"><svg height="32" class="octicon octicon-mark-github anim-pulse"
+            viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+            </path>
+          </svg></a>
+      </div>
+    </div>
+    <div class="content-title-nav">
+      <ul>
+        <li><a href="#一、缓存的目的">一、缓存的目的</a></li><li><a href="#二、缓存常见问题">二、缓存常见问题</a></li>
+      </ul>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

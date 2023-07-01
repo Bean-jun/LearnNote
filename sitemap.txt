@@ -9,7 +9,8 @@
 │   ├── MySQL-入门.md
 │   ├── Redis-事务.md
 │   ├── Redis-入门.md
-│   └── Redis-持久化.md
+│   ├── Redis-持久化.md
+│   └── Redis-缓存设计.md
 ├── DeployDocs
 │   ├── nginx_uwsgi_django部署.md
 │   └── nginx_uwsgi_flask部署.md
@@ -113,4 +114,4 @@
 ├── setup.py
 └── sitemap.txt
 
-46 directories, 67 files
+46 directories, 68 files
