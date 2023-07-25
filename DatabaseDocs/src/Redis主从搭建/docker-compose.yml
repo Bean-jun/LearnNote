@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  redis_1:
+    image: redis:latest
+    restart: always
+    command: 
+      redis-server /data/redis.conf
+    volumes:
+      - ./machine1_6380:/data
+    environment:
+      - TZ=Asia/Shanghai
+    network_mode: host
+  redis_2:
+    image: redis:latest
+    restart: always
+    command: 
+      redis-server /data/redis.conf
+    volumes:
+      - ./machine2_6381:/data
+    environment:
+      - TZ=Asia/Shanghai
+    network_mode: host
+  redis_3:
+    image: redis:latest
+    restart: always
+    command: 
+      redis-server /data/redis.conf
+    volumes:
+      - ./machine3_6382:/data
+    environment:
+      - TZ=Asia/Shanghai
+    network_mode: host

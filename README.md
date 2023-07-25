@@ -187,6 +187,8 @@
    
    👉	[持久化](DatabaseDocs/Redis-持久化.md)👈
 
+   👉	[复制&哨兵](DatabaseDocs/Redis-复制&哨兵.md)👈
+
    👉	[缓存设计](DatabaseDocs/Redis-缓存设计.md)👈
    
    

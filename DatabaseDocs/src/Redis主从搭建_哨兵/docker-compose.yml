@@ -1,0 +1,62 @@
+version: '3.9'
+services:
+  redis_1:
+    image: redis:latest
+    restart: always
+    command: 
+      redis-server /data/redis.conf
+    volumes:
+      - ./machine1_6380:/data
+    network_mode: host
+    environment:
+      - TZ=Asia/Shanghai
+  redis_2:
+    image: redis:latest
+    restart: always
+    command: 
+      redis-server /data/redis.conf
+    volumes:
+      - ./machine2_6381:/data
+    network_mode: host
+    environment:
+      - TZ=Asia/Shanghai
+  redis_3:
+    image: redis:latest
+    restart: always
+    command: 
+      redis-server /data/redis.conf
+    volumes:
+      - ./machine3_6382:/data
+    network_mode: host
+    environment:
+      - TZ=Asia/Shanghai
+  redis_sentinel_1:
+    image: redis:latest
+    restart: always
+    command: 
+      redis-server /data/sentinel.conf --sentinel
+    volumes:
+      - ./sentinel1_26380:/data
+    network_mode: host
+    environment:
+      - TZ=Asia/Shanghai
+  redis_sentinel_2:
+    image: redis:latest
+    restart: always
+    command: 
+      redis-server /data/sentinel.conf --sentinel
+    volumes:
+      - ./sentinel2_26381:/data
+    network_mode: host
+    environment:
+      - TZ=Asia/Shanghai
+  redis_sentinel_3:
+    image: redis:latest
+    restart: always
+    command: 
+      redis-server /data/sentinel.conf --sentinel
+    volumes:
+      - ./sentinel3_26382:/data
+    network_mode: host
+    environment:
+      - TZ=Asia/Shanghai

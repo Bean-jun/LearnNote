@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+  <link rel="stylesheet" href="/.static/css/main.css">
+  <title>Redis-复制哨兵.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <!-- <div class="
+  Box
+  md
+  js-code-block-container
+  Box--responsive
+  container-nav
+  container-left-nav
+  mt-5
+  d-none d-lg-block
+">
+    <div class="Box-body p-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <h1>填充...</h1>
+      </div>
+    </div>
+    <div>填充</div>
+  </div> -->
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div class="border rounded-3 to-home">
+          <a href="/">返回主页</a>
+        </div>
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+        <div class="article-size">
+          <span>1182字 | 2分钟</span>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h2><a id="user-content-一复制" class="anchor" aria-hidden="true" href="#一复制"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、复制</h2>
+<p>在分布式系统中，为解决单点问题，一般将数据复制多个副本部署在不同的服务器上，实现故障恢复和负载均衡等需求，Redis本身也提供了这块的功能。</p>
+<ol>
+<li>
+<p>基础介绍</p>
+<p>如何在两台Redis服务上建立起复制呢？我们可以使用</p>
+<p><code>slaveof &lt;masterHost&gt; &lt;masterPort&gt;</code></p>
+<p>来实现基本的复制功能。通常，我们在建立之后，可以在主、从Redis服务器上执行<code>info replication</code>来查看建立的关系信息</p>
+<p>那么，我们又如何断开这种复制功能呢？</p>
+<p><code>slaveof no one</code></p>
+</li>
+<li>
+<p>安全性考虑</p>
+<p>Redis服务器务必开启密码进行验证，主节点配置<code>requirepass</code>参数值后，从服务器需要配置<code>masterauth</code>才可以建立复制关系</p>
+</li>
+<li>
+<p>只读</p>
+<p>默认情况下，建立主从复制的Redis服务器，主服务器可读可写，但是从只能读取。这是默认配置文件<code>slave-read-only=yes</code>在起作用，建议不要修改此参数</p>
+</li>
+<li>
+<p>一般拓扑结构</p>
+<p>一主一从</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-07-25-22-02-40.png"><img src="images/2023-07-25-22-02-40.png" alt="" style="max-width: 100%;"></a></p>
+<p>一主多从</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-07-25-22-03-11.png"><img src="images/2023-07-25-22-03-11.png" alt="" style="max-width: 100%;"></a></p>
+<p>树状主从</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-07-25-22-03-44.png"><img src="images/2023-07-25-22-03-44.png" alt="" style="max-width: 100%;"></a></p>
+</li>
+<li>
+<p>工作原理</p>
+<p>保存主节点信息</p>
+<p>主动建立Socket连接</p>
+<p>发送ping命令</p>
+<p>权限验证</p>
+<p>同步数据</p>
+<p>命令持续复制</p>
+</li>
+<li>
+<p>数据同步</p>
+<p>TODO:</p>
+</li>
+<li>
+<p>主从复制模型搭建（基于docker）</p>
+<p>一主二从结构模型</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> docker-compose位置</span>
+<span class="pl-c"><span class="pl-c">#</span> ./src/Redis主从搭建</span>
+<span class="pl-c"><span class="pl-c">#</span> docker-compose up .</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 主节点6380</span>
+配置 port 6380
+配置 requirepass foobared
+<span class="pl-c"><span class="pl-c">#</span> 从节点6381 这部分的配置一般可以通过启动参数给出，我这里就先写在配置文件中了</span>
+配置 port 6381
+配置 requirepass foobared
+配置 replicaof 127.0.0.1 6380
+配置 masterauth foobared
+<span class="pl-c"><span class="pl-c">#</span> 从节点6382 这部分的配置一般可以通过启动参数给出，我这里就先写在配置文件中了</span>
+配置 port 6382
+配置 requirepass foobared
+配置 replicaof 127.0.0.1 6380
+配置 masterauth foobared</pre></div>
+</li>
+</ol>
+<h2><a id="user-content-二哨兵" class="anchor" aria-hidden="true" href="#二哨兵"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、哨兵</h2>
+<p>在复制模型中，一旦主节点噶了，需要人工手动配置新的主节点，同时需要告知应用方，更新了主节点地址，太麻烦了，引入哨兵主要就是为了解决这个问题。</p>
+<ol>
+<li>
+<p>基础介绍</p>
+<p>简单理解，哨兵是在原有复制不变的架构上，添加的监控运维节点。哨兵节点会对主从架构中的每一个节点进行监控（我们配置监控时，只需要配置监控主节点就可以了，主节点上本身保留有从节点信息，哨兵可以读到这部分数据）</p>
+<p>当主节点噶了时，哨兵可以通过定期监控发现主节点噶了，当多个哨兵节点统一认为主节点确实噶了，会选举一个哨兵节点来完成我们上述的一些操作（选举其中一个从节点为主节点，配置其他节点复制这个主节点，同时告知应用方，我们的节点信息发生了变更）</p>
+</li>
+<li>
+<p>简单的原理图展示</p>
+<p>Redis Sentinel结构</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-07-25-22-21-48.png"><img src="images/2023-07-25-22-21-48.png" alt="" style="max-width: 100%;"></a></p>
+<p>此时主节点噶了</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-07-25-22-22-15.png"><img src="images/2023-07-25-22-22-15.png" alt="" style="max-width: 100%;"></a></p>
+<p>Redis Sentinel选举其中一个哨兵来完成后续的操作</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-07-25-22-22-34.png"><img src="images/2023-07-25-22-22-34.png" alt="" style="max-width: 100%;"></a></p>
+<p>哨兵开始自动配置节点信息</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-07-25-22-22-55.png"><img src="images/2023-07-25-22-22-55.png" alt="" style="max-width: 100%;"></a></p>
+<p>哨兵通知应用方</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-07-25-22-23-25.png"><img src="images/2023-07-25-22-23-25.png" alt="" style="max-width: 100%;"></a></p>
+</li>
+<li>
+<p>注意</p>
+<p>上述的一切都是Redis的哨兵来完成的，包括通知应用方。那么我们在使用Redis的客户端时，客户端需要特殊处理，通过配置参数来获取我们需要的主从节点，看看redis的python客户端实现</p>
+<p><a target="_blank" rel="noopener noreferrer" href="images/2023-07-25-22-36-51.png"><img src="images/2023-07-25-22-36-51.png" alt="" style="max-width: 100%;"></a></p>
+</li>
+<li>
+<p>哨兵模型搭建（基于docker）</p>
+<p>一主二从三哨兵结构模型</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> docker-compose位置</span>
+<span class="pl-c"><span class="pl-c">#</span> ./src/Redis主从搭建_哨兵</span>
+<span class="pl-c"><span class="pl-c">#</span> docker-compose up .</span>
+<span class="pl-c"><span class="pl-c">#</span> 启动后，我们手动把主节点噶了，将会看到哨兵会主动完成节点的迁移</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 主节点6380</span>
+配置 port 6380
+配置 requirepass foobared
+<span class="pl-c"><span class="pl-c">#</span> 从节点6381 这部分的配置一般可以通过启动参数给出，我这里就先写在配置文件中了</span>
+配置 port 6381
+配置 requirepass foobared
+配置 replicaof 127.0.0.1 6380
+配置 masterauth foobared
+<span class="pl-c"><span class="pl-c">#</span> 从节点6382 这部分的配置一般可以通过启动参数给出，我这里就先写在配置文件中了</span>
+配置 port 6382
+配置 requirepass foobared
+配置 replicaof 127.0.0.1 6380
+配置 masterauth foobared
+
+<span class="pl-c"><span class="pl-c">#</span> 哨兵1</span>
+配置 port 26380
+配置 sentinel monitor mymaster 127.0.0.1 6380 2
+配置 sentinel auth-pass mymaster foobared
+配置 requirepass <span class="pl-s"><span class="pl-pds">"</span>foobared<span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">#</span> 哨兵2</span>
+配置 port 26381
+配置 sentinel monitor mymaster 127.0.0.1 6380 2
+配置 sentinel auth-pass mymaster foobared
+配置 requirepass <span class="pl-s"><span class="pl-pds">"</span>foobared<span class="pl-pds">"</span></span>
+<span class="pl-c"><span class="pl-c">#</span> 哨兵3</span>
+配置 port 26382
+配置 sentinel monitor mymaster 127.0.0.1 6380 2
+配置 sentinel auth-pass mymaster foobared
+配置 requirepass <span class="pl-s"><span class="pl-pds">"</span>foobared<span class="pl-pds">"</span></span></pre></div>
+</li>
+</ol>
+
+      </article>
+    </div>
+  </div>
+  <div class="
+    side
+    Box
+    md
+    js-code-block-container
+    Box--responsive
+    container-right-nav
+    mt-5
+    d-none d-lg-block
+  " style="overflow: hidden;">
+    <div class="Box-body p-5">
+      <div class="container-right-nav-logo">
+        <a href="https://www.github.com/Bean-jun"><svg height="32" class="octicon octicon-mark-github anim-pulse"
+            viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+            </path>
+          </svg></a>
+      </div>
+    </div>
+    <div class="content-title-nav">
+      <ul>
+        <li><a href="#一、复制">一、复制</a></li><li><a href="#二、哨兵">二、哨兵</a></li>
+      </ul>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>
