@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+  <link rel="stylesheet" href="/.static/css/main.css">
+  <title>Lua基础.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <!-- <div class="
+  Box
+  md
+  js-code-block-container
+  Box--responsive
+  container-nav
+  container-left-nav
+  mt-5
+  d-none d-lg-block
+">
+    <div class="Box-body p-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <h1>填充...</h1>
+      </div>
+    </div>
+    <div>填充</div>
+  </div> -->
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div class="border rounded-3 to-home">
+          <a href="/">返回主页</a>
+        </div>
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+        <div class="article-size">
+          <span>1518字 | 3分钟</span>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <ol>
+<li>
+<p>环境安装</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 安装lua</span>
+<span class="pl-c"><span class="pl-c">#</span> 安装vscode</span>
+<span class="pl-c"><span class="pl-c">#</span> 安装vscode插件</span>
+<span class="pl-c"><span class="pl-c">#</span> Lua # sumneko</span>
+<span class="pl-c"><span class="pl-c">#</span> Lua Debug  # actboy168</span></pre></div>
+</li>
+<li>
+<p>hello world</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>hello world<span class="pl-pds">"</span></span>)</pre></div>
+</li>
+<li>
+<p>注释</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-c"><span class="pl-c">--</span> 这是单行注释</span>
+
+<span class="pl-c"><span class="pl-c">--[[</span></span>
+<span class="pl-c">    我是多行注释1</span>
+<span class="pl-c">    我是多行注释2</span>
+<span class="pl-c">--<span class="pl-c">]]</span></span></pre></div>
+</li>
+<li>
+<p>关键词</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>and</td>
+<td>break</td>
+<td>do</td>
+<td>else</td>
+</tr>
+<tr>
+<td>elseif</td>
+<td>end</td>
+<td>false</td>
+<td>for</td>
+</tr>
+<tr>
+<td>function</td>
+<td>if</td>
+<td>in</td>
+<td>local</td>
+</tr>
+<tr>
+<td>nil</td>
+<td>not</td>
+<td>or</td>
+<td>repeat</td>
+</tr>
+<tr>
+<td>return</td>
+<td>then</td>
+<td>true</td>
+<td>until</td>
+</tr>
+<tr>
+<td>while</td>
+<td>goto</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>变量</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-c"><span class="pl-c">--</span> 默认情况下，变量总是全局的,访问没有初始化的变量也不会报错，得到的结果为nil</span>
+
+<span class="pl-c"><span class="pl-c">--</span> 声明一个局部变量</span>
+<span class="pl-k">local</span> msg <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>这是一个局部变量<span class="pl-pds">"</span></span></pre></div>
+</li>
+<li>
+<p>数据类型</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-c"><span class="pl-c">--</span> 通过type查看对象的数据类型</span>
+
+<span class="pl-c1">nil</span>         只有值<span class="pl-c1">nil</span>属于该类，表示一个无效值（在条件表达式中相当于<span class="pl-c1">false</span>）。
+boolean	    包含两个值：<span class="pl-c1">false</span>和<span class="pl-c1">true</span>。
+number	    表示双精度类型的实浮点数
+string	    字符串由一对双引号或单引号来表示
+<span class="pl-k">function</span>	由 C 或 Lua 编写的函数
+userdata	表示任意存储在变量中的C数据结构
+thread	    表示执行的独立线路，用于执行协同程序
+table	    Lua 中的表（table）其实是一个<span class="pl-s"><span class="pl-pds">"</span>关联数组<span class="pl-pds">"</span></span>（associative arrays），数组的索引可以是数字、字符串或表类型。在 Lua 里，table 的创建是通过<span class="pl-s"><span class="pl-pds">"</span>构造表达式<span class="pl-pds">"</span></span>来完成，最简单构造表达式是{}，用来创建一个空表。</pre></div>
+</li>
+<li>
+<p>循环</p>
+<ul>
+<li>
+<p>for循环</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-c"><span class="pl-c">--</span> 数组for循环</span>
+<span class="pl-c"><span class="pl-c">--[[</span></span>
+<span class="pl-c">var 从 exp1 变化到 exp2，每次变化以 exp3 为步长递增 var，并执行一次 "执行体"。exp3 是可选的，如果不指定，默认为1。</span>
+<span class="pl-c">for var=exp1,exp2,exp3 do  </span>
+<span class="pl-c">    &lt;执行体&gt;  </span>
+<span class="pl-c">end</span>
+<span class="pl-c">--<span class="pl-c">]]</span></span>
+<span class="pl-k">for</span> i <span class="pl-k">=</span> <span class="pl-c1">1</span>, <span class="pl-c1">10</span>, <span class="pl-c1">1</span> <span class="pl-k">do</span>
+    <span class="pl-c1">print</span>(i)
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> 泛型for循环</span>
+<span class="pl-k">local</span> a <span class="pl-k">=</span> {<span class="pl-s"><span class="pl-pds">"</span>one<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>two<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>three<span class="pl-pds">"</span></span>}   <span class="pl-c"><span class="pl-c">--</span> 数组</span>
+<span class="pl-k">for</span> idx, v <span class="pl-k">in</span> <span class="pl-c1">ipairs</span>(a) <span class="pl-k">do</span>
+    <span class="pl-c1">print</span>(idx, v)
+<span class="pl-k">end</span></pre></div>
+</li>
+<li>
+<p>while循环</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-c"><span class="pl-c">--[[</span></span>
+<span class="pl-c">    while(condition)</span>
+<span class="pl-c">    do</span>
+<span class="pl-c">        statements</span>
+<span class="pl-c">    end</span>
+<span class="pl-c">--<span class="pl-c">]]</span></span>
+<span class="pl-k">local</span> b <span class="pl-k">=</span> <span class="pl-c1">10</span>
+<span class="pl-k">while</span> (b <span class="pl-k">&gt;</span> <span class="pl-c1">0</span>) <span class="pl-k">do</span>
+    <span class="pl-c1">print</span>(b)
+    b <span class="pl-k">=</span> b <span class="pl-k">-</span> <span class="pl-c1">1</span>
+<span class="pl-k">end</span></pre></div>
+</li>
+<li>
+<p>repeat until循环(类似于do...while语句)</p>
+<p>Lua 编程语言中 repeat...until 循环语句不同于 for 和 while循环，for 和 while 循环的条件语句在当前循环执行开始时判断，而 repeat...until 循环的条件语句在当前循环结束后判断。</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-c"><span class="pl-c">--[[</span></span>
+<span class="pl-c">repeat</span>
+<span class="pl-c">statements</span>
+<span class="pl-c">until( condition )</span>
+<span class="pl-c">--<span class="pl-c">]]</span></span>
+<span class="pl-k">local</span> a <span class="pl-k">=</span> <span class="pl-c1">10</span>
+<span class="pl-k">repeat</span>
+    <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>a value:<span class="pl-pds">"</span></span>, a)
+    a <span class="pl-k">=</span> a <span class="pl-k">-</span> <span class="pl-c1">1</span>
+<span class="pl-k">until</span> a <span class="pl-k">&gt;</span> <span class="pl-c1">8</span></pre></div>
+</li>
+<li>
+<p>嵌套循环案例</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-k">for</span> i <span class="pl-k">=</span> <span class="pl-c1">1</span>, <span class="pl-c1">9</span>, <span class="pl-c1">1</span> <span class="pl-k">do</span>
+    <span class="pl-k">for</span> j <span class="pl-k">=</span> <span class="pl-c1">9</span>, <span class="pl-c1">1</span>, <span class="pl-k">-</span><span class="pl-c1">1</span> <span class="pl-k">do</span>
+        <span class="pl-c1">print</span>(i, <span class="pl-s"><span class="pl-pds">"</span>*<span class="pl-pds">"</span></span>, j, <span class="pl-s"><span class="pl-pds">"</span>=<span class="pl-pds">"</span></span>, i <span class="pl-k">*</span> j)
+    <span class="pl-k">end</span>
+<span class="pl-k">end</span></pre></div>
+</li>
+<li>
+<p>break</p>
+</li>
+<li>
+<p>goto</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-c"><span class="pl-c">--</span> goto 需搭配label使用</span>
+<span class="pl-c"><span class="pl-c">--</span> label写法 ::label::</span>
+
+<span class="pl-c"><span class="pl-c">--</span> goto实现continue</span>
+<span class="pl-c"><span class="pl-c">--</span> 大于3就直接continue</span>
+<span class="pl-k">for</span> i<span class="pl-k">=</span><span class="pl-c1">1</span>,<span class="pl-c1">4</span> <span class="pl-k">do</span>
+    <span class="pl-k">if</span> i <span class="pl-k">&gt;</span> <span class="pl-c1">3</span> <span class="pl-k">then</span>
+        <span class="pl-k">goto</span> <span class="pl-c1">continue</span>
+    <span class="pl-k">end</span>
+    <span class="pl-c1">print</span>(i)
+    <span class="pl-c1">::continue::</span>
+<span class="pl-k">end</span></pre></div>
+</li>
+</ul>
+</li>
+<li>
+<p>流程控制</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-c"><span class="pl-c">--</span> if语法</span>
+<span class="pl-k">local</span> a <span class="pl-k">=</span> <span class="pl-c1">10</span>
+
+<span class="pl-k">if</span> a <span class="pl-k">&gt;</span> <span class="pl-c1">5</span> <span class="pl-k">then</span>
+    <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>a&gt;5<span class="pl-pds">"</span></span>)
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> if else语法</span>
+<span class="pl-k">local</span> a <span class="pl-k">=</span> <span class="pl-c1">3</span>
+<span class="pl-k">if</span> a <span class="pl-k">&gt;</span> <span class="pl-c1">5</span> <span class="pl-k">then</span>
+    <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>a&gt;5<span class="pl-pds">"</span></span>)
+<span class="pl-k">else</span>
+    <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>a&lt;5<span class="pl-pds">"</span></span>)
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> if elseif语法</span>
+<span class="pl-k">local</span> a <span class="pl-k">=</span> <span class="pl-c1">10</span>
+<span class="pl-k">if</span> a <span class="pl-k">&gt;</span> <span class="pl-c1">8</span> <span class="pl-k">then</span>
+    <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>a&gt;8<span class="pl-pds">"</span></span>)
+<span class="pl-k">elseif</span> a <span class="pl-k">&gt;</span> <span class="pl-c1">5</span> <span class="pl-k">then</span>
+    <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>a&gt;5<span class="pl-pds">"</span></span>)
+<span class="pl-k">else</span>
+    <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>a&lt;5<span class="pl-pds">"</span></span>)
+<span class="pl-k">end</span></pre></div>
+</li>
+<li>
+<p>运算符</p>
+<div class="highlight highlight-source-shell"><pre>+	加法	A + B 输出结果 30
+-	减法	A - B 输出结果 -10
+<span class="pl-k">*</span>	乘法	A <span class="pl-k">*</span> B 输出结果 200
+/	除法	B / A 输出结果 2
+%	取余	B % A 输出结果 0
+^	乘幂	A^2 输出结果 100
+-	负号	-A 输出结果 -10
+//	整除运算符(<span class="pl-k">&gt;</span>=lua5.3)	5//2 输出结果 2
+
+
+==	等于，检测两个值是否相等，相等返回 true，否则返回 <span class="pl-c1">false</span>	(A == B) 为 false。
+<span class="pl-k">~</span>=	不等于，检测两个值是否相等，不相等返回 true，否则返回 <span class="pl-c1">false</span>	(A <span class="pl-k">~</span>= B) 为 true。
+<span class="pl-k">&gt;</span>	大于，如果左边的值大于右边的值，返回 true，否则返回 <span class="pl-c1">false</span>	(A <span class="pl-k">&gt;</span> B) 为 false。
+<span class="pl-k">&lt;</span>	小于，如果左边的值大于右边的值，返回 false，否则返回 <span class="pl-c1">true</span>	(A <span class="pl-k">&lt;</span> B) 为 true。
+<span class="pl-k">&gt;</span>=	大于等于，如果左边的值大于等于右边的值，返回 true，否则返回 <span class="pl-c1">false</span>	(A <span class="pl-k">&gt;</span>= B) 返回 false。
+<span class="pl-k">&lt;</span>=	小于等于， 如果左边的值小于等于右边的值，返回 true，否则返回 <span class="pl-c1">false</span>	(A <span class="pl-k">&lt;</span>= B) 返回 true。
+
+
+and	逻辑与操作符。 若 A 为 false，则返回 A，否则返回 B。	(A and B) 为 false。
+or	逻辑或操作符。 若 A 为 true，则返回 A，否则返回 B。	(A or B) 为 true。
+not	逻辑非操作符。与逻辑运算结果相反，如果条件为 true，逻辑非为 false。	not(A and B) 为 true。
+
+
+..	连接两个字符串	a..b ，其中 a 为 <span class="pl-s"><span class="pl-pds">"</span>Hello <span class="pl-pds">"</span></span> ， b 为 <span class="pl-s"><span class="pl-pds">"</span>World<span class="pl-pds">"</span></span>, 输出结果为 <span class="pl-s"><span class="pl-pds">"</span>Hello World<span class="pl-pds">"</span></span>。
+<span class="pl-c"><span class="pl-c">#</span>	一元运算符，返回字符串或表的长度。	#"Hello" 返回 5</span></pre></div>
+</li>
+<li>
+<p>字符串</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-k">local</span> a <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>这是字符串<span class="pl-pds">'</span></span>
+<span class="pl-k">local</span> b <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>这是字符串<span class="pl-pds">"</span></span>
+<span class="pl-k">local</span> c <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">[[</span>这是字符串<span class="pl-pds">]]</span></span>
+
+<span class="pl-k">local</span> myString <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Hello,世界!<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> 计算字符串的长度（字符个数）</span>
+<span class="pl-k">local</span> length1 <span class="pl-k">=</span> utf8.<span class="pl-c1">len</span>(myString)
+<span class="pl-c1">print</span>(length1) <span class="pl-c"><span class="pl-c">--</span> 输出 9</span>
+
+<span class="pl-c"><span class="pl-c">--</span> string.len 函数会导致结果不准确</span>
+<span class="pl-k">local</span> length2 <span class="pl-k">=</span> <span class="pl-c1">string.len</span>(myString)
+<span class="pl-c1">print</span>(length2) <span class="pl-c"><span class="pl-c">--</span> 输出 13</span></pre></div>
+</li>
+<li>
+<p>数组<a href="%E6%95%B0%E7%BB%84%E7%9A%84%E4%B8%8B%E6%A0%87%E4%BB%8E1%E5%BC%80%E5%A7%8B">table</a></p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-k">local</span> a <span class="pl-k">=</span> {<span class="pl-c1">10</span>, <span class="pl-c1">23</span>, <span class="pl-c1">121</span>, <span class="pl-c1">111</span>}
+<span class="pl-c"><span class="pl-c">--</span> for循环搭配ipairs直接遍历</span>
+<span class="pl-k">for</span> key, value <span class="pl-k">in</span> <span class="pl-c1">ipairs</span>(a) <span class="pl-k">do</span>
+    <span class="pl-c1">print</span>(key, value)
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> 使用#获取数组长度进行遍历</span>
+<span class="pl-k">for</span> i<span class="pl-k">=</span><span class="pl-c1">1</span>,<span class="pl-k">#</span>a <span class="pl-k">do</span>
+    <span class="pl-c1">print</span>(a[i])
+<span class="pl-k">end</span></pre></div>
+</li>
+<li>
+<p>函数</p>
+<div class="highlight highlight-source-lua"><pre>optional_function_scope <span class="pl-k">function</span> <span class="pl-en">function_name</span>( <span class="pl-smi">argument1</span>, <span class="pl-smi">argument2</span>, <span class="pl-smi">argument3</span>..., <span class="pl-smi">argumentn</span>)
+    function_body
+    <span class="pl-k">return</span> result_params_comma_separated
+<span class="pl-k">end</span>
+
+<span class="pl-c"><span class="pl-c">--</span> optional_function_scope: 该参数是可选的指定函数是全局函数还是局部函数，未设置该参数默认为全局函数，如果你需要设置函数为局部函数需要使用关键字 local。</span>
+
+<span class="pl-c"><span class="pl-c">--</span> function_name: 指定函数名称。</span>
+
+<span class="pl-c"><span class="pl-c">--</span> argument1, argument2, argument3..., argumentn: 函数参数，多个参数以逗号隔开，函数也可以不带参数。</span>
+
+<span class="pl-c"><span class="pl-c">--</span> function_body: 函数体，函数中需要执行的代码语句块。</span>
+
+<span class="pl-c"><span class="pl-c">--</span> result_params_comma_separated: 函数返回值，Lua语言函数可以返回多个值，每个值以逗号隔开。</span></pre></div>
+<div class="highlight highlight-source-lua"><pre><span class="pl-c"><span class="pl-c">--</span> 定义一个斐波拉契数列函数</span>
+<span class="pl-k">local</span> <span class="pl-k">function</span> <span class="pl-en">fibo</span>(<span class="pl-smi">n</span>)
+    <span class="pl-k">if</span> n <span class="pl-k">&lt;</span> <span class="pl-c1">2</span> <span class="pl-k">then</span>
+        <span class="pl-k">return</span> n
+    <span class="pl-k">else</span>
+        <span class="pl-k">return</span> <span class="pl-c1">fibo</span>(n <span class="pl-k">-</span> <span class="pl-c1">1</span>) <span class="pl-k">+</span> <span class="pl-c1">fibo</span>(n <span class="pl-k">-</span> <span class="pl-c1">2</span>)
+    <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+
+<span class="pl-k">for</span> i <span class="pl-k">=</span> <span class="pl-c1">1</span>, <span class="pl-c1">10</span>, <span class="pl-c1">1</span> <span class="pl-k">do</span>
+    <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>current: <span class="pl-pds">"</span></span><span class="pl-k">..</span>i<span class="pl-k">..</span><span class="pl-s"><span class="pl-pds">"</span> fibo value: <span class="pl-pds">"</span></span><span class="pl-k">..</span><span class="pl-c1">fibo</span>(i))
+<span class="pl-k">end</span></pre></div>
+<div class="highlight highlight-source-lua"><pre><span class="pl-c"><span class="pl-c">--</span> 可变参数使用...表示，...解析如下</span>
+<span class="pl-k">local</span> <span class="pl-k">function</span> <span class="pl-en">Args</span>(...)
+    <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>get args nums: <span class="pl-pds">"</span></span>, <span class="pl-k">#</span>{ <span class="pl-c1">...</span> })
+    <span class="pl-k">local</span> arg <span class="pl-k">=</span> { <span class="pl-c1">...</span> }
+    <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>get args nums: <span class="pl-pds">"</span></span>, <span class="pl-k">#</span>arg)
+
+    <span class="pl-k">for</span> index, value <span class="pl-k">in</span> <span class="pl-c1">ipairs</span>({ <span class="pl-c1">...</span> }) <span class="pl-k">do</span>
+        <span class="pl-c1">print</span>(index, value)
+    <span class="pl-k">end</span>
+<span class="pl-k">end</span>
+
+
+<span class="pl-c1">Args</span>(<span class="pl-c1">10</span>, <span class="pl-c1">12</span>, <span class="pl-c1">14</span>)</pre></div>
+</li>
+<li>
+<p>模块</p>
+<p>Lua 的模块是由变量、函数等已知元素组成的 table，因此创建一个模块很简单，就是创建一个 table，然后把需要导出的常量、函数放入其中，最后返回这个 table 就行。以下为创建自定义模块 module.lua，文件代码格式如下：</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-c"><span class="pl-c">--</span> 文件名为 module.lua</span>
+<span class="pl-c"><span class="pl-c">--</span> 定义一个名为 module 的模块</span>
+module <span class="pl-k">=</span> {}
+
+<span class="pl-c"><span class="pl-c">--</span> 定义一个常量</span>
+module.<span class="pl-smi">constant</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>这是一个常量<span class="pl-pds">"</span></span>
+
+<span class="pl-c"><span class="pl-c">--</span> 定义一个函数</span>
+<span class="pl-k">function</span> <span class="pl-en">module.func1</span>()
+    <span class="pl-c1">io.write</span>(<span class="pl-s"><span class="pl-pds">"</span>这是一个公有函数！<span class="pl-cce">\n</span><span class="pl-pds">"</span></span>)
+<span class="pl-k">end</span>
+
+<span class="pl-k">local</span> <span class="pl-k">function</span> <span class="pl-en">func2</span>()
+    <span class="pl-c1">print</span>(<span class="pl-s"><span class="pl-pds">"</span>这是一个私有函数！<span class="pl-pds">"</span></span>)
+<span class="pl-k">end</span>
+
+<span class="pl-k">function</span> <span class="pl-en">module.func3</span>()
+    <span class="pl-c1">func2</span>()
+<span class="pl-k">end</span>
+
+<span class="pl-k">return</span> module</pre></div>
+</li>
+<li>
+<p>文件</p>
+<div class="highlight highlight-source-lua"><pre><span class="pl-k">local</span> file <span class="pl-k">=</span> <span class="pl-c1">io.open</span>(<span class="pl-s"><span class="pl-pds">"</span>utils.lua<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>r<span class="pl-pds">"</span></span>)
+<span class="pl-k">if</span> file <span class="pl-k">~=</span> <span class="pl-c1">nil</span> <span class="pl-k">then</span>
+    <span class="pl-c"><span class="pl-c">--</span> 读取文件首行</span>
+    <span class="pl-c1">print</span>(file:<span class="pl-c1">read</span>())
+<span class="pl-k">end</span></pre></div>
+</li>
+</ol>
+
+      </article>
+    </div>
+  </div>
+  <div class="
+    side
+    Box
+    md
+    js-code-block-container
+    Box--responsive
+    container-right-nav
+    mt-5
+    d-none d-lg-block
+  " style="overflow: hidden;">
+    <div class="Box-body p-5">
+      <div class="container-right-nav-logo">
+        <a href="https://www.github.com/Bean-jun"><svg height="32" class="octicon octicon-mark-github anim-pulse"
+            viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+            </path>
+          </svg></a>
+      </div>
+    </div>
+    <div class="content-title-nav">
+      <ul>
+        <li><a href="#1. 环境安装">1. 环境安装</a></li><li><a href="#2. hello world">2. hello world</a></li><li><a href="#3. 注释">3. 注释</a></li><li><a href="#4. 关键词">4. 关键词</a></li><li><a href="#5. 变量">5. 变量</a></li><li><a href="#6. 数据类型">6. 数据类型</a></li><li><a href="#7. 循环">7. 循环</a></li><li><a href="#8. 流程控制">8. 流程控制</a></li><li><a href="#9. 运算符">9. 运算符</a></li><li><a href="#10. 字符串">10. 字符串</a></li><li><a href="#11. 数组[table](数组的下标从1开始)">11. 数组[table](数组的下标从1开始)</a></li><li><a href="#12. 函数">12. 函数</a></li><li><a href="#12. 模块">12. 模块</a></li><li><a href="#13. 文件">13. 文件</a></li>
+      </ul>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>
