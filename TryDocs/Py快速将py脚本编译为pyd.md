@@ -22,7 +22,7 @@
     ```python
     # setup.py
     import os
-    from distutils.core import setup
+    from setuptools import setup
 
     from Cython.Build import cythonize
 

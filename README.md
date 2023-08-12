@@ -358,7 +358,11 @@
  3. py to pyd
 
       👉 [Py快速将py脚本编译为pyd](TryDocs/Py快速将py脚本编译为pyd.md)👈
+ 
+ 4. py脚本打包效率对比
 
- 4. Lua基础
+      👉 [Py脚本打包效率对比](TryDocs/Py脚本打包效率对比.md)👈
+
+ 5. Lua基础
 
       👉 [Lua基础](TryDocs/Lua基础.md)👈
