@@ -104,7 +104,7 @@
 │   ├── Lua基础.md
 │   ├── Pyinstaller工具小tips.md
 │   ├── Py快速将py脚本编译为pyd.md
-│   └── Py脚本打包效率对比.md
+│   └── Py脚本打包后执行效率对比.md
 ├── WebFrameDocs
 │   ├── image
 │   ├── src
