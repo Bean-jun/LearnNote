@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+  <link rel="stylesheet" href="/.static/css/main.css">
+  <title>Flask-源码分析2.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <!-- <div class="
+  Box
+  md
+  js-code-block-container
+  Box--responsive
+  container-nav
+  container-left-nav
+  mt-5
+  d-none d-lg-block
+">
+    <div class="Box-body p-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <h1>填充...</h1>
+      </div>
+    </div>
+    <div>填充</div>
+  </div> -->
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div class="border rounded-3 to-home">
+          <a href="/">返回主页</a>
+        </div>
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+        <div class="article-size">
+          <span>1355字 | 3分钟</span>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h3><a id="user-content-一wsgi引入" class="anchor" aria-hidden="true" tabindex="-1" href="#一wsgi引入"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、wsgi引入</h3>
+<p><code>wsgi</code>通用web网关协议接口，是作为Python Web开发必须可少的标准接口，定义格式为:</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">def</span> <span class="pl-en">app</span>(<span class="pl-s1">environ</span>, <span class="pl-s1">start_response</span>):
+    <span class="pl-en">start_response</span>(<span class="pl-s1">status</span>, <span class="pl-s1">headers</span>)
+    <span class="pl-k">return</span> <span class="pl-s1">body</span></pre></div>
+<ol>
+<li>
+<p><a href="https://docs.python.org/zh-cn/3/library/wsgiref.html" rel="nofollow">官方引入标准库</a></p>
+</li>
+<li>
+<p>一个简单的Python web server</p>
+</li>
+</ol>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> <span class="pl-s1">wsgiref</span>.<span class="pl-s1">simple_server</span> <span class="pl-k">import</span> <span class="pl-s1">make_server</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">app</span>(<span class="pl-s1">environ</span>, <span class="pl-s1">start_response</span>):
+    <span class="pl-c"># print("current environ: ", environ)</span>
+    <span class="pl-s1">headers</span> <span class="pl-c1">=</span> [(<span class="pl-s">"Content-type"</span>, <span class="pl-s">"text/plain; charset=utf-8"</span>)]
+    <span class="pl-en">start_response</span>(<span class="pl-s">"200 OK"</span>, <span class="pl-s1">headers</span>)
+    <span class="pl-k">return</span> [<span class="pl-s">b"hello world"</span>]
+
+
+<span class="pl-k">with</span> <span class="pl-en">make_server</span>(<span class="pl-s">"0.0.0.0"</span>, <span class="pl-c1">8888</span>, <span class="pl-s1">app</span>) <span class="pl-k">as</span> <span class="pl-s1">server</span>:
+    <span class="pl-s1">server</span>.<span class="pl-en">serve_forever</span>()</pre></div>
+<p>![](images/简单Python Web Server.png)</p>
+<h3><a id="user-content-二了解werkzeug" class="anchor" aria-hidden="true" tabindex="-1" href="#二了解werkzeug"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、了解Werkzeug</h3>
+<p>Werkzeug作为一个全面的wsgi工具库，为flask框架的开发提供了极大的便利。在学习flask框架之前我们对此库做一些简单的了解，将对咱们理解flask来说将会事半功倍。</p>
+<ol>
+<li>
+<p>下载Werkzeug源码</p>
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/pallets/werkzeug.git</pre></div>
+</li>
+<li>
+<p>查看此项目的0.1版本(后续的说明均是基于0.1版本)</p>
+<div class="highlight highlight-source-shell"><pre>git checkout 0.1</pre></div>
+</li>
+<li>
+<p>目录树</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c1">.</span>
+├── contrib      <span class="pl-c"><span class="pl-c">#</span> session、限流器等</span>
+│   ├── __init__.py
+│   ├── iterio.py
+│   ├── jsrouting.py
+│   ├── kickstart.py
+│   ├── limiter.py
+│   └── sessions.py
+├── debug
+│   ├── __init__.py
+│   ├── render.py
+│   ├── shared
+│   └── util.py
+├── exceptions.py <span class="pl-c"><span class="pl-c">#</span> 异常</span>
+├── http.py      <span class="pl-c"><span class="pl-c">#</span> 常用HTTP工具</span>
+├── __init__.py
+├── local.py     <span class="pl-c"><span class="pl-c">#</span> 本地线程 类似threading.local</span>
+├── routing.py   <span class="pl-c"><span class="pl-c">#</span> 路由</span>
+├── script.py
+├── serving.py   <span class="pl-c"><span class="pl-c">#</span> HTTP Server</span>
+├── templates.py <span class="pl-c"><span class="pl-c">#</span> 模板</span>
+├── testapp.py
+├── test.py
+├── utils.py     <span class="pl-c"><span class="pl-c">#</span> 常用HTTP工具</span>
+└── wrappers.py  <span class="pl-c"><span class="pl-c">#</span> 对Request、Response进行封装</span>
+
+3 directories, 21 files</pre></div>
+</li>
+<li>
+<p>主要代码解析</p>
+</li>
+</ol>
+<ul>
+<li>local.py
+<ul>
+<li>参见我之前写的<a href="https://github.com/Bean-jun/LearnNote/blob/main/WebFrameDocs/Flask-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.html">Flask源码解析第一弹</a>
+</li>
+</ul>
+</li>
+<li>routing.py</li>
+<li>serving.py</li>
+<li>wrappers.py
+<ul>
+<li>BaseRequest    # 解析请求
+<ul>
+<li>args</li>
+<li>form</li>
+<li>data</li>
+<li>...</li>
+</ul>
+</li>
+<li>BaseResponse   # 请求响应
+<ul>
+<li>write</li>
+<li>set_cookie</li>
+<li>...</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3><a id="user-content-三尝试自定义短链接应用werkzeug官方demo" class="anchor" aria-hidden="true" tabindex="-1" href="#三尝试自定义短链接应用werkzeug官方demo"><span aria-hidden="true" class="octicon octicon-link"></span></a>三、尝试自定义短链接应用(Werkzeug官方Demo)</h3>
+<ol>
+<li>
+<p><a href="https://werkzeug.palletsprojects.com/en/2.2.x/tutorial/" rel="nofollow">教程地址</a></p>
+</li>
+<li>
+<p>源码解析</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-s">"""A simple URL shortener using Werkzeug and redis."""</span>
+<span class="pl-k">import</span> <span class="pl-s1">os</span>
+<span class="pl-k">from</span> <span class="pl-s1">urllib</span>.<span class="pl-s1">parse</span> <span class="pl-k">import</span> <span class="pl-s1">urlsplit</span>
+
+<span class="pl-k">import</span> <span class="pl-s1">redis</span>
+<span class="pl-k">from</span> <span class="pl-s1">jinja2</span> <span class="pl-k">import</span> <span class="pl-v">Environment</span>
+<span class="pl-k">from</span> <span class="pl-s1">jinja2</span> <span class="pl-k">import</span> <span class="pl-v">FileSystemLoader</span>
+<span class="pl-k">from</span> <span class="pl-s1">werkzeug</span>.<span class="pl-s1">exceptions</span> <span class="pl-k">import</span> <span class="pl-v">HTTPException</span>
+<span class="pl-k">from</span> <span class="pl-s1">werkzeug</span>.<span class="pl-s1">exceptions</span> <span class="pl-k">import</span> <span class="pl-v">NotFound</span>
+<span class="pl-k">from</span> <span class="pl-s1">werkzeug</span>.<span class="pl-s1">middleware</span>.<span class="pl-s1">shared_data</span> <span class="pl-k">import</span> <span class="pl-v">SharedDataMiddleware</span>
+<span class="pl-k">from</span> <span class="pl-s1">werkzeug</span>.<span class="pl-s1">routing</span> <span class="pl-k">import</span> <span class="pl-v">Map</span>
+<span class="pl-k">from</span> <span class="pl-s1">werkzeug</span>.<span class="pl-s1">routing</span> <span class="pl-k">import</span> <span class="pl-v">Rule</span>
+<span class="pl-k">from</span> <span class="pl-s1">werkzeug</span>.<span class="pl-s1">utils</span> <span class="pl-k">import</span> <span class="pl-s1">redirect</span>
+<span class="pl-k">from</span> <span class="pl-s1">werkzeug</span>.<span class="pl-s1">wrappers</span> <span class="pl-k">import</span> <span class="pl-v">Request</span>
+<span class="pl-k">from</span> <span class="pl-s1">werkzeug</span>.<span class="pl-s1">wrappers</span> <span class="pl-k">import</span> <span class="pl-v">Response</span>
+
+
+<span class="pl-k">def</span> <span class="pl-en">base36_encode</span>(<span class="pl-s1">number</span>):
+    <span class="pl-k">assert</span> <span class="pl-s1">number</span> <span class="pl-c1">&gt;=</span> <span class="pl-c1">0</span>, <span class="pl-s">"positive integer required"</span>
+    <span class="pl-k">if</span> <span class="pl-s1">number</span> <span class="pl-c1">==</span> <span class="pl-c1">0</span>:
+        <span class="pl-k">return</span> <span class="pl-s">"0"</span>
+    <span class="pl-s1">base36</span> <span class="pl-c1">=</span> []
+    <span class="pl-k">while</span> <span class="pl-s1">number</span> <span class="pl-c1">!=</span> <span class="pl-c1">0</span>:
+        <span class="pl-s1">number</span>, <span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-en">divmod</span>(<span class="pl-s1">number</span>, <span class="pl-c1">36</span>)
+        <span class="pl-s1">base36</span>.<span class="pl-en">append</span>(<span class="pl-s">"0123456789abcdefghijklmnopqrstuvwxyz"</span>[<span class="pl-s1">i</span>])
+    <span class="pl-k">return</span> <span class="pl-s">""</span>.<span class="pl-en">join</span>(<span class="pl-en">reversed</span>(<span class="pl-s1">base36</span>))
+
+
+<span class="pl-k">def</span> <span class="pl-en">is_valid_url</span>(<span class="pl-s1">url</span>):
+    <span class="pl-s1">parts</span> <span class="pl-c1">=</span> <span class="pl-en">urlsplit</span>(<span class="pl-s1">url</span>)
+    <span class="pl-k">return</span> <span class="pl-s1">parts</span>.<span class="pl-s1">scheme</span> <span class="pl-c1">in</span> (<span class="pl-s">"http"</span>, <span class="pl-s">"https"</span>)
+
+
+<span class="pl-k">def</span> <span class="pl-en">get_hostname</span>(<span class="pl-s1">url</span>):
+    <span class="pl-k">return</span> <span class="pl-en">urlsplit</span>(<span class="pl-s1">url</span>).<span class="pl-s1">netloc</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">Shortly</span>:
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">config</span>):
+        <span class="pl-c"># APP初始化，使用Redis对短链接进行存储</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">redis</span> <span class="pl-c1">=</span> <span class="pl-s1">redis</span>.<span class="pl-v">Redis</span>(
+            <span class="pl-s1">config</span>[<span class="pl-s">"redis_host"</span>], <span class="pl-s1">config</span>[<span class="pl-s">"redis_port"</span>], <span class="pl-s1">decode_responses</span><span class="pl-c1">=</span><span class="pl-c1">True</span>
+        )
+        <span class="pl-c"># 添加jinja模板</span>
+        <span class="pl-s1">template_path</span> <span class="pl-c1">=</span> <span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">join</span>(<span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">dirname</span>(<span class="pl-s1">__file__</span>), <span class="pl-s">"templates"</span>)
+        <span class="pl-s1">self</span>.<span class="pl-s1">jinja_env</span> <span class="pl-c1">=</span> <span class="pl-v">Environment</span>(
+            <span class="pl-s1">loader</span><span class="pl-c1">=</span><span class="pl-v">FileSystemLoader</span>(<span class="pl-s1">template_path</span>), <span class="pl-s1">autoescape</span><span class="pl-c1">=</span><span class="pl-c1">True</span>
+        )
+        <span class="pl-s1">self</span>.<span class="pl-s1">jinja_env</span>.<span class="pl-s1">filters</span>[<span class="pl-s">"hostname"</span>] <span class="pl-c1">=</span> <span class="pl-s1">get_hostname</span>
+
+        <span class="pl-c"># 配置Url请求</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">url_map</span> <span class="pl-c1">=</span> <span class="pl-v">Map</span>(
+            [
+                <span class="pl-v">Rule</span>(<span class="pl-s">"/"</span>, <span class="pl-s1">endpoint</span><span class="pl-c1">=</span><span class="pl-s">"new_url"</span>),
+                <span class="pl-v">Rule</span>(<span class="pl-s">"/&lt;short_id&gt;"</span>, <span class="pl-s1">endpoint</span><span class="pl-c1">=</span><span class="pl-s">"follow_short_link"</span>),
+                <span class="pl-v">Rule</span>(<span class="pl-s">"/&lt;short_id&gt;+"</span>, <span class="pl-s1">endpoint</span><span class="pl-c1">=</span><span class="pl-s">"short_link_details"</span>),
+            ]
+        )
+
+    <span class="pl-k">def</span> <span class="pl-en">on_new_url</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-s1">error</span> <span class="pl-c1">=</span> <span class="pl-c1">None</span>
+        <span class="pl-s1">url</span> <span class="pl-c1">=</span> <span class="pl-s">""</span>
+        <span class="pl-k">if</span> <span class="pl-s1">request</span>.<span class="pl-s1">method</span> <span class="pl-c1">==</span> <span class="pl-s">"POST"</span>:
+            <span class="pl-s1">url</span> <span class="pl-c1">=</span> <span class="pl-s1">request</span>.<span class="pl-s1">form</span>[<span class="pl-s">"url"</span>]
+            <span class="pl-k">if</span> <span class="pl-c1">not</span> <span class="pl-en">is_valid_url</span>(<span class="pl-s1">url</span>):
+                <span class="pl-s1">error</span> <span class="pl-c1">=</span> <span class="pl-s">"Please enter a valid URL"</span>
+            <span class="pl-k">else</span>:
+                <span class="pl-s1">short_id</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">insert_url</span>(<span class="pl-s1">url</span>)
+                <span class="pl-k">return</span> <span class="pl-en">redirect</span>(<span class="pl-s">f"/<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">short_id</span><span class="pl-kos">}</span></span>+"</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">render_template</span>(<span class="pl-s">"new_url.html"</span>, <span class="pl-s1">error</span><span class="pl-c1">=</span><span class="pl-s1">error</span>, <span class="pl-s1">url</span><span class="pl-c1">=</span><span class="pl-s1">url</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">on_follow_short_link</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">short_id</span>):
+        <span class="pl-s1">link_target</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">redis</span>.<span class="pl-en">get</span>(<span class="pl-s">f"url-target:<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">short_id</span><span class="pl-kos">}</span></span>"</span>)
+        <span class="pl-k">if</span> <span class="pl-s1">link_target</span> <span class="pl-c1">is</span> <span class="pl-c1">None</span>:
+            <span class="pl-k">raise</span> <span class="pl-v">NotFound</span>()
+        <span class="pl-s1">self</span>.<span class="pl-s1">redis</span>.<span class="pl-en">incr</span>(<span class="pl-s">f"click-count:<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">short_id</span><span class="pl-kos">}</span></span>"</span>)
+        <span class="pl-k">return</span> <span class="pl-en">redirect</span>(<span class="pl-s1">link_target</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">on_short_link_details</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>, <span class="pl-s1">short_id</span>):
+        <span class="pl-s1">link_target</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">redis</span>.<span class="pl-en">get</span>(<span class="pl-s">f"url-target:<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">short_id</span><span class="pl-kos">}</span></span>"</span>)
+        <span class="pl-k">if</span> <span class="pl-s1">link_target</span> <span class="pl-c1">is</span> <span class="pl-c1">None</span>:
+            <span class="pl-k">raise</span> <span class="pl-v">NotFound</span>()
+        <span class="pl-s1">click_count</span> <span class="pl-c1">=</span> <span class="pl-en">int</span>(<span class="pl-s1">self</span>.<span class="pl-s1">redis</span>.<span class="pl-en">get</span>(<span class="pl-s">f"click-count:<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">short_id</span><span class="pl-kos">}</span></span>"</span>) <span class="pl-c1">or</span> <span class="pl-c1">0</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">render_template</span>(
+            <span class="pl-s">"short_link_details.html"</span>,
+            <span class="pl-s1">link_target</span><span class="pl-c1">=</span><span class="pl-s1">link_target</span>,
+            <span class="pl-s1">short_id</span><span class="pl-c1">=</span><span class="pl-s1">short_id</span>,
+            <span class="pl-s1">click_count</span><span class="pl-c1">=</span><span class="pl-s1">click_count</span>,
+        )
+
+    <span class="pl-k">def</span> <span class="pl-en">error_404</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">response</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">render_template</span>(<span class="pl-s">"404.html"</span>)
+        <span class="pl-s1">response</span>.<span class="pl-s1">status_code</span> <span class="pl-c1">=</span> <span class="pl-c1">404</span>
+        <span class="pl-k">return</span> <span class="pl-s1">response</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">insert_url</span>(<span class="pl-s1">self</span>, <span class="pl-s1">url</span>):
+        <span class="pl-s1">short_id</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">redis</span>.<span class="pl-en">get</span>(<span class="pl-s">f"reverse-url:<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">url</span><span class="pl-kos">}</span></span>"</span>)
+        <span class="pl-k">if</span> <span class="pl-s1">short_id</span> <span class="pl-c1">is</span> <span class="pl-c1">not</span> <span class="pl-c1">None</span>:
+            <span class="pl-k">return</span> <span class="pl-s1">short_id</span>
+        <span class="pl-s1">url_num</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">redis</span>.<span class="pl-en">incr</span>(<span class="pl-s">"last-url-id"</span>)
+        <span class="pl-s1">short_id</span> <span class="pl-c1">=</span> <span class="pl-en">base36_encode</span>(<span class="pl-s1">url_num</span>)
+        <span class="pl-s1">self</span>.<span class="pl-s1">redis</span>.<span class="pl-en">set</span>(<span class="pl-s">f"url-target:<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">short_id</span><span class="pl-kos">}</span></span>"</span>, <span class="pl-s1">url</span>)
+        <span class="pl-s1">self</span>.<span class="pl-s1">redis</span>.<span class="pl-en">set</span>(<span class="pl-s">f"reverse-url:<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">url</span><span class="pl-kos">}</span></span>"</span>, <span class="pl-s1">short_id</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">short_id</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">render_template</span>(<span class="pl-s1">self</span>, <span class="pl-s1">template_name</span>, <span class="pl-c1">**</span><span class="pl-s1">context</span>):
+        <span class="pl-s1">t</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">jinja_env</span>.<span class="pl-en">get_template</span>(<span class="pl-s1">template_name</span>)
+        <span class="pl-k">return</span> <span class="pl-v">Response</span>(<span class="pl-s1">t</span>.<span class="pl-en">render</span>(<span class="pl-s1">context</span>), <span class="pl-s1">mimetype</span><span class="pl-c1">=</span><span class="pl-s">"text/html"</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">dispatch_request</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-s1">adapter</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">url_map</span>.<span class="pl-en">bind_to_environ</span>(<span class="pl-s1">request</span>.<span class="pl-s1">environ</span>)
+        <span class="pl-k">try</span>:
+            <span class="pl-c"># 匹配功能函数进行调用</span>
+            <span class="pl-s1">endpoint</span>, <span class="pl-s1">values</span> <span class="pl-c1">=</span> <span class="pl-s1">adapter</span>.<span class="pl-en">match</span>()
+            <span class="pl-c"># 反射函数并执行，由于没有使用local对象，使得对应视图函数类似Django的写法，需要传递Request对象</span>
+            <span class="pl-k">return</span> <span class="pl-en">getattr</span>(<span class="pl-s1">self</span>, <span class="pl-s">f"on_<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">endpoint</span><span class="pl-kos">}</span></span>"</span>)(<span class="pl-s1">request</span>, <span class="pl-c1">**</span><span class="pl-s1">values</span>)
+        <span class="pl-k">except</span> <span class="pl-v">NotFound</span>:
+            <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">error_404</span>()
+        <span class="pl-k">except</span> <span class="pl-v">HTTPException</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+            <span class="pl-k">return</span> <span class="pl-s1">e</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">wsgi_app</span>(<span class="pl-s1">self</span>, <span class="pl-s1">environ</span>, <span class="pl-s1">start_response</span>):
+        <span class="pl-c"># 封装Request</span>
+        <span class="pl-s1">request</span> <span class="pl-c1">=</span> <span class="pl-v">Request</span>(<span class="pl-s1">environ</span>)
+        <span class="pl-c"># 对请求进行分发</span>
+        <span class="pl-s1">response</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">dispatch_request</span>(<span class="pl-s1">request</span>)
+        <span class="pl-c"># 封装response并响应</span>
+        <span class="pl-k">return</span> <span class="pl-en">response</span>(<span class="pl-s1">environ</span>, <span class="pl-s1">start_response</span>)
+
+    <span class="pl-c"># run_simple执行流程到达execute时，会调用当前对象__call__方法</span>
+    <span class="pl-k">def</span> <span class="pl-en">__call__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">environ</span>, <span class="pl-s1">start_response</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">wsgi_app</span>(<span class="pl-s1">environ</span>, <span class="pl-s1">start_response</span>)
+
+
+<span class="pl-k">def</span> <span class="pl-en">create_app</span>(<span class="pl-s1">redis_host</span><span class="pl-c1">=</span><span class="pl-s">"localhost"</span>, <span class="pl-s1">redis_port</span><span class="pl-c1">=</span><span class="pl-c1">6379</span>, <span class="pl-s1">with_static</span><span class="pl-c1">=</span><span class="pl-c1">True</span>):
+    <span class="pl-c"># 创建一个Shortly应用</span>
+    <span class="pl-s1">app</span> <span class="pl-c1">=</span> <span class="pl-v">Shortly</span>({<span class="pl-s">"redis_host"</span>: <span class="pl-s1">redis_host</span>, <span class="pl-s">"redis_port"</span>: <span class="pl-s1">redis_port</span>})
+    <span class="pl-k">if</span> <span class="pl-s1">with_static</span>:
+        <span class="pl-s1">app</span>.<span class="pl-s1">wsgi_app</span> <span class="pl-c1">=</span> <span class="pl-v">SharedDataMiddleware</span>(
+            <span class="pl-s1">app</span>.<span class="pl-s1">wsgi_app</span>, {<span class="pl-s">"/static"</span>: <span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">join</span>(<span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">dirname</span>(<span class="pl-s1">__file__</span>), <span class="pl-s">"static"</span>)}
+        )
+    <span class="pl-k">return</span> <span class="pl-s1">app</span>
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-k">from</span> <span class="pl-s1">werkzeug</span>.<span class="pl-s1">serving</span> <span class="pl-k">import</span> <span class="pl-s1">run_simple</span>
+
+    <span class="pl-s1">app</span> <span class="pl-c1">=</span> <span class="pl-en">create_app</span>()
+    <span class="pl-c"># 将应用丢入run_simple中执行</span>
+    <span class="pl-en">run_simple</span>(<span class="pl-s">"127.0.0.1"</span>, <span class="pl-c1">5000</span>, <span class="pl-s1">app</span>, <span class="pl-s1">use_debugger</span><span class="pl-c1">=</span><span class="pl-c1">True</span>, <span class="pl-s1">use_reloader</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+
+    <span class="pl-c"># run_simple执行流程</span>
+    <span class="pl-c"># run_simple --&gt; make_server </span>
+    <span class="pl-c"># --&gt; BaseWSGIServer(绑定handler(WSGIRequestHandler)) </span>
+    <span class="pl-c"># --&gt; BaseWSGIServer.serve_forever</span>
+    <span class="pl-c"># --&gt; HTTPServer.serve_forever --&gt; _handle_request_noblock </span>
+    <span class="pl-c"># --&gt; process_request --&gt; finish_request</span>
+    <span class="pl-c"># --&gt; RequestHandlerClass(request, client_address, self)(绑定server到handler上[self])</span>
+    <span class="pl-c"># --&gt; WSGIRequestHandler.handle</span>
+    <span class="pl-c"># --&gt; BaseHTTPRequestHandler.handle</span>
+    <span class="pl-c"># --&gt; WSGIRequestHandler.handle_one_request</span>
+    <span class="pl-c"># --&gt; WSGIRequestHandler.run_wsgi()</span>
+    <span class="pl-c"># --&gt; WSGIRequestHandler.execute(self.server.app)</span>
+    <span class="pl-c"># --&gt; execute执行 内部[application_iter = app(environ, start_response)]</span></pre></div>
+</li>
+</ol>
+<h3><a id="user-content-四flask官方demo" class="anchor" aria-hidden="true" tabindex="-1" href="#四flask官方demo"><span aria-hidden="true" class="octicon octicon-link"></span></a>四、Flask官方demo</h3>
+<ol>
+<li>
+<p>下载flask源码</p>
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/pallets/flask.git</pre></div>
+</li>
+<li>
+<p>查看此项目的0.1版本(后续的说明均是基于0.1版本)</p>
+<div class="highlight highlight-source-shell"><pre>git checkout 0.1</pre></div>
+</li>
+<li>
+<p>目录树</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c1">.</span>
+├── artwork
+├── docs
+├── examples
+│   ├── flaskr
+│   └── minitwit
+├── flask.py
+├── LICENSE
+├── Makefile
+├── README
+├── setup.py
+├── tests
+│   ├── flask_tests.py
+│   ├── static
+│   └── templates
+└── website
+    ├── index.html
+    └── logo.png</pre></div>
+</li>
+<li>
+<p>0.1 源码(部分)</p>
+</li>
+</ol>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">class</span> <span class="pl-v">Flask</span>(<span class="pl-s1">object</span>):
+    <span class="pl-s">"""The flask object implements a WSGI application and acts as the central</span>
+<span class="pl-s">    object.  It is passed the name of the module or package of the</span>
+<span class="pl-s">    application.  Once it is created it will act as a central registry for</span>
+<span class="pl-s">    the view functions, the URL rules, template configuration and much more.</span>
+<span class="pl-s"></span>
+<span class="pl-s">    The name of the package is used to resolve resources from inside the</span>
+<span class="pl-s">    package or the folder the module is contained in depending on if the</span>
+<span class="pl-s">    package parameter resolves to an actual python package (a folder with</span>
+<span class="pl-s">    an `__init__.py` file inside) or a standard module (just a `.py` file).</span>
+<span class="pl-s"></span>
+<span class="pl-s">    For more information about resource loading, see :func:`open_resource`.</span>
+<span class="pl-s"></span>
+<span class="pl-s">    Usually you create a :class:`Flask` instance in your main module or</span>
+<span class="pl-s">    in the `__init__.py` file of your package like this::</span>
+<span class="pl-s"></span>
+<span class="pl-s">        from flask import Flask</span>
+<span class="pl-s">        app = Flask(__name__)</span>
+<span class="pl-s">    """</span>
+
+    <span class="pl-c">#: the class that is used for request objects.  See :class:`~flask.request`</span>
+    <span class="pl-c">#: for more information.</span>
+    <span class="pl-s1">request_class</span> <span class="pl-c1">=</span> <span class="pl-v">Request</span>
+
+    <span class="pl-c">#: the class that is used for response objects.  See</span>
+    <span class="pl-c">#: :class:`~flask.Response` for more information.</span>
+    <span class="pl-s1">response_class</span> <span class="pl-c1">=</span> <span class="pl-v">Response</span>
+
+    <span class="pl-c">#: path for the static files.  If you don't want to use static files</span>
+    <span class="pl-c">#: you can set this value to `None` in which case no URL rule is added</span>
+    <span class="pl-c">#: and the development server will no longer serve any static files.</span>
+    <span class="pl-s1">static_path</span> <span class="pl-c1">=</span> <span class="pl-s">'/static'</span>
+
+    <span class="pl-c">#: if a secret key is set, cryptographic components can use this to</span>
+    <span class="pl-c">#: sign cookies and other things.  Set this to a complex random value</span>
+    <span class="pl-c">#: when you want to use the secure cookie for instance.</span>
+    <span class="pl-s1">secret_key</span> <span class="pl-c1">=</span> <span class="pl-c1">None</span>
+
+    <span class="pl-c">#: The secure cookie uses this for the name of the session cookie</span>
+    <span class="pl-s1">session_cookie_name</span> <span class="pl-c1">=</span> <span class="pl-s">'session'</span>
+
+    <span class="pl-c">#: options that are passed directly to the Jinja2 environment</span>
+    <span class="pl-s1">jinja_options</span> <span class="pl-c1">=</span> <span class="pl-en">dict</span>(
+        <span class="pl-s1">autoescape</span><span class="pl-c1">=</span><span class="pl-c1">True</span>,
+        <span class="pl-s1">extensions</span><span class="pl-c1">=</span>[<span class="pl-s">'jinja2.ext.autoescape'</span>, <span class="pl-s">'jinja2.ext.with_'</span>]
+    )
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">package_name</span>):
+        <span class="pl-c">#: the debug flag.  Set this to `True` to enable debugging of</span>
+        <span class="pl-c">#: the application.  In debug mode the debugger will kick in</span>
+        <span class="pl-c">#: when an unhandled exception ocurrs and the integrated server</span>
+        <span class="pl-c">#: will automatically reload the application if changes in the</span>
+        <span class="pl-c">#: code are detected.</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">debug</span> <span class="pl-c1">=</span> <span class="pl-c1">False</span>
+
+        <span class="pl-c">#: the name of the package or module.  Do not change this once</span>
+        <span class="pl-c">#: it was set by the constructor.</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">package_name</span> <span class="pl-c1">=</span> <span class="pl-s1">package_name</span>
+
+        <span class="pl-c">#: where is the app root located?</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">root_path</span> <span class="pl-c1">=</span> <span class="pl-en">_get_package_path</span>(<span class="pl-s1">self</span>.<span class="pl-s1">package_name</span>)
+
+        <span class="pl-c">#: a dictionary of all view functions registered.  The keys will</span>
+        <span class="pl-c">#: be function names which are also used to generate URLs and</span>
+        <span class="pl-c">#: the values are the function objects themselves.</span>
+        <span class="pl-c">#: to register a view function, use the :meth:`route` decorator.</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">view_functions</span> <span class="pl-c1">=</span> {}
+
+        <span class="pl-c">#: a dictionary of all registered error handlers.  The key is</span>
+        <span class="pl-c">#: be the error code as integer, the value the function that</span>
+        <span class="pl-c">#: should handle that error.</span>
+        <span class="pl-c">#: To register a error handler, use the :meth:`errorhandler`</span>
+        <span class="pl-c">#: decorator.</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">error_handlers</span> <span class="pl-c1">=</span> {}
+
+        <span class="pl-c">#: a list of functions that should be called at the beginning</span>
+        <span class="pl-c">#: of the request before request dispatching kicks in.  This</span>
+        <span class="pl-c">#: can for example be used to open database connections or</span>
+        <span class="pl-c">#: getting hold of the currently logged in user.</span>
+        <span class="pl-c">#: To register a function here, use the :meth:`before_request`</span>
+        <span class="pl-c">#: decorator.</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">before_request_funcs</span> <span class="pl-c1">=</span> []
+
+        <span class="pl-c">#: a list of functions that are called at the end of the</span>
+        <span class="pl-c">#: request.  Tha function is passed the current response</span>
+        <span class="pl-c">#: object and modify it in place or replace it.</span>
+        <span class="pl-c">#: To register a function here use the :meth:`after_request`</span>
+        <span class="pl-c">#: decorator.</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">after_request_funcs</span> <span class="pl-c1">=</span> []
+
+        <span class="pl-c">#: a list of functions that are called without arguments</span>
+        <span class="pl-c">#: to populate the template context.  Each returns a dictionary</span>
+        <span class="pl-c">#: that the template context is updated with.</span>
+        <span class="pl-c">#: To register a function here, use the :meth:`context_processor`</span>
+        <span class="pl-c">#: decorator.</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">template_context_processors</span> <span class="pl-c1">=</span> [<span class="pl-s1">_default_template_ctx_processor</span>]
+
+        <span class="pl-s1">self</span>.<span class="pl-s1">url_map</span> <span class="pl-c1">=</span> <span class="pl-v">Map</span>()
+
+        <span class="pl-k">if</span> <span class="pl-s1">self</span>.<span class="pl-s1">static_path</span> <span class="pl-c1">is</span> <span class="pl-c1">not</span> <span class="pl-c1">None</span>:
+            <span class="pl-s1">self</span>.<span class="pl-s1">url_map</span>.<span class="pl-en">add</span>(<span class="pl-v">Rule</span>(<span class="pl-s1">self</span>.<span class="pl-s1">static_path</span> <span class="pl-c1">+</span> <span class="pl-s">'/&lt;filename&gt;'</span>,
+                                  <span class="pl-s1">build_only</span><span class="pl-c1">=</span><span class="pl-c1">True</span>, <span class="pl-s1">endpoint</span><span class="pl-c1">=</span><span class="pl-s">'static'</span>))
+            <span class="pl-k">if</span> <span class="pl-s1">pkg_resources</span> <span class="pl-c1">is</span> <span class="pl-c1">not</span> <span class="pl-c1">None</span>:
+                <span class="pl-s1">target</span> <span class="pl-c1">=</span> (<span class="pl-s1">self</span>.<span class="pl-s1">package_name</span>, <span class="pl-s">'static'</span>)
+            <span class="pl-k">else</span>:
+                <span class="pl-s1">target</span> <span class="pl-c1">=</span> <span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">join</span>(<span class="pl-s1">self</span>.<span class="pl-s1">root_path</span>, <span class="pl-s">'static'</span>)
+            <span class="pl-s1">self</span>.<span class="pl-s1">wsgi_app</span> <span class="pl-c1">=</span> <span class="pl-v">SharedDataMiddleware</span>(<span class="pl-s1">self</span>.<span class="pl-s1">wsgi_app</span>, {
+                <span class="pl-s1">self</span>.<span class="pl-s1">static_path</span>: <span class="pl-s1">target</span>
+            })
+
+        <span class="pl-c">#: the Jinja2 environment.  It is created from the</span>
+        <span class="pl-c">#: :attr:`jinja_options` and the loader that is returned</span>
+        <span class="pl-c">#: by the :meth:`create_jinja_loader` function.</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">jinja_env</span> <span class="pl-c1">=</span> <span class="pl-v">Environment</span>(<span class="pl-s1">loader</span><span class="pl-c1">=</span><span class="pl-s1">self</span>.<span class="pl-en">create_jinja_loader</span>(),
+                                     <span class="pl-c1">**</span><span class="pl-s1">self</span>.<span class="pl-s1">jinja_options</span>)
+        <span class="pl-s1">self</span>.<span class="pl-s1">jinja_env</span>.<span class="pl-s1">globals</span>.<span class="pl-en">update</span>(
+            <span class="pl-s1">url_for</span><span class="pl-c1">=</span><span class="pl-s1">url_for</span>,
+            <span class="pl-s1">get_flashed_messages</span><span class="pl-c1">=</span><span class="pl-s1">get_flashed_messages</span>
+        )
+
+    <span class="pl-k">def</span> <span class="pl-en">create_jinja_loader</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s">"""Creates the Jinja loader.  By default just a package loader for</span>
+<span class="pl-s">        the configured package is returned that looks up templates in the</span>
+<span class="pl-s">        `templates` folder.  To add other loaders it's possible to</span>
+<span class="pl-s">        override this method.</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">if</span> <span class="pl-s1">pkg_resources</span> <span class="pl-c1">is</span> <span class="pl-c1">None</span>:
+            <span class="pl-k">return</span> <span class="pl-v">FileSystemLoader</span>(<span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">join</span>(<span class="pl-s1">self</span>.<span class="pl-s1">root_path</span>, <span class="pl-s">'templates'</span>))
+        <span class="pl-k">return</span> <span class="pl-v">PackageLoader</span>(<span class="pl-s1">self</span>.<span class="pl-s1">package_name</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">update_template_context</span>(<span class="pl-s1">self</span>, <span class="pl-s1">context</span>):
+        <span class="pl-s">"""Update the template context with some commonly used variables.</span>
+<span class="pl-s">        This injects request, session and g into the template context.</span>
+<span class="pl-s"></span>
+<span class="pl-s">        :param context: the context as a dictionary that is updated in place</span>
+<span class="pl-s">                        to add extra variables.</span>
+<span class="pl-s">        """</span>
+        <span class="pl-s1">reqctx</span> <span class="pl-c1">=</span> <span class="pl-s1">_request_ctx_stack</span>.<span class="pl-s1">top</span>
+        <span class="pl-k">for</span> <span class="pl-s1">func</span> <span class="pl-c1">in</span> <span class="pl-s1">self</span>.<span class="pl-s1">template_context_processors</span>:
+            <span class="pl-s1">context</span>.<span class="pl-en">update</span>(<span class="pl-en">func</span>())
+
+    <span class="pl-k">def</span> <span class="pl-en">run</span>(<span class="pl-s1">self</span>, <span class="pl-s1">host</span><span class="pl-c1">=</span><span class="pl-s">'localhost'</span>, <span class="pl-s1">port</span><span class="pl-c1">=</span><span class="pl-c1">5000</span>, <span class="pl-c1">**</span><span class="pl-s1">options</span>):
+        <span class="pl-s">"""Runs the application on a local development server.  If the</span>
+<span class="pl-s">        :attr:`debug` flag is set the server will automatically reload</span>
+<span class="pl-s">        for code changes and show a debugger in case an exception happened.</span>
+<span class="pl-s"></span>
+<span class="pl-s">        :param host: the hostname to listen on.  set this to ``'0.0.0.0'``</span>
+<span class="pl-s">                     to have the server available externally as well.</span>
+<span class="pl-s">        :param port: the port of the webserver</span>
+<span class="pl-s">        :param options: the options to be forwarded to the underlying</span>
+<span class="pl-s">                        Werkzeug server.  See :func:`werkzeug.run_simple`</span>
+<span class="pl-s">                        for more information.</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">from</span> <span class="pl-s1">werkzeug</span> <span class="pl-k">import</span> <span class="pl-s1">run_simple</span>
+        <span class="pl-k">if</span> <span class="pl-s">'debug'</span> <span class="pl-c1">in</span> <span class="pl-s1">options</span>:
+            <span class="pl-s1">self</span>.<span class="pl-s1">debug</span> <span class="pl-c1">=</span> <span class="pl-s1">options</span>.<span class="pl-en">pop</span>(<span class="pl-s">'debug'</span>)
+        <span class="pl-s1">options</span>.<span class="pl-en">setdefault</span>(<span class="pl-s">'use_reloader'</span>, <span class="pl-s1">self</span>.<span class="pl-s1">debug</span>)
+        <span class="pl-s1">options</span>.<span class="pl-en">setdefault</span>(<span class="pl-s">'use_debugger'</span>, <span class="pl-s1">self</span>.<span class="pl-s1">debug</span>)
+        <span class="pl-k">return</span> <span class="pl-en">run_simple</span>(<span class="pl-s1">host</span>, <span class="pl-s1">port</span>, <span class="pl-s1">self</span>, <span class="pl-c1">**</span><span class="pl-s1">options</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">test_client</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s">"""Creates a test client for this application.  For information</span>
+<span class="pl-s">        about unit testing head over to :ref:`testing`.</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">from</span> <span class="pl-s1">werkzeug</span> <span class="pl-k">import</span> <span class="pl-v">Client</span>
+        <span class="pl-k">return</span> <span class="pl-v">Client</span>(<span class="pl-s1">self</span>, <span class="pl-s1">self</span>.<span class="pl-s1">response_class</span>, <span class="pl-s1">use_cookies</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">open_resource</span>(<span class="pl-s1">self</span>, <span class="pl-s1">resource</span>):
+        <span class="pl-s">"""Opens a resource from the application's resource folder.  To see</span>
+<span class="pl-s">        how this works, consider the following folder structure::</span>
+<span class="pl-s"></span>
+<span class="pl-s">            /myapplication.py</span>
+<span class="pl-s">            /schemal.sql</span>
+<span class="pl-s">            /static</span>
+<span class="pl-s">                /style.css</span>
+<span class="pl-s">            /template</span>
+<span class="pl-s">                /layout.html</span>
+<span class="pl-s">                /index.html</span>
+<span class="pl-s"></span>
+<span class="pl-s">        If you want to open the `schema.sql` file you would do the</span>
+<span class="pl-s">        following::</span>
+<span class="pl-s"></span>
+<span class="pl-s">            with app.open_resource('schema.sql') as f:</span>
+<span class="pl-s">                contents = f.read()</span>
+<span class="pl-s">                do_something_with(contents)</span>
+<span class="pl-s"></span>
+<span class="pl-s">        :param resource: the name of the resource.  To access resources within</span>
+<span class="pl-s">                         subfolders use forward slashes as separator.</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">if</span> <span class="pl-s1">pkg_resources</span> <span class="pl-c1">is</span> <span class="pl-c1">None</span>:
+            <span class="pl-k">return</span> <span class="pl-en">open</span>(<span class="pl-s1">os</span>.<span class="pl-s1">path</span>.<span class="pl-en">join</span>(<span class="pl-s1">self</span>.<span class="pl-s1">root_path</span>, <span class="pl-s1">resource</span>), <span class="pl-s">'rb'</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">pkg_resources</span>.<span class="pl-en">resource_stream</span>(<span class="pl-s1">self</span>.<span class="pl-s1">package_name</span>, <span class="pl-s1">resource</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">open_session</span>(<span class="pl-s1">self</span>, <span class="pl-s1">request</span>):
+        <span class="pl-s">"""Creates or opens a new session.  Default implementation stores all</span>
+<span class="pl-s">        session data in a signed cookie.  This requires that the</span>
+<span class="pl-s">        :attr:`secret_key` is set.</span>
+<span class="pl-s"></span>
+<span class="pl-s">        :param request: an instance of :attr:`request_class`.</span>
+<span class="pl-s">        """</span>
+        <span class="pl-s1">key</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">secret_key</span>
+        <span class="pl-k">if</span> <span class="pl-s1">key</span> <span class="pl-c1">is</span> <span class="pl-c1">not</span> <span class="pl-c1">None</span>:
+            <span class="pl-k">return</span> <span class="pl-v">SecureCookie</span>.<span class="pl-en">load_cookie</span>(<span class="pl-s1">request</span>, <span class="pl-s1">self</span>.<span class="pl-s1">session_cookie_name</span>,
+                                            <span class="pl-s1">secret_key</span><span class="pl-c1">=</span><span class="pl-s1">key</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">save_session</span>(<span class="pl-s1">self</span>, <span class="pl-s1">session</span>, <span class="pl-s1">response</span>):
+        <span class="pl-s">"""Saves the session if it needs updates.  For the default</span>
+<span class="pl-s">        implementation, check :meth:`open_session`.</span>
+<span class="pl-s"></span>
+<span class="pl-s">        :param session: the session to be saved (a</span>
+<span class="pl-s">                        :class:`~werkzeug.contrib.securecookie.SecureCookie`</span>
+<span class="pl-s">                        object)</span>
+<span class="pl-s">        :param response: an instance of :attr:`response_class`</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">if</span> <span class="pl-s1">session</span> <span class="pl-c1">is</span> <span class="pl-c1">not</span> <span class="pl-c1">None</span>:
+            <span class="pl-s1">session</span>.<span class="pl-en">save_cookie</span>(<span class="pl-s1">response</span>, <span class="pl-s1">self</span>.<span class="pl-s1">session_cookie_name</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">add_url_rule</span>(<span class="pl-s1">self</span>, <span class="pl-s1">rule</span>, <span class="pl-s1">endpoint</span>, <span class="pl-c1">**</span><span class="pl-s1">options</span>):
+        <span class="pl-s">"""Connects a URL rule.  Works exactly like the :meth:`route`</span>
+<span class="pl-s">        decorator but does not register the view function for the endpoint.</span>
+<span class="pl-s"></span>
+<span class="pl-s">        Basically this example::</span>
+<span class="pl-s"></span>
+<span class="pl-s">            @app.route('/')</span>
+<span class="pl-s">            def index():</span>
+<span class="pl-s">                pass</span>
+<span class="pl-s"></span>
+<span class="pl-s">        Is equivalent to the following::</span>
+<span class="pl-s"></span>
+<span class="pl-s">            def index():</span>
+<span class="pl-s">                pass</span>
+<span class="pl-s">            app.add_url_rule('index', '/')</span>
+<span class="pl-s">            app.view_functions['index'] = index</span>
+<span class="pl-s"></span>
+<span class="pl-s">        :param rule: the URL rule as string</span>
+<span class="pl-s">        :param endpoint: the endpoint for the registered URL rule.  Flask</span>
+<span class="pl-s">                         itself assumes the name of the view function as</span>
+<span class="pl-s">                         endpoint</span>
+<span class="pl-s">        :param options: the options to be forwarded to the underlying</span>
+<span class="pl-s">                        :class:`~werkzeug.routing.Rule` object</span>
+<span class="pl-s">        """</span>
+        <span class="pl-s1">options</span>[<span class="pl-s">'endpoint'</span>] <span class="pl-c1">=</span> <span class="pl-s1">endpoint</span>
+        <span class="pl-s1">options</span>.<span class="pl-en">setdefault</span>(<span class="pl-s">'methods'</span>, (<span class="pl-s">'GET'</span>,))
+        <span class="pl-s1">self</span>.<span class="pl-s1">url_map</span>.<span class="pl-en">add</span>(<span class="pl-v">Rule</span>(<span class="pl-s1">rule</span>, <span class="pl-c1">**</span><span class="pl-s1">options</span>))
+
+    <span class="pl-k">def</span> <span class="pl-en">route</span>(<span class="pl-s1">self</span>, <span class="pl-s1">rule</span>, <span class="pl-c1">**</span><span class="pl-s1">options</span>):
+        <span class="pl-s">"""A decorator that is used to register a view function for a</span>
+<span class="pl-s">        given URL rule.  Example::</span>
+<span class="pl-s"></span>
+<span class="pl-s">            @app.route('/')</span>
+<span class="pl-s">            def index():</span>
+<span class="pl-s">                return 'Hello World'</span>
+<span class="pl-s"></span>
+<span class="pl-s">        Variables parts in the route can be specified with angular</span>
+<span class="pl-s">        brackets (``/user/&lt;username&gt;``).  By default a variable part</span>
+<span class="pl-s">        in the URL accepts any string without a slash however a different</span>
+<span class="pl-s">        converter can be specified as well by using ``&lt;converter:name&gt;``.</span>
+<span class="pl-s"></span>
+<span class="pl-s">        Variable parts are passed to the view function as keyword</span>
+<span class="pl-s">        arguments.</span>
+<span class="pl-s"></span>
+<span class="pl-s">        The following converters are possible:</span>
+<span class="pl-s"></span>
+<span class="pl-s">        =========== ===========================================</span>
+<span class="pl-s">        `int`       accepts integers</span>
+<span class="pl-s">        `float`     like `int` but for floating point values</span>
+<span class="pl-s">        `path`      like the default but also accepts slashes</span>
+<span class="pl-s">        =========== ===========================================</span>
+<span class="pl-s"></span>
+<span class="pl-s">        Here some examples::</span>
+<span class="pl-s"></span>
+<span class="pl-s">            @app.route('/')</span>
+<span class="pl-s">            def index():</span>
+<span class="pl-s">                pass</span>
+<span class="pl-s"></span>
+<span class="pl-s">            @app.route('/&lt;username&gt;')</span>
+<span class="pl-s">            def show_user(username):</span>
+<span class="pl-s">                pass</span>
+<span class="pl-s"></span>
+<span class="pl-s">            @app.route('/post/&lt;int:post_id&gt;')</span>
+<span class="pl-s">            def show_post(post_id):</span>
+<span class="pl-s">                pass</span>
+<span class="pl-s"></span>
+<span class="pl-s">        An important detail to keep in mind is how Flask deals with trailing</span>
+<span class="pl-s">        slashes.  The idea is to keep each URL unique so the following rules</span>
+<span class="pl-s">        apply:</span>
+<span class="pl-s"></span>
+<span class="pl-s">        1. If a rule ends with a slash and is requested without a slash</span>
+<span class="pl-s">           by the user, the user is automatically redirected to the same</span>
+<span class="pl-s">           page with a trailing slash attached.</span>
+<span class="pl-s">        2. If a rule does not end with a trailing slash and the user request</span>
+<span class="pl-s">           the page with a trailing slash, a 404 not found is raised.</span>
+<span class="pl-s"></span>
+<span class="pl-s">        This is consistent with how web servers deal with static files.  This</span>
+<span class="pl-s">        also makes it possible to use relative link targets safely.</span>
+<span class="pl-s"></span>
+<span class="pl-s">        The :meth:`route` decorator accepts a couple of other arguments</span>
+<span class="pl-s">        as well:</span>
+<span class="pl-s"></span>
+<span class="pl-s">        :param rule: the URL rule as string</span>
+<span class="pl-s">        :param methods: a list of methods this rule should be limited</span>
+<span class="pl-s">                        to (``GET``, ``POST`` etc.).  By default a rule</span>
+<span class="pl-s">                        just listens for ``GET`` (and implicitly ``HEAD``).</span>
+<span class="pl-s">        :param subdomain: specifies the rule for the subdoain in case</span>
+<span class="pl-s">                          subdomain matching is in use.</span>
+<span class="pl-s">        :param strict_slashes: can be used to disable the strict slashes</span>
+<span class="pl-s">                               setting for this rule.  See above.</span>
+<span class="pl-s">        :param options: other options to be forwarded to the underlying</span>
+<span class="pl-s">                        :class:`~werkzeug.routing.Rule` object.</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">def</span> <span class="pl-en">decorator</span>(<span class="pl-s1">f</span>):
+            <span class="pl-s1">self</span>.<span class="pl-en">add_url_rule</span>(<span class="pl-s1">rule</span>, <span class="pl-s1">f</span>.<span class="pl-s1">__name__</span>, <span class="pl-c1">**</span><span class="pl-s1">options</span>)
+            <span class="pl-s1">self</span>.<span class="pl-s1">view_functions</span>[<span class="pl-s1">f</span>.<span class="pl-s1">__name__</span>] <span class="pl-c1">=</span> <span class="pl-s1">f</span>
+            <span class="pl-k">return</span> <span class="pl-s1">f</span>
+        <span class="pl-k">return</span> <span class="pl-s1">decorator</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">errorhandler</span>(<span class="pl-s1">self</span>, <span class="pl-s1">code</span>):
+        <span class="pl-s">"""A decorator that is used to register a function give a given</span>
+<span class="pl-s">        error code.  Example::</span>
+<span class="pl-s"></span>
+<span class="pl-s">            @app.errorhandler(404)</span>
+<span class="pl-s">            def page_not_found():</span>
+<span class="pl-s">                return 'This page does not exist', 404</span>
+<span class="pl-s"></span>
+<span class="pl-s">        You can also register a function as error handler without using</span>
+<span class="pl-s">        the :meth:`errorhandler` decorator.  The following example is</span>
+<span class="pl-s">        equivalent to the one above::</span>
+<span class="pl-s"></span>
+<span class="pl-s">            def page_not_found():</span>
+<span class="pl-s">                return 'This page does not exist', 404</span>
+<span class="pl-s">            app.error_handlers[404] = page_not_found</span>
+<span class="pl-s"></span>
+<span class="pl-s">        :param code: the code as integer for the handler</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">def</span> <span class="pl-en">decorator</span>(<span class="pl-s1">f</span>):
+            <span class="pl-s1">self</span>.<span class="pl-s1">error_handlers</span>[<span class="pl-s1">code</span>] <span class="pl-c1">=</span> <span class="pl-s1">f</span>
+            <span class="pl-k">return</span> <span class="pl-s1">f</span>
+        <span class="pl-k">return</span> <span class="pl-s1">decorator</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">before_request</span>(<span class="pl-s1">self</span>, <span class="pl-s1">f</span>):
+        <span class="pl-s">"""Registers a function to run before each request."""</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">before_request_funcs</span>.<span class="pl-en">append</span>(<span class="pl-s1">f</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">f</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">after_request</span>(<span class="pl-s1">self</span>, <span class="pl-s1">f</span>):
+        <span class="pl-s">"""Register a function to be run after each request."""</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">after_request_funcs</span>.<span class="pl-en">append</span>(<span class="pl-s1">f</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">f</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">context_processor</span>(<span class="pl-s1">self</span>, <span class="pl-s1">f</span>):
+        <span class="pl-s">"""Registers a template context processor function."""</span>
+        <span class="pl-s1">self</span>.<span class="pl-s1">template_context_processors</span>.<span class="pl-en">append</span>(<span class="pl-s1">f</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">f</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">match_request</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s">"""Matches the current request against the URL map and also</span>
+<span class="pl-s">        stores the endpoint and view arguments on the request object</span>
+<span class="pl-s">        is successful, otherwise the exception is stored.</span>
+<span class="pl-s">        """</span>
+        <span class="pl-s1">rv</span> <span class="pl-c1">=</span> <span class="pl-s1">_request_ctx_stack</span>.<span class="pl-s1">top</span>.<span class="pl-s1">url_adapter</span>.<span class="pl-en">match</span>()
+        <span class="pl-s1">request</span>.<span class="pl-s1">endpoint</span>, <span class="pl-s1">request</span>.<span class="pl-s1">view_args</span> <span class="pl-c1">=</span> <span class="pl-s1">rv</span>
+        <span class="pl-k">return</span> <span class="pl-s1">rv</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">dispatch_request</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s">"""Does the request dispatching.  Matches the URL and returns the</span>
+<span class="pl-s">        return value of the view or error handler.  This does not have to</span>
+<span class="pl-s">        be a response object.  In order to convert the return value to a</span>
+<span class="pl-s">        proper response object, call :func:`make_response`.</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">try</span>:
+            <span class="pl-s1">endpoint</span>, <span class="pl-s1">values</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">match_request</span>()
+            <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">view_functions</span>[<span class="pl-s1">endpoint</span>](<span class="pl-c1">**</span><span class="pl-s1">values</span>)
+        <span class="pl-k">except</span> <span class="pl-v">HTTPException</span>, <span class="pl-s1">e</span>:
+            <span class="pl-s1">handler</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">error_handlers</span>.<span class="pl-en">get</span>(<span class="pl-s1">e</span>.<span class="pl-s1">code</span>)
+            <span class="pl-k">if</span> <span class="pl-s1">handler</span> <span class="pl-c1">is</span> <span class="pl-c1">None</span>:
+                <span class="pl-k">return</span> <span class="pl-s1">e</span>
+            <span class="pl-k">return</span> <span class="pl-en">handler</span>(<span class="pl-s1">e</span>)
+        <span class="pl-k">except</span> <span class="pl-v">Exception</span>, <span class="pl-s1">e</span>:
+            <span class="pl-s1">handler</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">error_handlers</span>.<span class="pl-en">get</span>(<span class="pl-c1">500</span>)
+            <span class="pl-k">if</span> <span class="pl-s1">self</span>.<span class="pl-s1">debug</span> <span class="pl-c1">or</span> <span class="pl-s1">handler</span> <span class="pl-c1">is</span> <span class="pl-c1">None</span>:
+                <span class="pl-k">raise</span>
+            <span class="pl-k">return</span> <span class="pl-en">handler</span>(<span class="pl-s1">e</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">make_response</span>(<span class="pl-s1">self</span>, <span class="pl-s1">rv</span>):
+        <span class="pl-s">"""Converts the return value from a view function to a real</span>
+<span class="pl-s">        response object that is an instance of :attr:`response_class`.</span>
+<span class="pl-s"></span>
+<span class="pl-s">        The following types are allowd for `rv`:</span>
+<span class="pl-s"></span>
+<span class="pl-s">        ======================= ===========================================</span>
+<span class="pl-s">        :attr:`response_class`  the object is returned unchanged</span>
+<span class="pl-s">        :class:`str`            a response object is created with the</span>
+<span class="pl-s">                                string as body</span>
+<span class="pl-s">        :class:`unicode`        a response object is created with the</span>
+<span class="pl-s">                                string encoded to utf-8 as body</span>
+<span class="pl-s">        :class:`tuple`          the response object is created with the</span>
+<span class="pl-s">                                contents of the tuple as arguments</span>
+<span class="pl-s">        a WSGI function         the function is called as WSGI application</span>
+<span class="pl-s">                                and buffered as response object</span>
+<span class="pl-s">        ======================= ===========================================</span>
+<span class="pl-s"></span>
+<span class="pl-s">        :param rv: the return value from the view function</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">if</span> <span class="pl-en">isinstance</span>(<span class="pl-s1">rv</span>, <span class="pl-s1">self</span>.<span class="pl-s1">response_class</span>):
+            <span class="pl-k">return</span> <span class="pl-s1">rv</span>
+        <span class="pl-k">if</span> <span class="pl-en">isinstance</span>(<span class="pl-s1">rv</span>, <span class="pl-s1">basestring</span>):
+            <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">response_class</span>(<span class="pl-s1">rv</span>)
+        <span class="pl-k">if</span> <span class="pl-en">isinstance</span>(<span class="pl-s1">rv</span>, <span class="pl-s1">tuple</span>):
+            <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">response_class</span>(<span class="pl-c1">*</span><span class="pl-s1">rv</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">response_class</span>.<span class="pl-en">force_type</span>(<span class="pl-s1">rv</span>, <span class="pl-s1">request</span>.<span class="pl-s1">environ</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">preprocess_request</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s">"""Called before the actual request dispatching and will</span>
+<span class="pl-s">        call every as :meth:`before_request` decorated function.</span>
+<span class="pl-s">        If any of these function returns a value it's handled as</span>
+<span class="pl-s">        if it was the return value from the view and further</span>
+<span class="pl-s">        request handling is stopped.</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">for</span> <span class="pl-s1">func</span> <span class="pl-c1">in</span> <span class="pl-s1">self</span>.<span class="pl-s1">before_request_funcs</span>:
+            <span class="pl-s1">rv</span> <span class="pl-c1">=</span> <span class="pl-en">func</span>()
+            <span class="pl-k">if</span> <span class="pl-s1">rv</span> <span class="pl-c1">is</span> <span class="pl-c1">not</span> <span class="pl-c1">None</span>:
+                <span class="pl-k">return</span> <span class="pl-s1">rv</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">process_response</span>(<span class="pl-s1">self</span>, <span class="pl-s1">response</span>):
+        <span class="pl-s">"""Can be overridden in order to modify the response object</span>
+<span class="pl-s">        before it's sent to the WSGI server.  By default this will</span>
+<span class="pl-s">        call all the :meth:`after_request` decorated functions.</span>
+<span class="pl-s"></span>
+<span class="pl-s">        :param response: a :attr:`response_class` object.</span>
+<span class="pl-s">        :return: a new response object or the same, has to be an</span>
+<span class="pl-s">                 instance of :attr:`response_class`.</span>
+<span class="pl-s">        """</span>
+        <span class="pl-s1">session</span> <span class="pl-c1">=</span> <span class="pl-s1">_request_ctx_stack</span>.<span class="pl-s1">top</span>.<span class="pl-s1">session</span>
+        <span class="pl-k">if</span> <span class="pl-s1">session</span> <span class="pl-c1">is</span> <span class="pl-c1">not</span> <span class="pl-c1">None</span>:
+            <span class="pl-s1">self</span>.<span class="pl-en">save_session</span>(<span class="pl-s1">session</span>, <span class="pl-s1">response</span>)
+        <span class="pl-k">for</span> <span class="pl-s1">handler</span> <span class="pl-c1">in</span> <span class="pl-s1">self</span>.<span class="pl-s1">after_request_funcs</span>:
+            <span class="pl-s1">response</span> <span class="pl-c1">=</span> <span class="pl-en">handler</span>(<span class="pl-s1">response</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">response</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">wsgi_app</span>(<span class="pl-s1">self</span>, <span class="pl-s1">environ</span>, <span class="pl-s1">start_response</span>):
+        <span class="pl-s">"""The actual WSGI application.  This is not implemented in</span>
+<span class="pl-s">        `__call__` so that middlewares can be applied:</span>
+<span class="pl-s"></span>
+<span class="pl-s">            app.wsgi_app = MyMiddleware(app.wsgi_app)</span>
+<span class="pl-s"></span>
+<span class="pl-s">        :param environ: a WSGI environment</span>
+<span class="pl-s">        :param start_response: a callable accepting a status code,</span>
+<span class="pl-s">                               a list of headers and an optional</span>
+<span class="pl-s">                               exception context to start the response</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">with</span> <span class="pl-s1">self</span>.<span class="pl-en">request_context</span>(<span class="pl-s1">environ</span>):
+            <span class="pl-s1">rv</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">preprocess_request</span>()
+            <span class="pl-k">if</span> <span class="pl-s1">rv</span> <span class="pl-c1">is</span> <span class="pl-c1">None</span>:
+                <span class="pl-s1">rv</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">dispatch_request</span>()
+            <span class="pl-s1">response</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">make_response</span>(<span class="pl-s1">rv</span>)
+            <span class="pl-s1">response</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-en">process_response</span>(<span class="pl-s1">response</span>)
+            <span class="pl-k">return</span> <span class="pl-en">response</span>(<span class="pl-s1">environ</span>, <span class="pl-s1">start_response</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">request_context</span>(<span class="pl-s1">self</span>, <span class="pl-s1">environ</span>):
+        <span class="pl-s">"""Creates a request context from the given environment and binds</span>
+<span class="pl-s">        it to the current context.  This must be used in combination with</span>
+<span class="pl-s">        the `with` statement because the request is only bound to the</span>
+<span class="pl-s">        current context for the duration of the `with` block.</span>
+<span class="pl-s"></span>
+<span class="pl-s">        Example usage::</span>
+<span class="pl-s"></span>
+<span class="pl-s">            with app.request_context(environ):</span>
+<span class="pl-s">                do_something_with(request)</span>
+<span class="pl-s"></span>
+<span class="pl-s">        :params environ: a WSGI environment</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">return</span> <span class="pl-en">_RequestContext</span>(<span class="pl-s1">self</span>, <span class="pl-s1">environ</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">test_request_context</span>(<span class="pl-s1">self</span>, <span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-s">"""Creates a WSGI environment from the given values (see</span>
+<span class="pl-s">        :func:`werkzeug.create_environ` for more information, this</span>
+<span class="pl-s">        function accepts the same arguments).</span>
+<span class="pl-s">        """</span>
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">request_context</span>(<span class="pl-en">create_environ</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>))
+
+    <span class="pl-k">def</span> <span class="pl-en">__call__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">environ</span>, <span class="pl-s1">start_response</span>):
+        <span class="pl-s">"""Shortcut for :attr:`wsgi_app`"""</span>
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-en">wsgi_app</span>(<span class="pl-s1">environ</span>, <span class="pl-s1">start_response</span>)</pre></div>
+
+      </article>
+    </div>
+  </div>
+  <div class="
+    side
+    Box
+    md
+    js-code-block-container
+    Box--responsive
+    container-right-nav
+    mt-5
+    d-none d-lg-block
+  " style="overflow: hidden;">
+    <div class="Box-body p-5">
+      <div class="container-right-nav-logo">
+        <a href="https://www.github.com/Bean-jun"><svg height="32" class="octicon octicon-mark-github anim-pulse"
+            viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+            </path>
+          </svg></a>
+      </div>
+    </div>
+    <div class="content-title-nav">
+      <ul>
+        <li><a href="#一、wsgi引入">一、wsgi引入</a></li><li><a href="#二、了解Werkzeug">二、了解Werkzeug</a></li><li><a href="#三、尝试自定义短链接应用(Werkzeug官方Demo)">三、尝试自定义短链接应用(Werkzeug官方Demo)</a></li><li><a href="#四、Flask官方demo">四、Flask官方demo</a></li>
+      </ul>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>

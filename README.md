@@ -64,6 +64,8 @@
 
       - 👉	[自定义Python Web Frame](https://github.com/Bean-jun/bframe) 【使用 `pip install bframe` 进行体验】👈
 
+      - 👉	[快速实现第三方平台验证登录](https://github.com/Bean-jun/oauth2link) 【使用 `pip install oauth2link` 进行体验】👈
+
    - 1.6 Python相关文章推荐
 
       - 👉	[Python3多继承](https://www.python.org/download/releases/2.3/mro/) | [译文](https://lotabout.me/2020/C3-Algorithm/) | [见栗子-10](PythonDocs/Python-基础语法.md)👈
@@ -234,6 +236,8 @@
    👉	[flask-信号的使用](WebFrameDocs/Flask-信号的使用.md)👈
    
    👉	[flask源码分析第一弹](WebFrameDocs/Flask-源码分析.md)👈
+
+   👉	[flask源码分析第二弹](WebFrameDocs/Flask-源码分析2.md)👈
 
    **Demo:**
    
