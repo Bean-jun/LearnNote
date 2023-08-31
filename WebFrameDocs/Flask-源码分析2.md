@@ -26,7 +26,7 @@ with make_server("0.0.0.0", 8888, app) as server:
     server.serve_forever()
 ```
 
-![](images/简单Python Web Server.png)
+![](image/2023-08-31-23-40-17.png)
 
 ### 二、了解Werkzeug
 
