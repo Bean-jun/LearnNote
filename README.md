@@ -59,6 +59,8 @@
       - 👉	[常见代码](PythonDocs/Python-常见代码.md)👈
 
       - 👉	[Python-grpc&protobuf使用](PythonDocs/grpc&protobuf使用.md)👈
+
+      - 👉	[Python+SQLAlchemy 读写分离](DatabaseDocs/MySQL-主从配置.md#四代码测试数据库读写分离pythonsqlalchmey)👈
    
    - 1.5 无聊的轮子
 
@@ -178,6 +180,8 @@
 1. MySQL
 
    👉	[入门使用](DatabaseDocs/MySQL-入门.md)👈
+
+   👉	[主从配置](DatabaseDocs/MySQL-主从配置.md)👈
 
 2. Redis
 

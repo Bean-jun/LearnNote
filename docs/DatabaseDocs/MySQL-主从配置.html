@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/.static/css/primer.css" rel="stylesheet" />
+  <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
+  <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
+  <link rel="stylesheet" href="/.static/css/main.css">
+  <title>MySQL-主从配置.md</title>
+</head>
+
+<body id="markdown-body" data-color-mode="light" data-dark-theme="light">
+  <!-- <div class="
+  Box
+  md
+  js-code-block-container
+  Box--responsive
+  container-nav
+  container-left-nav
+  mt-5
+  d-none d-lg-block
+">
+    <div class="Box-body p-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <h1>填充...</h1>
+      </div>
+    </div>
+    <div>填充</div>
+  </div> -->
+  <div class="
+        Box
+        md
+        js-code-block-container
+        Box--responsive
+        container-xl
+        px-3 px-md-4 px-lg-5
+        mt-5
+      " id="content">
+    <div class="Box-body px-5 pb-5">
+      <div class="d-flex flex-column flex-sm-row-reverse">
+        <div class="border rounded-3 to-home">
+          <a href="/">返回主页</a>
+        </div>
+        <div>
+          <button id="theme-button" class="btn" type="button">
+            <span id="theme-icon" class="iconify" data-icon="octicon:sun-16"></span>
+          </button>
+        </div>
+        <div class="article-size">
+          <span>750字 | 1分钟</span>
+        </div>
+      </div>
+      <article class="markdown-body entry-content container-lg" itemprop="text">
+        <h1><a id="user-content-mysql主从配置一主一从" class="anchor" aria-hidden="true" tabindex="-1" href="#mysql主从配置一主一从"><span aria-hidden="true" class="octicon octicon-link"></span></a>MySQL主从配置（一主一从）</h1>
+<h3><a id="user-content-一环境准备" class="anchor" aria-hidden="true" tabindex="-1" href="#一环境准备"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、环境准备</h3>
+<ol>
+<li>windows 11</li>
+<li>MySQL-8.0.30</li>
+</ol>
+<h3><a id="user-content-二开始配置" class="anchor" aria-hidden="true" tabindex="-1" href="#二开始配置"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、开始配置</h3>
+<ol start="0">
+<li>
+<p>将MySQL-8.0.30分别拷贝至两个目录</p>
+<p>MySQL-8.0.30-winx64_master</p>
+<p>MySQL-8.0.30-winx64_slave</p>
+</li>
+<li>
+<p>编辑my.ini</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 主库的my.ini文件</span>
+<span class="pl-c"><span class="pl-c">#</span>####新加入部分#######</span>
+[mysqld]
+port=3306
+server_id=1
+log_bin=ON
+
+
+<span class="pl-c"><span class="pl-c">#</span> 从库的my.ini文件</span>
+<span class="pl-c"><span class="pl-c">#</span>####新加入部分#######</span>
+[mysqld]
+port=3307
+server_id=2</pre></div>
+</li>
+<li>
+<p>编辑auto.conf（在mysql的数据文件夹下）</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span> 修改的目的是避免uuid重复，我们保证uuid唯一就可以了</span>
+
+<span class="pl-c"><span class="pl-c">#</span> 主库的auto.conf</span>
+<span class="pl-c"><span class="pl-c">#</span>#####新加入部分#########</span>
+[auto]
+server-uuid=50582deb-3efc-4ee6-8a7d-4f69f1651a91
+
+
+<span class="pl-c"><span class="pl-c">#</span> 从库的auto.conf</span>
+<span class="pl-c"><span class="pl-c">#</span>#####新加入部分#########</span>
+[auto]
+server-uuid=95b759aa-f4ab-489e-93e4-75f409731887
+</pre></div>
+</li>
+<li>
+<p>创建账号</p>
+<p>在<code>主机</code>上创建一个账号用于从机复制使用</p>
+<div class="highlight highlight-source-sql"><pre><span class="pl-c"><span class="pl-c">--</span> 创建账号</span>
+<span class="pl-k">create</span> <span class="pl-k">user</span> "<span class="pl-en">slave</span>"@<span class="pl-s"><span class="pl-pds">"</span>%<span class="pl-pds">"</span></span> identified with mysql_native_password by <span class="pl-s"><span class="pl-pds">"</span>slave<span class="pl-pds">"</span></span>;
+
+<span class="pl-c"><span class="pl-c">--</span> 授权账号复制权限</span>
+<span class="pl-k">grant</span> replication slave to <span class="pl-s"><span class="pl-pds">"</span>slave<span class="pl-pds">"</span></span>@<span class="pl-s"><span class="pl-pds">"</span>%<span class="pl-pds">"</span></span>;
+
+<span class="pl-c"><span class="pl-c">--</span> 更新授权</span>
+flash privileges;</pre></div>
+</li>
+<li>
+<p>查询状态</p>
+<p>在<code>主机</code>上查询当前主节点的状态</p>
+<div class="highlight highlight-source-sql"><pre>show master status;</pre></div>
+<div class="highlight highlight-source-shell"><pre>mysql<span class="pl-k">&gt;</span> show master status<span class="pl-k">;</span>
++-----------+----------+--------------+------------------+-------------------+
+<span class="pl-k">|</span> File      <span class="pl-k">|</span> Position <span class="pl-k">|</span> Binlog_Do_DB <span class="pl-k">|</span> Binlog_Ignore_DB <span class="pl-k">|</span> Executed_Gtid_Set <span class="pl-k">|</span>
++-----------+----------+--------------+------------------+-------------------+
+<span class="pl-k">|</span> ON.000001 <span class="pl-k">|</span>     3756 <span class="pl-k">|</span>              <span class="pl-k">|</span>                  <span class="pl-k">|</span>                   <span class="pl-k">|</span>
++-----------+----------+--------------+------------------+-------------------+</pre></div>
+</li>
+<li>
+<p>设置待复制主机信息</p>
+<p>在<code>从机</code>上运行下面命令</p>
+<div class="highlight highlight-source-sql"><pre><span class="pl-c"><span class="pl-c">--</span> master_host 主机地址</span>
+<span class="pl-c"><span class="pl-c">--</span> master_port 主机端口</span>
+<span class="pl-c"><span class="pl-c">--</span> master_user 主机复制权限的用户</span>
+<span class="pl-c"><span class="pl-c">--</span> master_password 主机复制权限的用户密码</span>
+<span class="pl-c"><span class="pl-c">--</span> master_log_file 主机日志文件名称（见上方show master status）结果</span>
+<span class="pl-c"><span class="pl-c">--</span> master_log_pos 主机日志文件偏移量（见上方show master status）结果</span>
+change master to master_host<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span>127.0.0.1<span class="pl-pds">'</span></span>,master_port<span class="pl-k">=</span><span class="pl-c1">3306</span>,master_user<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span>slave<span class="pl-pds">'</span></span>,master_password<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span>slave<span class="pl-pds">'</span></span>,master_log_file<span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span>ON.000001<span class="pl-pds">'</span></span>,master_log_pos<span class="pl-k">=</span><span class="pl-c1">3756</span>;</pre></div>
+</li>
+<li>
+<p>开始复制</p>
+<p>在从机上开始复制</p>
+<div class="highlight highlight-source-sql"><pre>start slave;</pre></div>
+<p>查看复制信息</p>
+<div class="highlight highlight-source-sql"><pre>show slave status \G;</pre></div>
+<p>正常状态</p>
+<div class="highlight highlight-source-shell"><pre>mysql<span class="pl-k">&gt;</span> show slave status <span class="pl-cce">\G</span><span class="pl-k">;</span>
+<span class="pl-k">***************************</span> 1. row <span class="pl-k">***************************</span>
+            Slave_IO_State: Waiting <span class="pl-k">for</span> <span class="pl-c1">source</span> to send event
+                Master_Host: 127.0.0.1
+                Master_User: synctest
+                Master_Port: 3306
+                Connect_Retry: 60
+            Master_Log_File: ON.000004
+        Read_Master_Log_Pos: 346
+            Relay_Log_File: Bean-relay-bin.000002
+                Relay_Log_Pos: 319
+        Relay_Master_Log_File: ON.000004
+            Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+            Replicate_Do_DB:
+        Replicate_Ignore_DB:
+        Replicate_Do_Table:
+    Replicate_Ignore_Table:
+    Replicate_Wild_Do_Table:
+Replicate_Wild_Ignore_Table:
+                Last_Errno: 0
+                Last_Error:
+                Skip_Counter: 0
+        Exec_Master_Log_Pos: 346
+            Relay_Log_Space: 528
+            Until_Condition: None
+            Until_Log_File:
+                Until_Log_Pos: 0
+        Master_SSL_Allowed: No
+        Master_SSL_CA_File:
+        Master_SSL_CA_Path:
+            Master_SSL_Cert:
+            Master_SSL_Cipher:
+            Master_SSL_Key:
+        Seconds_Behind_Master: 0
+Master_SSL_Verify_Server_Cert: No
+                Last_IO_Errno: 0
+                Last_IO_Error:
+            Last_SQL_Errno: 0
+            Last_SQL_Error:
+Replicate_Ignore_Server_Ids:
+            Master_Server_Id: 1
+                Master_UUID: 50582deb-3efc-4ee6-8a7d-4f69f1651a91
+            Master_Info_File: mysql.slave_master_info
+                    SQL_Delay: 0
+        SQL_Remaining_Delay: NULL
+    Slave_SQL_Running_State: Replica has <span class="pl-c1">read</span> all relay log<span class="pl-k">;</span> waiting <span class="pl-k">for</span> more updates
+        Master_Retry_Count: 86400
+                Master_Bind:
+    Last_IO_Error_Timestamp:
+    Last_SQL_Error_Timestamp:
+            Master_SSL_Crl:
+        Master_SSL_Crlpath:
+        Retrieved_Gtid_Set:
+            Executed_Gtid_Set:
+                Auto_Position: 0
+        Replicate_Rewrite_DB:
+                Channel_Name:
+        Master_TLS_Version:
+    Master_public_key_path:
+        Get_master_public_key: 0
+            Network_Namespace:
+1 row <span class="pl-k">in</span> set, 1 warning (0.01 sec)</pre></div>
+</li>
+</ol>
+<h3><a id="user-content-三测试主从" class="anchor" aria-hidden="true" tabindex="-1" href="#三测试主从"><span aria-hidden="true" class="octicon octicon-link"></span></a>三、测试主从</h3>
+<ol>
+<li>
+<p>在主机上创建一个数据库</p>
+<div class="highlight highlight-source-sql"><pre><span class="pl-k">create</span> <span class="pl-k">database</span> <span class="pl-en">testdb</span> charset<span class="pl-k">=</span>utf8;</pre></div>
+</li>
+<li>
+<p>检查从机上是否出现此表</p>
+</li>
+<li>
+<p>在主机上创建一张表</p>
+<div class="highlight highlight-source-sql"><pre><span class="pl-k">CREATE</span> <span class="pl-k">TABLE</span> `<span class="pl-en">users</span>` (
+<span class="pl-s"><span class="pl-pds">`</span>id<span class="pl-pds">`</span></span> <span class="pl-k">int</span> <span class="pl-k">NOT NULL</span> AUTO_INCREMENT,
+<span class="pl-s"><span class="pl-pds">`</span>name<span class="pl-pds">`</span></span> <span class="pl-k">varchar</span>(<span class="pl-c1">255</span>) COLLATE utf8mb4_general_ci DEFAULT <span class="pl-k">NULL</span>,
+<span class="pl-s"><span class="pl-pds">`</span>age<span class="pl-pds">`</span></span> <span class="pl-k">int</span> DEFAULT <span class="pl-k">NULL</span>,
+<span class="pl-k">PRIMARY KEY</span> (<span class="pl-s"><span class="pl-pds">`</span>id<span class="pl-pds">`</span></span>)
+) ENGINE<span class="pl-k">=</span>InnoDB DEFAULT CHARSET<span class="pl-k">=</span>utf8mb4 COLLATE<span class="pl-k">=</span>utf8mb4_general_ci;</pre></div>
+</li>
+<li>
+<p>检查从机上是否出现此表</p>
+</li>
+</ol>
+<h3><a id="user-content-四代码测试数据库读写分离pythonsqlalchmey" class="anchor" aria-hidden="true" tabindex="-1" href="#四代码测试数据库读写分离pythonsqlalchmey"><span aria-hidden="true" class="octicon octicon-link"></span></a>四、代码测试数据库读写分离(python+sqlalchmey)</h3>
+<ol>
+<li>
+<p>前提工作</p>
+<ul>
+<li>主从数据库服务开启</li>
+</ul>
+</li>
+<li>
+<p>编写py脚本</p>
+</li>
+</ol>
+<ul>
+<li>
+<p>方案一（基于装饰器）</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> <span class="pl-s1">functools</span>
+<span class="pl-k">import</span> <span class="pl-s1">random</span>
+<span class="pl-k">import</span> <span class="pl-s1">time</span>
+
+<span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span> <span class="pl-k">import</span> <span class="pl-v">Column</span>, <span class="pl-v">Integer</span>, <span class="pl-v">String</span>, <span class="pl-s1">create_engine</span>
+<span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span>.<span class="pl-s1">orm</span> <span class="pl-k">import</span> <span class="pl-s1">declarative_base</span>, <span class="pl-s1">scoped_session</span>, <span class="pl-s1">sessionmaker</span>
+
+<span class="pl-v">Base</span> <span class="pl-c1">=</span> <span class="pl-en">declarative_base</span>()
+
+
+<span class="pl-k">class</span> <span class="pl-v">User</span>(<span class="pl-v">Base</span>):
+    <span class="pl-s1">__tablename__</span> <span class="pl-c1">=</span> <span class="pl-s">'users'</span>
+
+    <span class="pl-s1">id</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">Integer</span>, <span class="pl-s1">primary_key</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+    <span class="pl-s1">username</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">String</span>(<span class="pl-c1">100</span>), <span class="pl-s1">unique</span><span class="pl-c1">=</span><span class="pl-c1">True</span>, <span class="pl-s1">nullable</span><span class="pl-c1">=</span><span class="pl-c1">False</span>, <span class="pl-s1">comment</span><span class="pl-c1">=</span><span class="pl-s">"用户名"</span>)
+    <span class="pl-s1">phone</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">String</span>(<span class="pl-c1">11</span>), <span class="pl-s1">comment</span><span class="pl-c1">=</span><span class="pl-s">"手机号"</span>)
+
+
+<span class="pl-s1">master_engine</span> <span class="pl-c1">=</span> <span class="pl-en">create_engine</span>(<span class="pl-s">"mysql+pymysql://root:root@localhost:3306/shop"</span>)
+<span class="pl-s1">slave_engine</span> <span class="pl-c1">=</span> <span class="pl-en">create_engine</span>(<span class="pl-s">"mysql+pymysql://root:root@localhost:3307/shop"</span>)
+<span class="pl-v">Base</span>.<span class="pl-s1">metadata</span>.<span class="pl-en">create_all</span>(<span class="pl-s1">master_engine</span>)
+<span class="pl-v">Session</span> <span class="pl-c1">=</span> <span class="pl-en">scoped_session</span>(<span class="pl-en">sessionmaker</span>(<span class="pl-s1">bind</span><span class="pl-c1">=</span><span class="pl-s1">master_engine</span>))
+
+
+<span class="pl-k">def</span> <span class="pl-en">read_slave</span>(<span class="pl-s1">f</span>):
+    <span class="pl-en">@<span class="pl-s1">functools</span>.<span class="pl-en">wraps</span>(<span class="pl-s1">f</span>)</span>
+    <span class="pl-k">def</span> <span class="pl-en">wrpper</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-s1">old</span> <span class="pl-c1">=</span> <span class="pl-v">Session</span>.<span class="pl-s1">bind</span>
+        <span class="pl-k">try</span>:
+            <span class="pl-v">Session</span>.<span class="pl-s1">bind</span> <span class="pl-c1">=</span> <span class="pl-s1">slave_engine</span>
+            <span class="pl-k">return</span> <span class="pl-en">f</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+        <span class="pl-k">except</span> <span class="pl-v">Exception</span> <span class="pl-k">as</span> <span class="pl-s1">e</span>:
+            <span class="pl-en">print</span>(<span class="pl-s1">e</span>.<span class="pl-s1">args</span>)
+        <span class="pl-k">finally</span>:
+            <span class="pl-v">Session</span>.<span class="pl-s1">bind</span> <span class="pl-c1">=</span> <span class="pl-s1">old</span>
+    <span class="pl-k">return</span> <span class="pl-s1">wrpper</span>
+
+
+<span class="pl-en">@<span class="pl-s1">read_slave</span></span>
+<span class="pl-k">def</span> <span class="pl-en">read_data</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">f"use engine <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-v">Session</span>.<span class="pl-s1">bind</span>.<span class="pl-s1">url</span><span class="pl-kos">}</span></span>"</span>)
+    <span class="pl-s1">objs</span> <span class="pl-c1">=</span> <span class="pl-v">Session</span>.<span class="pl-en">query</span>(<span class="pl-v">User</span>).<span class="pl-en">all</span>()
+    <span class="pl-en">print</span>([{<span class="pl-s1">obj</span>.<span class="pl-s1">id</span>: <span class="pl-s1">obj</span>.<span class="pl-s1">username</span> <span class="pl-k">for</span> <span class="pl-s1">obj</span> <span class="pl-c1">in</span> <span class="pl-s1">objs</span>}])
+
+
+<span class="pl-k">def</span> <span class="pl-en">write_data</span>():
+    <span class="pl-en">print</span>(<span class="pl-s">f"use engine <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-v">Session</span>.<span class="pl-s1">bind</span>.<span class="pl-s1">url</span><span class="pl-kos">}</span></span>"</span>)
+    <span class="pl-s1">user</span> <span class="pl-c1">=</span> <span class="pl-v">User</span>(<span class="pl-s1">username</span><span class="pl-c1">=</span><span class="pl-s">f"tom-<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">time</span>.<span class="pl-en">time</span>()<span class="pl-kos">}</span></span>"</span>, <span class="pl-s1">phone</span><span class="pl-c1">=</span><span class="pl-s1">random</span>.<span class="pl-en">randint</span>(<span class="pl-c1">0</span>, <span class="pl-c1">100</span>))
+    <span class="pl-v">Session</span>.<span class="pl-en">add</span>(<span class="pl-s1">user</span>)
+    <span class="pl-v">Session</span>.<span class="pl-en">commit</span>()
+    <span class="pl-en">print</span>(<span class="pl-s">f"add user: <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">user</span>.<span class="pl-s1">id</span><span class="pl-kos">}</span></span>"</span>)
+
+
+<span class="pl-k">def</span> <span class="pl-en">main</span>():
+    <span class="pl-en">write_data</span>()
+    <span class="pl-en">read_data</span>()
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-en">main</span>()</pre></div>
+</li>
+<li>
+<p>方案二（基于自定义Session类）</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> <span class="pl-s1">random</span>
+<span class="pl-k">import</span> <span class="pl-s1">time</span>
+
+<span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span> <span class="pl-k">import</span> <span class="pl-v">Column</span>, <span class="pl-v">Integer</span>, <span class="pl-v">String</span>, <span class="pl-s1">create_engine</span>
+<span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span>.<span class="pl-s1">orm</span> <span class="pl-k">import</span> <span class="pl-s1">declarative_base</span>, <span class="pl-s1">scoped_session</span>, <span class="pl-s1">sessionmaker</span>
+<span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span>.<span class="pl-s1">orm</span>.<span class="pl-s1">session</span> <span class="pl-k">import</span> <span class="pl-v">Session</span> <span class="pl-k">as</span> <span class="pl-v">Se</span>
+<span class="pl-k">from</span> <span class="pl-s1">sqlalchemy</span>.<span class="pl-s1">sql</span> <span class="pl-k">import</span> <span class="pl-v">Delete</span>, <span class="pl-v">Insert</span>, <span class="pl-v">Update</span>
+
+<span class="pl-v">Base</span> <span class="pl-c1">=</span> <span class="pl-en">declarative_base</span>()
+
+
+<span class="pl-k">class</span> <span class="pl-v">User</span>(<span class="pl-v">Base</span>):
+    <span class="pl-s1">__tablename__</span> <span class="pl-c1">=</span> <span class="pl-s">'users'</span>
+
+    <span class="pl-s1">id</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">Integer</span>, <span class="pl-s1">primary_key</span><span class="pl-c1">=</span><span class="pl-c1">True</span>)
+    <span class="pl-s1">username</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">String</span>(<span class="pl-c1">100</span>), <span class="pl-s1">unique</span><span class="pl-c1">=</span><span class="pl-c1">True</span>, <span class="pl-s1">nullable</span><span class="pl-c1">=</span><span class="pl-c1">False</span>, <span class="pl-s1">comment</span><span class="pl-c1">=</span><span class="pl-s">"用户名"</span>)
+    <span class="pl-s1">phone</span> <span class="pl-c1">=</span> <span class="pl-v">Column</span>(<span class="pl-v">String</span>(<span class="pl-c1">11</span>), <span class="pl-s1">comment</span><span class="pl-c1">=</span><span class="pl-s">"手机号"</span>)
+
+
+<span class="pl-s1">master_engine</span> <span class="pl-c1">=</span> <span class="pl-en">create_engine</span>(<span class="pl-s">"mysql+pymysql://root:root@localhost:3306/shop"</span>)
+<span class="pl-s1">slave_engine</span> <span class="pl-c1">=</span> <span class="pl-en">create_engine</span>(<span class="pl-s">"mysql+pymysql://root:root@localhost:3307/shop"</span>)
+<span class="pl-v">Base</span>.<span class="pl-s1">metadata</span>.<span class="pl-en">create_all</span>(<span class="pl-s1">master_engine</span>)
+
+
+<span class="pl-k">class</span> <span class="pl-v">CustomSe</span>(<span class="pl-v">Se</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">get_bind</span>(<span class="pl-s1">self</span>, <span class="pl-s1">mapper</span><span class="pl-c1">=</span><span class="pl-c1">None</span>, <span class="pl-s1">clause</span><span class="pl-c1">=</span><span class="pl-c1">None</span>, <span class="pl-s1">bind</span><span class="pl-c1">=</span><span class="pl-c1">None</span>, <span class="pl-s1">_sa_skip_events</span><span class="pl-c1">=</span><span class="pl-c1">None</span>, <span class="pl-s1">_sa_skip_for_implicit_returning</span><span class="pl-c1">=</span><span class="pl-c1">False</span>, <span class="pl-c1">**</span><span class="pl-s1">kw</span>):
+        <span class="pl-k">if</span> <span class="pl-s1">self</span>.<span class="pl-s1">_flushing</span> <span class="pl-c1">or</span> <span class="pl-en">isinstance</span>(<span class="pl-s1">clause</span>, (<span class="pl-v">Update</span>, <span class="pl-v">Delete</span>, <span class="pl-v">Insert</span>)):
+            <span class="pl-en">print</span>(<span class="pl-s">"insert update delete engine: "</span>, <span class="pl-s1">master_engine</span>.<span class="pl-s1">url</span>)
+            <span class="pl-k">return</span> <span class="pl-s1">master_engine</span>
+
+        <span class="pl-en">print</span>(<span class="pl-s">"query engine: "</span>, <span class="pl-s1">slave_engine</span>.<span class="pl-s1">url</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">slave_engine</span>
+
+
+<span class="pl-v">Session</span> <span class="pl-c1">=</span> <span class="pl-en">scoped_session</span>(<span class="pl-en">sessionmaker</span>(<span class="pl-s1">class_</span><span class="pl-c1">=</span><span class="pl-v">CustomSe</span>))
+
+
+<span class="pl-k">def</span> <span class="pl-en">read_data</span>():
+    <span class="pl-s1">objs</span> <span class="pl-c1">=</span> <span class="pl-v">Session</span>.<span class="pl-en">query</span>(<span class="pl-v">User</span>).<span class="pl-en">all</span>()
+    <span class="pl-en">print</span>([{<span class="pl-s1">obj</span>.<span class="pl-s1">id</span>: <span class="pl-s1">obj</span>.<span class="pl-s1">username</span> <span class="pl-k">for</span> <span class="pl-s1">obj</span> <span class="pl-c1">in</span> <span class="pl-s1">objs</span>}])
+
+
+<span class="pl-k">def</span> <span class="pl-en">write_data</span>():
+    <span class="pl-s1">user</span> <span class="pl-c1">=</span> <span class="pl-v">User</span>(<span class="pl-s1">username</span><span class="pl-c1">=</span><span class="pl-s">f"tom-<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">time</span>.<span class="pl-en">time</span>()<span class="pl-kos">}</span></span>"</span>, <span class="pl-s1">phone</span><span class="pl-c1">=</span><span class="pl-s1">random</span>.<span class="pl-en">randint</span>(<span class="pl-c1">0</span>, <span class="pl-c1">100</span>))
+    <span class="pl-v">Session</span>.<span class="pl-en">add</span>(<span class="pl-s1">user</span>)
+    <span class="pl-v">Session</span>.<span class="pl-en">commit</span>()
+    <span class="pl-en">print</span>(<span class="pl-s">f"add user: <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">user</span>.<span class="pl-s1">id</span><span class="pl-kos">}</span></span>"</span>)
+
+
+<span class="pl-k">def</span> <span class="pl-en">main</span>():
+    <span class="pl-en">write_data</span>()
+    <span class="pl-en">read_data</span>()
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-en">main</span>()</pre></div>
+</li>
+</ul>
+
+      </article>
+    </div>
+  </div>
+  <div class="
+    side
+    Box
+    md
+    js-code-block-container
+    Box--responsive
+    container-right-nav
+    mt-5
+    d-none d-lg-block
+  " style="overflow: hidden;">
+    <div class="Box-body p-5">
+      <div class="container-right-nav-logo">
+        <a href="https://www.github.com/Bean-jun"><svg height="32" class="octicon octicon-mark-github anim-pulse"
+            viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+            </path>
+          </svg></a>
+      </div>
+    </div>
+    <div class="content-title-nav">
+      <ul>
+        <li><a href="#一、环境准备">一、环境准备</a></li><li><a href="#二、开始配置">二、开始配置</a></li><li><a href="#三、测试主从">三、测试主从</a></li><li><a href="#四、代码测试数据库读写分离(python+sqlalchmey)">四、代码测试数据库读写分离(python+sqlalchmey)</a></li>
+      </ul>
+    </div>
+  </div>
+  <script src="/.static/js/theme.js"></script>
+  <script src="/.static/js/iconify.min.js"></script>
+</body>
+
+</html>
