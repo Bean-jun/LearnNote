@@ -93,6 +93,17 @@
       - 👉	[自定义Golang Web Frame](GolangDocs/Golang-自定义Web框架.md) [| 视频介绍](https://www.bilibili.com/video/BV18D4y1k78d)👈
 
       - 👉	[手搓HTTP制作短链接生成器](GolangDocs/Golang-手搓HTTP制作短链接生成器.md) [| 视频介绍](https://www.bilibili.com/video/BV1Cs4y1H79U)👈
+   
+   - 2.4 Go相关文章推荐
+
+      - 👉	[Go入门指南](https://github.com/unknwon/the-way-to-go_ZH_CN)👈
+      - 👉	[go by example](https://github.com/gobyexample-cn/gobyexample)👈
+      - 👉	[go-daily-lib](https://github.com/darjun/go-daily-lib)👈
+      - 👉	[go-tutorial](https://github.com/jincheng9/go-tutorial)👈
+      - 👉	[build web app with go](https://github.com/astaxie/build-web-application-with-golang)👈
+      - 👉	[极客兔兔-7天用Go从零实现系列](https://github.com/geektutu/7days-golang)👈
+      - 👉	[极客兔兔-Go 语言高性能编程](https://github.com/geektutu/high-performance-go)👈
+      - 👉	[Golang-100-Days](https://github.com/rubyhan1314/Golang-100-Days)👈
 
 3. Java从入门到入土
 
@@ -118,6 +129,21 @@
       - 👉	[Ajax基础语法](FrontDocs/Ajax-基础语法.md)👈
 
       - 👉	[Vue基础语法](FrontDocs/Vue-基础语法.md)👈
+   
+   - 4.2 前端文档推荐链接
+
+      - 👉	[Vue](https://cn.vuejs.org/)👈
+      - 👉	[Vue-Router](https://router.vuejs.org/zh/)👈
+      - 👉	[Pinia](https://pinia.vuejs.org/zh/)👈
+      - 👉	[Vuex](https://vuex.vuejs.org/zh/guide/)👈
+      - 👉	[Element UI](https://element.eleme.cn/#/zh-CN)👈
+      - 👉	[Element Plus](https://element-plus.org/zh-CN/)👈
+      - 👉	[Nuxt](https://nuxt.com/)👈
+      - 👉	[Vant](https://vant-ui.github.io/vant/#/zh-CN/)👈
+      - 👉	[Vant Weapp](https://vant-contrib.gitee.io/vant-weapp/#/home)👈
+      - 👉	[Axios](https://www.axios-http.cn/docs/intro)👈
+      - 👉	[Swiper](https://swiper.com.cn/)👈
+      - 👉	[express](https://express.nodejs.cn/)👈
 
 
 
@@ -183,6 +209,7 @@
 
    👉	[主从配置](DatabaseDocs/MySQL-主从配置.md)👈
 
+
 2. Redis
 
    Redis（Remote Dictionary Server），即远程字典服务，支持网络、可基于内存亦可持久化的日志型、Key-Value型数据库。
@@ -197,9 +224,9 @@
 
    👉	[缓存设计](DatabaseDocs/Redis-缓存设计.md)👈
    
-   
-   
+
 3. MongoDB
+
 
 4. ORM工具【非数据库】
 
@@ -209,71 +236,80 @@
 
    - [peewee](http://docs.peewee-orm.com/en/latest/)
 
+   - [GORM](https://gorm.io/zh_CN/docs/index.html)
+
+
 
 ### 七、Web框架
 
-1. [Django](https://docs.djangoproject.com/)     [中文文档](https://docs.djangoproject.com/zh-hans/)           推荐指数 ⭐️⭐️⭐️⭐️⭐️
+1. Python Web 框架
 
-   Django是一个可以使Web开发工作愉快并且高效的Web开发框架。 使用Django，能够以最小的代价构建和维护高质量的Web应用。
+   - [Django](https://docs.djangoproject.com/)     [中文文档](https://docs.djangoproject.com/zh-hans/)
 
-   推荐: [Django REST framework](https://www.django-rest-framework.org/)
+      Django是一个可以使Web开发工作愉快并且高效的Web开发框架。 使用Django，能够以最小的代价构建和维护高质量的Web应用。
 
-   👉	[Django入门使用](WebFrameDocs/Django-入门.md)👈
+      推荐: [Django REST framework](https://www.django-rest-framework.org/)
 
-   👉	[DRF入门使用](WebFrameDocs/DRF-入门.md)👈
+      👉	[Django入门使用](WebFrameDocs/Django-入门.md)👈
 
-   **Demo:**
+      👉	[DRF入门使用](WebFrameDocs/DRF-入门.md)👈
+
+      **Demo:**
+      
+      👉   [基于django实现的PersonBlog](https://github.com/Bean-jun/PersonBlogSystem.git)👈
    
-   👉   [基于django实现的PersonBlog](https://github.com/Bean-jun/PersonBlogSystem.git)👈
-  
-   👉   [基于django实现的AuthSystem](https://github.com/Bean-jun/AuthSystem.git)👈
+      👉   [基于django实现的AuthSystem](https://github.com/Bean-jun/AuthSystem.git)👈
+      
    
-   
+   - [Flask](https://flask.palletsprojects.com/)    [中文文档](https://dormousehole.readthedocs.io/en/latest/)
 
+      Flask是一个使用Python编写的轻量级 Web 应用框架。其WSGI工具箱采用 Werkzeug ，模板引擎则使用 Jinja2。
 
-2. [Flask](https://flask.palletsprojects.com/)    [中文文档](https://dormousehole.readthedocs.io/en/latest/)               推荐指数 ⭐️⭐️⭐️⭐️⭐️
+      👉	[入门使用](WebFrameDocs/Flask-入门.md)👈
 
-   Flask是一个使用Python编写的轻量级 Web 应用框架。其WSGI工具箱采用 Werkzeug ，模板引擎则使用 Jinja2。
+      👉	[flask-信号的使用](WebFrameDocs/Flask-信号的使用.md)👈
+      
+      👉	[flask源码分析第一弹](WebFrameDocs/Flask-源码分析.md)👈
 
-   👉	[入门使用](WebFrameDocs/Flask-入门.md)👈
+      👉	[flask源码分析第二弹](WebFrameDocs/Flask-源码分析2.md)👈
 
-   👉	[flask-信号的使用](WebFrameDocs/Flask-信号的使用.md)👈
-   
-   👉	[flask源码分析第一弹](WebFrameDocs/Flask-源码分析.md)👈
-
-   👉	[flask源码分析第二弹](WebFrameDocs/Flask-源码分析2.md)👈
-
-   **Demo:**
-   
-   👉	[基于flask实现的api-demo](https://github.com/Bean-jun/PersonBlogSystemFlask/blob/master/docs/APIDocuments.md)👈
-   
-   
-
-3. [fastapi](https://fastapi.tiangolo.com/zh/tutorial/)    官方中文             推荐指数 ⭐️⭐️⭐️⭐️
-
-   FastAPI 是一个用于构建 API 的现代、快速（高性能）的 web 框架，使用 Python 3.6+ 并基于标准的 Python 类型提示。
-
-   **Demo:**
-   
-   👉	[基于fastAPI实现的文件对象存储](https://github.com/Bean-jun/fileStorage)👈
-
+      **Demo:**
+      
+      👉	[基于flask实现的api-demo](https://github.com/Bean-jun/PersonBlogSystemFlask/blob/master/docs/APIDocuments.md)👈
+      
    
 
-4. [tornado](https://www.tornadoweb.org/en/stable/)    [中文文档](https://www.osgeo.cn/tornado/)           推荐指数 ⭐️⭐️⭐️⭐️
+   - [fastapi](https://fastapi.tiangolo.com/zh/tutorial/)    官方中文
 
-   Tornado是一个python web框架和异步网络库，最初开发于 FriendFeed . 通过使用非阻塞网络I/O，Tornado可以扩展到数万个开放连接，使其非常适合 long polling， WebSockets以及其他需要与每个用户建立长期连接的应用程序。
+      FastAPI 是一个用于构建 API 的现代、快速（高性能）的 web 框架，使用 Python 3.6+ 并基于标准的 Python 类型提示。
 
-   - 图书推荐 [introduction to tornado](http://shouce.jb51.net/tornado/)       **大家有机会还是支持正版书籍哦**
+      **Demo:**
+      
+      👉	[基于fastAPI实现的文件对象存储](https://github.com/Bean-jun/fileStorage)👈
 
-   **Demo**
+      
 
-   👉	[一个基于rbac模型的crud架子](https://github.com/Bean-jun/tornado_demo.git)👈
+   - [tornado](https://www.tornadoweb.org/en/stable/)    [中文文档](https://www.osgeo.cn/tornado/)
 
-   
+      Tornado是一个python web框架和异步网络库，最初开发于 FriendFeed . 通过使用非阻塞网络I/O，Tornado可以扩展到数万个开放连接，使其非常适合 long polling， WebSockets以及其他需要与每个用户建立长期连接的应用程序。
 
-5. [aiohttp](https://docs.aiohttp.org/en/stable/)   [中文文档](https://www.bookstack.cn/books/aiohttp-chinese-documentation)               推荐指数 ⭐️⭐️⭐️
+      - 图书推荐 [introduction to tornado](http://shouce.jb51.net/tornado/)       **大家有机会还是支持正版书籍哦**
 
-   Asynchronous HTTP Client/Server for [asyncio](https://docs.aiohttp.org/en/stable/glossary.html#term-asyncio) and Python.
+      **Demo**
+
+      👉	[一个基于rbac模型的crud架子](https://github.com/Bean-jun/tornado_demo.git)👈
+
+      
+
+   - [aiohttp](https://docs.aiohttp.org/en/stable/)   [中文文档](https://www.bookstack.cn/books/aiohttp-chinese-documentation)
+
+      Asynchronous HTTP Client/Server for [asyncio](https://docs.aiohttp.org/en/stable/glossary.html#term-asyncio) and Python.
+
+2. Go Web 框架
+
+   - [Gin](https://gin-gonic.com/zh-cn/)
+
+      Gin 是一个用 Go (Golang) 编写的 HTTP Web 框架
 
 
 
@@ -284,10 +320,12 @@
    一款非常简单、灵活、可靠的分布式系统，可用于处理大量消息，并且提供了一整套操作此系统的一系列工具
    
    👉	[入门使用](OtherDocs/celery使用.md)👈
-   
+
+
 2. [siege](https://www.joedog.org/siege-home)
 
    一款简单方便的压测工具
+
 
 3. [nginx](https://nginx.org/)
 
@@ -300,10 +338,12 @@
    👉 [nginx+uwsgi+django项目部署](DeployDocs/nginx_uwsgi_django部署.md)👈
 
    👉 [nginx+uwsgi+flask项目部署](DeployDocs/nginx_uwsgi_flask部署.md)👈
-   
+
+
 4. [uwsgi](https://uwsgi-docs-zh.readthedocs.io/zh_CN/latest/index.html)
 
    uWSGI是一个Web服务器，它实现了WSGI协议、uwsgi、http等协议
+
 
 5. [docker](https://www.docker.com/)
 
@@ -311,28 +351,33 @@
 
    👉	[docker简易上手](OtherDocs/docker.md)👈
 
+
 6. crontab
 
    特好用的定时执行程序的命令
 
    👉	[crontab操作文档(哈哈哈哈，我直接摘的操作手册)](OtherDocs/crontab.md)👈
 
+
 7. [frp](https://gofrp.org/)
 
    内网穿透工具
 
 
+
 ### 九、开发知识
 
- 1. cookies、session、token
+1. cookies、session、token
 
     👉 [cookies、session、token到底是个啥?](DevelopDocs/cookie_session_token介绍.md)👈
 
- 2. OAuth2、SSO
+
+2. OAuth2、SSO
 
     👉 [OAuth2、SSO介绍](DevelopDocs/oauth2_sso介绍.md)👈
 
- 3. LVS
+
+3. LVS
 
     👉 [LVS介绍（转载）](DevelopDocs/LVS介绍.md)👈
 
@@ -340,37 +385,43 @@
 
 ### 十、遇见的BUG
 
- 1. cookie离谱的生效范围
+1. cookie离谱的生效范围
 
       👉 [cookie离谱的生效范围](BugDocs/cookies/cookie离谱的生效范围.md)👈
+   
 
- 2. go 加密库 slow bug
+2. go 加密库 slow bug
 
       👉 [go加密库执行慢的bug](BugDocs/go加密库执行慢的bug.md)👈
+   
 
- 3. 看似无害的工具-->解决文件名冲突的工具函数竟是程序变慢的元凶
+3. 看似无害的工具-->解决文件名冲突的工具函数竟是程序变慢的元凶
 
       👉 [解决文件名冲突的工具函数竟是slow的元凶](BugDocs/解决文件名冲突的工具函数竟是slow的元凶.md)👈
 
 
 ### 十一、其他
 
- 1. Jetson Nano B01 环境搭建 
+1. Jetson Nano B01 环境搭建 
 
       👉 [Jetson Nano环境搭建](TryDocs/Jetson_Nano_环境搭建.md)👈
+   
 
- 2. pyinstaller打包小技巧
+2. pyinstaller打包小技巧
 
       👉 [Pyinstaller工具小Tips](TryDocs/Pyinstaller工具小tips.md)👈
- 
- 3. py to pyd
+
+
+3. py to pyd
 
       👉 [Py快速将py脚本编译为pyd](TryDocs/Py快速将py脚本编译为pyd.md)👈
- 
- 4. py脚本打包后执行效率对比
+
+
+4. py脚本打包后执行效率对比
 
       👉 [Py脚本打包效率对比](TryDocs/Py脚本打包后执行效率对比.md)👈
+   
 
- 5. Lua基础
+5. Lua基础
 
       👉 [Lua基础](TryDocs/Lua基础.md)👈
