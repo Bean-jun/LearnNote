@@ -49,12 +49,32 @@
           </button>
         </div>
         <div class="article-size">
-          <span>1588字 | 3分钟</span>
+          <span>3645字 | 9分钟</span>
         </div>
       </div>
       <article class="markdown-body entry-content container-lg" itemprop="text">
-        <h2><a id="user-content-一创建型模式-介绍对象创建" class="anchor" aria-hidden="true" href="#一创建型模式-介绍对象创建"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、创建型模式-&gt;介绍对象创建</h2>
-<h3><a id="user-content-1-工厂模式" class="anchor" aria-hidden="true" href="#1-工厂模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. 工厂模式</h3>
+        <h2><a id="user-content-零面向对象设计原则" class="anchor" aria-hidden="true" tabindex="-1" href="#零面向对象设计原则"><span aria-hidden="true" class="octicon octicon-link"></span></a>零、面向对象设计原则</h2>
+<h3><a id="user-content-1-单一原则" class="anchor" aria-hidden="true" tabindex="-1" href="#1-单一原则"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. 单一原则</h3>
+<p>单一的类，实现单一的职责</p>
+<h3><a id="user-content-2-开闭原则" class="anchor" aria-hidden="true" tabindex="-1" href="#2-开闭原则"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. 开闭原则</h3>
+<p>对扩展开放，对修改关闭</p>
+<h3><a id="user-content-3-里氏代换原则" class="anchor" aria-hidden="true" tabindex="-1" href="#3-里氏代换原则"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. 里氏代换原则</h3>
+<p>不要破坏继承体系，父类对象出现的地方都可以使用子类对象替换，而程序的执行结果不变。</p>
+<h3><a id="user-content-4-依赖倒转原则" class="anchor" aria-hidden="true" tabindex="-1" href="#4-依赖倒转原则"><span aria-hidden="true" class="octicon octicon-link"></span></a>4. 依赖倒转原则</h3>
+<p>抽象不应该依赖细节，细节应该依赖于抽象。</p>
+<h3><a id="user-content-5-接口隔离原则" class="anchor" aria-hidden="true" tabindex="-1" href="#5-接口隔离原则"><span aria-hidden="true" class="octicon octicon-link"></span></a>5. 接口隔离原则</h3>
+<p>接口设计要精简单一，类间的依赖关系应该建立在最小的接口上。</p>
+<h3><a id="user-content-6-迪米特法则" class="anchor" aria-hidden="true" tabindex="-1" href="#6-迪米特法则"><span aria-hidden="true" class="octicon octicon-link"></span></a>6. 迪米特法则</h3>
+<p>降低耦合, 一个类应该尽量少的了解其它类的信息</p>
+<h3><a id="user-content-7-组合聚合复用原则" class="anchor" aria-hidden="true" tabindex="-1" href="#7-组合聚合复用原则"><span aria-hidden="true" class="octicon octicon-link"></span></a>7. 组合/聚合复用原则</h3>
+<p>聚合表示整体与部分的关系，表示"含有"，整体由部分组合而成，部分可以脱离整体作为一个独立的个体存在。组合则是一种更强的聚合，部分组成整体，而且不可分割，部分不能脱离整体而单独存在。</p>
+<ul>
+<li>子类是超类的一个特殊种类，而不是超类的一个角色，也就是区分"Has-A"和"Is-A".只有"Is-A"关系才符合继承关系，"Has-A"关系应当使用聚合来描述。</li>
+<li>永远不会出现需要将子类换成另外一个类的子类的情况。如果不能肯定将来是否会变成另外一个子类的话，就不要使用继承。</li>
+<li>子类具有扩展超类的责任，而不是具有置换掉或注销掉超类的责任。如果一个子类需要大量的置换掉超类的行为，那么这个类就不应该是这个超类的子类。</li>
+</ul>
+<h2><a id="user-content-一创建型模式-介绍对象创建" class="anchor" aria-hidden="true" tabindex="-1" href="#一创建型模式-介绍对象创建"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、创建型模式-&gt;介绍对象创建</h2>
+<h3><a id="user-content-1-工厂模式" class="anchor" aria-hidden="true" tabindex="-1" href="#1-工厂模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. 工厂模式</h3>
 <blockquote>
 <p>两种模式可以用于以下场景</p>
 <p>a. 追踪对象的创建</p>
@@ -217,7 +237,7 @@
     <span class="pl-en">print</span>(<span class="pl-s1">conn</span>.<span class="pl-en">connect</span>())
     <span class="pl-s1">conn</span> <span class="pl-c1">=</span> <span class="pl-en">connect_factory</span>(<span class="pl-c1">0</span>, <span class="pl-s">"SQLServer"</span>)
     <span class="pl-en">print</span>(<span class="pl-s1">conn</span>.<span class="pl-en">connect</span>())</pre></div>
-<h3><a id="user-content-2-建造者模式" class="anchor" aria-hidden="true" href="#2-建造者模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. 建造者模式</h3>
+<h3><a id="user-content-2-建造者模式" class="anchor" aria-hidden="true" tabindex="-1" href="#2-建造者模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. 建造者模式</h3>
 <blockquote>
 <p>该模式在以下场景较为适用</p>
 <p>a. 若您需要创建一个复杂对象(多步骤，步骤之间还有一定顺序)</p>
@@ -342,7 +362,7 @@
     <span class="pl-s1">instance</span>.<span class="pl-en">construct_builder</span>(<span class="pl-s1">builder</span>)
     <span class="pl-s1">conn</span> <span class="pl-c1">=</span> <span class="pl-s1">instance</span>.<span class="pl-en">db</span>()
     <span class="pl-en">print</span>(<span class="pl-s">"客户端获取连接对象:"</span>, <span class="pl-s1">conn</span>)</pre></div>
-<h3><a id="user-content-3-原型模式" class="anchor" aria-hidden="true" href="#3-原型模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. 原型模式</h3>
+<h3><a id="user-content-3-原型模式" class="anchor" aria-hidden="true" tabindex="-1" href="#3-原型模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. 原型模式</h3>
 <blockquote>
 <p><strong>该模式中，将帮助我们创建一个对象的克隆</strong></p>
 </blockquote>
@@ -397,8 +417,300 @@
         <span class="pl-s">"gender"</span>: <span class="pl-s">"男"</span>,
     })
     <span class="pl-en">print</span>(<span class="pl-s1">data01</span>, <span class="pl-s1">data02</span>, <span class="pl-en">id</span>(<span class="pl-s1">data01</span>), <span class="pl-en">id</span>(<span class="pl-s1">data02</span>))</pre></div>
-<h2><a id="user-content-二结构型模式-介绍不同对象之间的关系" class="anchor" aria-hidden="true" href="#二结构型模式-介绍不同对象之间的关系"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、结构型模式-&gt;介绍不同对象之间的关系</h2>
-<h2><a id="user-content-三行为型模式-介绍对象之间通信的关系" class="anchor" aria-hidden="true" href="#三行为型模式-介绍对象之间通信的关系"><span aria-hidden="true" class="octicon octicon-link"></span></a>三、行为型模式-&gt;介绍对象之间通信的关系</h2>
+<h2><a id="user-content-二结构型模式-介绍不同对象之间的关系" class="anchor" aria-hidden="true" tabindex="-1" href="#二结构型模式-介绍不同对象之间的关系"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、结构型模式-&gt;介绍不同对象之间的关系</h2>
+<h3><a id="user-content-1-适配器模式" class="anchor" aria-hidden="true" tabindex="-1" href="#1-适配器模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. 适配器模式</h3>
+<blockquote>
+<p>该模式中，帮助我们实验两个不兼容接口之间的兼容</p>
+</blockquote>
+<p>比如iPhone手机，国行、港版、美版、欧版手机的充电接口都是<code>Lightning</code>,但是不同区域会有不同的标准，这就导致我们在使用iPhone过程中需要使用不同的充电器来为iPhone供电，为了解决问题，我们可以定义一个适配器为手机充电，例如下面的例子：</p>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># DesignDocs/src/struct_adapter.py</span>
+<span class="pl-k">class</span> <span class="pl-v">Charge</span>:
+    <span class="pl-s">"""标准充电器"""</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">start</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"标准充电器, 为iPhone充电中"</span>)
+    
+<span class="pl-k">class</span> <span class="pl-v">ChineseCharge</span>:
+    <span class="pl-s">"""国行充电器"""</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">charge5V</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"国行5v充电器，为iPhone充电中"</span>)
+
+
+<span class="pl-k">class</span> <span class="pl-v">OtherCharge</span>:
+    <span class="pl-s">"""其他充电器"""</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">super_charge</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">"其他超级快充充电器，为iPhone充电中"</span>)
+
+
+<span class="pl-k">class</span> <span class="pl-v">AdapterCharge</span>:
+    <span class="pl-s">"""转换器，为充电器适配"""</span>
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">charge</span>, <span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">__charge</span> <span class="pl-c1">=</span> <span class="pl-en">charge</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+        <span class="pl-k">if</span> <span class="pl-en">isinstance</span>(<span class="pl-s1">self</span>.<span class="pl-s1">__charge</span>, <span class="pl-v">Charge</span>):
+            <span class="pl-s1">self</span>.<span class="pl-s1">__charge</span>.<span class="pl-s1">do_charge</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">__charge</span>.<span class="pl-s1">start</span>
+        <span class="pl-k">if</span> <span class="pl-en">isinstance</span>(<span class="pl-s1">self</span>.<span class="pl-s1">__charge</span>, <span class="pl-v">ChineseCharge</span>):
+            <span class="pl-s1">self</span>.<span class="pl-s1">__charge</span>.<span class="pl-s1">do_charge</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">__charge</span>.<span class="pl-s1">charge5V</span>
+        <span class="pl-k">if</span> <span class="pl-en">isinstance</span>(<span class="pl-s1">self</span>.<span class="pl-s1">__charge</span>, <span class="pl-v">OtherCharge</span>):
+            <span class="pl-s1">self</span>.<span class="pl-s1">__charge</span>.<span class="pl-s1">do_charge</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">__charge</span>.<span class="pl-s1">super_charge</span>
+    
+    <span class="pl-k">def</span> <span class="pl-en">execute</span>(<span class="pl-s1">self</span>, <span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">__charge</span>.<span class="pl-en">do_charge</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-s1">adapter1</span> <span class="pl-c1">=</span> <span class="pl-v">AdapterCharge</span>(<span class="pl-v">Charge</span>)
+    <span class="pl-s1">adapter1</span>.<span class="pl-en">execute</span>()
+    <span class="pl-s1">adapter2</span> <span class="pl-c1">=</span> <span class="pl-v">AdapterCharge</span>(<span class="pl-v">ChineseCharge</span>)
+    <span class="pl-s1">adapter2</span>.<span class="pl-en">execute</span>()
+    <span class="pl-s1">adapter3</span> <span class="pl-c1">=</span> <span class="pl-v">AdapterCharge</span>(<span class="pl-v">OtherCharge</span>)
+    <span class="pl-s1">adapter3</span>.<span class="pl-en">execute</span>()</pre></div>
+<h3><a id="user-content-2-修饰器模式" class="anchor" aria-hidden="true" tabindex="-1" href="#2-修饰器模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. 修饰器模式</h3>
+<blockquote>
+<p>该模式中，能够支持动态的扩展对象功能</p>
+</blockquote>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># DesignDocs/src/struct_decorator.py</span>
+<span class="pl-k">import</span> <span class="pl-s1">time</span>
+<span class="pl-k">import</span> <span class="pl-s1">functools</span>
+
+<span class="pl-k">def</span> <span class="pl-en">memoize</span>(<span class="pl-s1">f</span>):
+    <span class="pl-s1">cache_dict</span> <span class="pl-c1">=</span> {}
+    <span class="pl-en">@<span class="pl-s1">functools</span>.<span class="pl-en">wraps</span>(<span class="pl-s1">f</span>)</span>
+    <span class="pl-k">def</span> <span class="pl-en">wrapper</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>):
+        <span class="pl-k">if</span> <span class="pl-s1">args</span> <span class="pl-c1">not</span> <span class="pl-c1">in</span> <span class="pl-s1">cache_dict</span>:
+            <span class="pl-s1">cache_dict</span>[<span class="pl-s1">args</span>] <span class="pl-c1">=</span> <span class="pl-en">f</span>(<span class="pl-c1">*</span><span class="pl-s1">args</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">cache_dict</span>[<span class="pl-s1">args</span>]
+    <span class="pl-k">return</span> <span class="pl-s1">wrapper</span>
+
+
+<span class="pl-en">@<span class="pl-s1">memoize</span>    <span class="pl-c"># 语法糖  对于一些其他语言，可以这样  fibo = memoize(fibo)</span></span>
+<span class="pl-k">def</span> <span class="pl-en">fibo</span>(<span class="pl-s1">n</span>):
+    <span class="pl-k">if</span> <span class="pl-s1">n</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">2</span>:
+        <span class="pl-k">return</span> <span class="pl-c1">1</span>
+    <span class="pl-k">return</span> <span class="pl-en">fibo</span>(<span class="pl-s1">n</span><span class="pl-c1">-</span><span class="pl-c1">1</span>) <span class="pl-c1">+</span> <span class="pl-en">fibo</span>(<span class="pl-s1">n</span><span class="pl-c1">-</span><span class="pl-c1">2</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-s1">t1</span> <span class="pl-c1">=</span> <span class="pl-s1">time</span>.<span class="pl-en">time</span>()
+    <span class="pl-s1">ret</span> <span class="pl-c1">=</span> <span class="pl-en">fibo</span>(<span class="pl-c1">40</span>)
+    <span class="pl-en">print</span>(<span class="pl-s">f"ret: <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">ret</span><span class="pl-kos">}</span></span> use time: <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">time</span>.<span class="pl-en">time</span>() <span class="pl-c1">-</span> <span class="pl-s1">t1</span><span class="pl-kos">}</span></span>"</span>)</pre></div>
+<h3><a id="user-content-3-外观模式" class="anchor" aria-hidden="true" tabindex="-1" href="#3-外观模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. 外观模式</h3>
+<blockquote>
+<p>外观设计模式有助于隐藏系统的内部复杂性，并通过一个简化的接口向客户端暴露必要的部分</p>
+</blockquote>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># DesignDocs/src/struct_facade.py</span>
+<span class="pl-k">from</span> <span class="pl-s1">abc</span> <span class="pl-k">import</span> <span class="pl-v">ABCMeta</span>, <span class="pl-s1">abstractmethod</span>
+
+<span class="pl-k">class</span> <span class="pl-v">Component</span>(<span class="pl-s1">metaclass</span><span class="pl-c1">=</span><span class="pl-v">ABCMeta</span>):
+    <span class="pl-c"># 通用零部件</span>
+
+    <span class="pl-en">@<span class="pl-s1">abstractmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">slef</span>):
+        <span class="pl-c"># 初始化</span>
+        <span class="pl-k">pass</span>
+
+    <span class="pl-en">@<span class="pl-s1">abstractmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">boot</span>(<span class="pl-s1">self</span>):
+        <span class="pl-c"># 启动</span>
+        <span class="pl-k">pass</span>
+
+    <span class="pl-en">@<span class="pl-s1">abstractmethod</span></span>
+    <span class="pl-k">def</span> <span class="pl-en">stop</span>(<span class="pl-s1">self</span>):
+        <span class="pl-c"># 停止</span>
+        <span class="pl-k">pass</span>
+
+
+<span class="pl-k">class</span> <span class="pl-v">Engine</span>(<span class="pl-v">Component</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"本田发动机"</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">boot</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span> 启动中"</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">stop</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span> 已停止"</span>)
+    
+
+<span class="pl-k">class</span> <span class="pl-v">Electrical</span>(<span class="pl-v">Component</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"汽车电器件"</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">boot</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span> 启动中"</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">stop</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span> 已停止"</span>)
+
+
+<span class="pl-k">class</span> <span class="pl-v">Display</span>(<span class="pl-v">Component</span>):
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"汽车中控显示器"</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">boot</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span> 启动中"</span>)
+
+    <span class="pl-k">def</span> <span class="pl-en">stop</span>(<span class="pl-s1">self</span>):
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">self</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span> 已停止"</span>)
+    
+
+<span class="pl-k">class</span> <span class="pl-v">UserOperator</span>:
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">engine</span> <span class="pl-c1">=</span> <span class="pl-v">Engine</span>()
+        <span class="pl-s1">self</span>.<span class="pl-s1">electrical</span> <span class="pl-c1">=</span> <span class="pl-v">Electrical</span>()
+        <span class="pl-s1">self</span>.<span class="pl-s1">display</span> <span class="pl-c1">=</span> <span class="pl-v">Display</span>()
+
+    <span class="pl-k">def</span> <span class="pl-en">start</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">engine</span>.<span class="pl-en">boot</span>()
+        <span class="pl-s1">self</span>.<span class="pl-s1">electrical</span>.<span class="pl-en">boot</span>()
+        <span class="pl-s1">self</span>.<span class="pl-s1">display</span>.<span class="pl-en">boot</span>()
+    
+    <span class="pl-k">def</span> <span class="pl-en">stop</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">display</span>.<span class="pl-en">stop</span>()
+        <span class="pl-s1">self</span>.<span class="pl-s1">electrical</span>.<span class="pl-en">stop</span>()
+        <span class="pl-s1">self</span>.<span class="pl-s1">engine</span>.<span class="pl-en">stop</span>()
+    
+    <span class="pl-k">def</span> <span class="pl-en">stop_display</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">display</span>.<span class="pl-en">stop</span>()
+    
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-s1">op</span> <span class="pl-c1">=</span> <span class="pl-v">UserOperator</span>()
+    <span class="pl-s1">op</span>.<span class="pl-en">start</span>()  <span class="pl-c"># 点火</span>
+    <span class="pl-s1">op</span>.<span class="pl-en">stop_display</span>() <span class="pl-c"># 关闭中控显示器</span>
+    <span class="pl-c"># 小车行驶.....</span>
+    <span class="pl-s1">op</span>.<span class="pl-en">stop</span>() <span class="pl-c">#熄火</span></pre></div>
+<h3><a id="user-content-4-享元模式" class="anchor" aria-hidden="true" tabindex="-1" href="#4-享元模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>4. 享元模式</h3>
+<blockquote>
+<p>享元就是一个包含状态独立的不可变（又称固有的）数据的共享对象 (关注的是共享对象数据)</p>
+</blockquote>
+<blockquote>
+<p>若想要享元模式有效应该满足下面的条件：</p>
+<p>应用需要使用大量的对象。</p>
+<p>对象太多，存储/渲染它们的代价太大。一旦移除对象中的可变状态（因为在需要之时，应该由客户端代码显式地传递给享元），多组不同的对象可被相对更少的共享对象所替代。</p>
+<p>对象ID对于应用不重要。对象共享会造成ID比较的失败，所以不能依赖对象ID（那些在客户端代码看来不同的对象，最终具有相同的ID）。</p>
+</blockquote>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># DesignDocs/src/struct_flyweight.py</span>
+<span class="pl-k">from</span> <span class="pl-s1">abc</span> <span class="pl-k">import</span> <span class="pl-v">ABCMeta</span>
+
+<span class="pl-k">class</span> <span class="pl-v">Car</span>(<span class="pl-s1">metaclass</span><span class="pl-c1">=</span><span class="pl-v">ABCMeta</span>):
+    <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"car"</span>
+
+<span class="pl-k">class</span> <span class="pl-v">MiniCar</span>(<span class="pl-v">Car</span>):
+    <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"MiniCar"</span>
+
+<span class="pl-k">class</span> <span class="pl-v">BusCar</span>(<span class="pl-v">Car</span>):
+    <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"BusCar"</span>
+
+<span class="pl-k">class</span> <span class="pl-v">BigCar</span>(<span class="pl-v">Car</span>):
+    <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s">"BigCar"</span>
+
+<span class="pl-k">class</span> <span class="pl-v">CreateCar</span>:
+    <span class="pl-s1">pool</span> <span class="pl-c1">=</span> <span class="pl-en">dict</span>()
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>, <span class="pl-s1">car</span>: <span class="pl-v">Car</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">car</span> <span class="pl-c1">=</span> <span class="pl-s1">car</span>
+
+    <span class="pl-k">def</span> <span class="pl-en">__new__</span>(<span class="pl-s1">cls</span>, <span class="pl-s1">car</span>: <span class="pl-v">Car</span>, <span class="pl-c1">*</span><span class="pl-s1">args</span>, <span class="pl-c1">**</span><span class="pl-s1">kwargs</span>):
+        <span class="pl-s1">_car</span> <span class="pl-c1">=</span> <span class="pl-s1">cls</span>.<span class="pl-s1">pool</span>.<span class="pl-en">get</span>(<span class="pl-s1">car</span>.<span class="pl-s1">name</span>)
+        <span class="pl-k">if</span> <span class="pl-c1">not</span> <span class="pl-s1">_car</span>:
+            <span class="pl-s1">_car</span> <span class="pl-c1">=</span> <span class="pl-s1">object</span>.<span class="pl-en">__new__</span>(<span class="pl-s1">cls</span>)
+            <span class="pl-s1">cls</span>.<span class="pl-s1">pool</span>[<span class="pl-s1">car</span>.<span class="pl-s1">name</span>] <span class="pl-c1">=</span> <span class="pl-s1">_car</span>
+        <span class="pl-k">return</span> <span class="pl-s1">_car</span>
+    
+    <span class="pl-k">def</span> <span class="pl-en">numberid</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-en">id</span>(<span class="pl-s1">self</span>.<span class="pl-s1">car</span>)
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-s1">mini_car</span> <span class="pl-c1">=</span> <span class="pl-v">MiniCar</span>()
+    <span class="pl-s1">bus_car</span> <span class="pl-c1">=</span> <span class="pl-v">BusCar</span>()
+    <span class="pl-s1">big_car</span> <span class="pl-c1">=</span> <span class="pl-v">BigCar</span>()
+    <span class="pl-c"># 对象已创建，即使不停创建的实例，都是基于此对象进行创建</span>
+    <span class="pl-k">for</span> <span class="pl-s1">_</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">10</span>):
+        <span class="pl-s1">c1</span> <span class="pl-c1">=</span> <span class="pl-v">CreateCar</span>(<span class="pl-s1">mini_car</span>)
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">c1</span>.<span class="pl-s1">car</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span> car id <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">c1</span>.<span class="pl-en">numberid</span>()<span class="pl-kos">}</span></span>"</span>)
+    <span class="pl-k">for</span> <span class="pl-s1">_</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">10</span>):
+        <span class="pl-s1">c2</span> <span class="pl-c1">=</span> <span class="pl-v">CreateCar</span>(<span class="pl-s1">bus_car</span>)
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">c2</span>.<span class="pl-s1">car</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span> car id <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">c2</span>.<span class="pl-en">numberid</span>()<span class="pl-kos">}</span></span>"</span>)
+    <span class="pl-k">for</span> <span class="pl-s1">_</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">10</span>):
+        <span class="pl-s1">c3</span> <span class="pl-c1">=</span> <span class="pl-v">CreateCar</span>(<span class="pl-s1">big_car</span>)
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">c3</span>.<span class="pl-s1">car</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span> car id <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">c3</span>.<span class="pl-en">numberid</span>()<span class="pl-kos">}</span></span>"</span>)
+    <span class="pl-k">for</span> <span class="pl-s1">_</span> <span class="pl-c1">in</span> <span class="pl-en">range</span>(<span class="pl-c1">10</span>):
+        <span class="pl-s1">c4</span> <span class="pl-c1">=</span> <span class="pl-v">CreateCar</span>(<span class="pl-s1">mini_car</span>)
+        <span class="pl-en">print</span>(<span class="pl-s">f"<span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">c4</span>.<span class="pl-s1">car</span>.<span class="pl-s1">name</span><span class="pl-kos">}</span></span> car id <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">c4</span>.<span class="pl-en">numberid</span>()<span class="pl-kos">}</span></span>"</span>)</pre></div>
+<h3><a id="user-content-5-模型-视图-控制器模式" class="anchor" aria-hidden="true" tabindex="-1" href="#5-模型-视图-控制器模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>5. 模型-视图-控制器模式</h3>
+<blockquote>
+<p>模型是核心的部分，代表着应用的信息本源，包含和管理（业务）逻辑、数据、状态以及应用的规则。</p>
+<p>视图是模型的可视化表现。视图的例子有，计算机图形用户界面、计算机终端的文本输出、智能手机的应用图形界面、PDF文档、饼图和柱状图等。视图只是展示数据，并不处理数据。</p>
+<p>控制器是模型与视图之间的链接/粘附。模型与视图之间的所有通信都通过控制器进行。</p>
+</blockquote>
+<div class="highlight highlight-source-python"><pre><span class="pl-c"># DesignDocs/src/struct_mvc.py</span>
+<span class="pl-k">class</span> <span class="pl-v">Model</span>:
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">data</span> <span class="pl-c1">=</span> []
+
+    <span class="pl-k">def</span> <span class="pl-en">get</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">data</span>
+    
+    <span class="pl-k">def</span> <span class="pl-en">add</span>(<span class="pl-s1">self</span>, <span class="pl-s1">data</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">data</span>.<span class="pl-en">append</span>(<span class="pl-s1">data</span>)
+        <span class="pl-k">return</span> <span class="pl-s1">self</span>.<span class="pl-s1">data</span>
+
+<span class="pl-k">class</span> <span class="pl-v">View</span>:
+
+    <span class="pl-k">def</span> <span class="pl-en">show</span>(<span class="pl-s1">self</span>, <span class="pl-s1">data</span>):
+        <span class="pl-k">for</span> <span class="pl-s1">i</span> <span class="pl-c1">in</span> <span class="pl-s1">data</span>:
+            <span class="pl-en">print</span>(<span class="pl-s">f"view: <span class="pl-s1"><span class="pl-kos">{</span><span class="pl-s1">i</span><span class="pl-kos">}</span></span>"</span>)
+
+<span class="pl-k">class</span> <span class="pl-v">Controller</span>:
+
+    <span class="pl-k">def</span> <span class="pl-en">__init__</span>(<span class="pl-s1">self</span>):
+        <span class="pl-s1">self</span>.<span class="pl-s1">model</span> <span class="pl-c1">=</span> <span class="pl-v">Model</span>()
+        <span class="pl-s1">self</span>.<span class="pl-s1">view</span> <span class="pl-c1">=</span> <span class="pl-v">View</span>()
+
+    <span class="pl-k">def</span> <span class="pl-en">run</span>(<span class="pl-s1">self</span>):
+        <span class="pl-k">while</span> <span class="pl-c1">True</span>:
+            <span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-en">input</span>(<span class="pl-s">"please input to view! input q exit:<span class="pl-cce">\n</span>"</span>)
+            <span class="pl-s1">i</span> <span class="pl-c1">=</span> <span class="pl-s1">i</span>.<span class="pl-en">rstrip</span>(<span class="pl-s">"<span class="pl-cce">\n</span>"</span>)
+            <span class="pl-k">if</span> <span class="pl-s1">i</span> <span class="pl-c1">==</span> <span class="pl-s">"q"</span>:
+                <span class="pl-k">break</span>
+            <span class="pl-s1">self</span>.<span class="pl-s1">model</span>.<span class="pl-en">add</span>(<span class="pl-s1">i</span>)
+            <span class="pl-s1">data</span> <span class="pl-c1">=</span> <span class="pl-s1">self</span>.<span class="pl-s1">model</span>.<span class="pl-en">get</span>()
+            <span class="pl-s1">self</span>.<span class="pl-s1">view</span>.<span class="pl-en">show</span>(<span class="pl-s1">data</span>)
+
+
+<span class="pl-k">if</span> <span class="pl-s1">__name__</span> <span class="pl-c1">==</span> <span class="pl-s">"__main__"</span>:
+    <span class="pl-s1">c</span> <span class="pl-c1">=</span> <span class="pl-v">Controller</span>()
+    <span class="pl-s1">c</span>.<span class="pl-en">run</span>()</pre></div>
+<h3><a id="user-content-6-代理模式" class="anchor" aria-hidden="true" tabindex="-1" href="#6-代理模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>6. 代理模式</h3>
+<blockquote>
+<p>四种不同的知名代理类型</p>
+<p>远程代理：实际存在于不同地址空间（例如，某个网络服务器）的对象在本地的代理者。</p>
+<p>虚拟代理：用于懒初始化，将一个大计算量对象的创建延迟到真正需要的时候进行。</p>
+<p>保护/防护代理：控制对敏感对象的访问。</p>
+<p>智能（引用）代理：在对象被访问时执行额外的动作。此类代理的例子包括引用计数和线程安全检查。</p>
+</blockquote>
+<h2><a id="user-content-三行为型模式-介绍对象之间通信的关系" class="anchor" aria-hidden="true" tabindex="-1" href="#三行为型模式-介绍对象之间通信的关系"><span aria-hidden="true" class="octicon octicon-link"></span></a>三、行为型模式-&gt;介绍对象之间通信的关系</h2>
+<h3><a id="user-content-1-责任链模式" class="anchor" aria-hidden="true" tabindex="-1" href="#1-责任链模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. 责任链模式</h3>
+<blockquote>
+<p>责任链（Chain of Responsibility）模式用于让多个对象来处理单个请求时，或者用于预先不知道应该由哪个对象（来自某个对象链）来处理某个特定请求时。其原则如下所示。</p>
+<p>(1) 存在一个对象链（链表、树或任何其他便捷的数据结构）。</p>
+<p>(2) 我们一开始将请求发送给链中的第一个对象。</p>
+<p>(3) 对象决定其是否要处理该请求。</p>
+<p>(4) 对象将请求转发给下一个对象。</p>
+<p>(5) 重复该过程，直到到达链尾。</p>
+</blockquote>
+<h3><a id="user-content-2-命令模式" class="anchor" aria-hidden="true" tabindex="-1" href="#2-命令模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. 命令模式</h3>
+<h3><a id="user-content-3-解释器模式" class="anchor" aria-hidden="true" tabindex="-1" href="#3-解释器模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. 解释器模式</h3>
+<h3><a id="user-content-4-观察者模式" class="anchor" aria-hidden="true" tabindex="-1" href="#4-观察者模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>4. 观察者模式</h3>
+<h3><a id="user-content-5-状态模式" class="anchor" aria-hidden="true" tabindex="-1" href="#5-状态模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>5. 状态模式</h3>
+<h3><a id="user-content-6-策略模式" class="anchor" aria-hidden="true" tabindex="-1" href="#6-策略模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>6. 策略模式</h3>
+<h3><a id="user-content-7-模板模式" class="anchor" aria-hidden="true" tabindex="-1" href="#7-模板模式"><span aria-hidden="true" class="octicon octicon-link"></span></a>7. 模板模式</h3>
 
       </article>
     </div>
@@ -425,7 +737,7 @@
     </div>
     <div class="content-title-nav">
       <ul>
-        <li><a href="#一、创建型模式->介绍对象创建">一、创建型模式->介绍对象创建</a></li><li><a href="#二、结构型模式->介绍不同对象之间的关系">二、结构型模式->介绍不同对象之间的关系</a></li><li><a href="#三、行为型模式->介绍对象之间通信的关系">三、行为型模式->介绍对象之间通信的关系</a></li>
+        <li><a href="#零、面向对象设计原则">零、面向对象设计原则</a></li><li><a href="#一、创建型模式->介绍对象创建">一、创建型模式->介绍对象创建</a></li><li><a href="#二、结构型模式->介绍不同对象之间的关系">二、结构型模式->介绍不同对象之间的关系</a></li><li><a href="#三、行为型模式->介绍对象之间通信的关系">三、行为型模式->介绍对象之间通信的关系</a></li>
       </ul>
     </div>
   </div>
