@@ -179,6 +179,8 @@
 
    👉	[基于Socket的简单封装对TCP粘包问题的小试牛刀](NetworkDocs/基于Socket的简单封装对TCP粘包问题的小试牛刀.md)👈
 
+   👉	[基于Socket的简易聊天室-Python版本](NetworkDocs/基于Socket的简易聊天室-Python版本.md)👈
+
 
 
 2. HTTP协议
