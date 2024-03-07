@@ -28,8 +28,6 @@
 
       - 👉	[基础语法](PythonDocs/Python-基础语法.md)👈
 
-   - 1.2 高级点的内容
-
       - 👉	[闭包&装饰器](PythonDocs/Python-闭包&装饰器.md)👈
 
       - 👉	[上下文](PythonDocs/Python-上下文.md)👈
@@ -46,7 +44,7 @@
 
       - 👉	[数据库编程](#六数据库)    (见数据库-ORM工具部分)👈
    
-   - 1.3 无聊的代码
+   - 1.2 无聊的代码
 
       - 👉	[重写os.walk工具](PythonDocs/Python-重写os.walk工具.md)👈
 
@@ -54,7 +52,7 @@
 
       - 👉	[一个带进度条的下载小工具](PythonDocs/Python-一个带进度条的下载小工具.md)👈
 
-   - 1.4 工作中常见
+   - 1.3 工作中常见
 
       - 👉	[常见代码](PythonDocs/Python-常见代码.md)👈
 
@@ -62,13 +60,13 @@
 
       - 👉	[Python+SQLAlchemy 读写分离](DatabaseDocs/MySQL-主从配置.md#四代码测试数据库读写分离pythonsqlalchmey)👈
    
-   - 1.5 无聊的轮子
+   - 1.4 无聊的轮子
 
       - 👉	[自定义Python Web Frame](https://github.com/Bean-jun/bframe) 【使用 `pip install bframe` 进行体验】👈
 
       - 👉	[快速实现第三方平台验证登录](https://github.com/Bean-jun/oauth2link) 【使用 `pip install oauth2link` 进行体验】👈
 
-   - 1.6 Python相关文章推荐
+   - 1.5 Python相关文章推荐
 
       - 👉	[Python3多继承](https://www.python.org/download/releases/2.3/mro/) | [译文](https://lotabout.me/2020/C3-Algorithm/) | [见栗子-10](PythonDocs/Python-基础语法.md)👈
       - 👉	[【知乎】-Python部分魔法方法一览](https://zhuanlan.zhihu.com/p/344951719)👈
@@ -115,6 +113,9 @@
 
       - 👉	[异常-多线程基础-集合-泛型-网络编程](JavaDocs/Java-异常-多线程基础-集合-泛型-网络编程.md)👈
 
+   - 3.2 开发网站的一堆东西
+
+      - 👉	[Servlet知识点](JavaDocs/Java-Servlet知识点.md)👈
 
 4. 前端那些事【 仅学习笔记🙄 】
 
