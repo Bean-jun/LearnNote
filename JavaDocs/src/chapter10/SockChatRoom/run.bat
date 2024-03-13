@@ -1,0 +1,1 @@
+cd src && javac App.java && java App %1 && cd ..
