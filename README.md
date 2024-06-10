@@ -344,9 +344,7 @@
 
    👉	[nginx中的一些基本概念](OtherDocs/nginx.md)👈
 
-   👉 [nginx+uwsgi+django项目部署](DeployDocs/nginx_uwsgi_django部署.md)👈
-
-   👉 [nginx+uwsgi+flask项目部署](DeployDocs/nginx_uwsgi_flask部署.md)👈
+   👉 [nginx+uwsgi项目部署](DeployDocs/nginx_uwsgi部署.md)👈
 
 
 4. [uwsgi](https://uwsgi-docs-zh.readthedocs.io/zh_CN/latest/index.html)

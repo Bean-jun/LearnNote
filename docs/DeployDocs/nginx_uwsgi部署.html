@@ -8,7 +8,7 @@
   <link rel="stylesheet alternate" href="/.static/css/github-light.css" id="light-hl">
   <link rel="stylesheet alternate" href="/.static/css/github-dark.css" id="dark-hl">
   <link rel="stylesheet" href="/.static/css/main.css">
-  <title>nginx_uwsgi_flask部署.md</title>
+  <title>nginx_uwsgi部署.md</title>
 </head>
 
 <body id="markdown-body" data-color-mode="light" data-dark-theme="light">
@@ -49,16 +49,20 @@
           </button>
         </div>
         <div class="article-size">
-          <span>255字 | 1分钟</span>
+          <span>395字 | 1分钟</span>
         </div>
       </div>
       <article class="markdown-body entry-content container-lg" itemprop="text">
-        <h3><a id="user-content-一安装uwsgi" class="anchor" aria-hidden="true" href="#一安装uwsgi"><span aria-hidden="true" class="octicon octicon-link"></span></a>一、安装uwsgi</h3>
+        <div class="markdown-heading"><h3 class="heading-element">一、安装uwsgi</h3><a id="user-content-一安装uwsgi" class="anchor" aria-label="Permalink: 一、安装uwsgi" href="#一安装uwsgi"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
 <div class="highlight highlight-source-shell"><pre>pip install uwsgi</pre></div>
-<h3><a id="user-content-二编辑uwsgi配置文件启动uwsgi" class="anchor" aria-hidden="true" href="#二编辑uwsgi配置文件启动uwsgi"><span aria-hidden="true" class="octicon octicon-link"></span></a>二、编辑uwsgi配置文件&amp;&amp;启动uwsgi</h3>
+<div class="markdown-heading"><h3 class="heading-element">二、编辑uwsgi配置文件&amp;&amp;启动uwsgi</h3><a id="user-content-二编辑uwsgi配置文件启动uwsgi" class="anchor" aria-label="Permalink: 二、编辑uwsgi配置文件&amp;&amp;启动uwsgi" href="#二编辑uwsgi配置文件启动uwsgi"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
 <ol>
+<li>编辑配置文件<code>uwsgi.ini</code>
+</li>
+</ol>
+<ul>
 <li>
-<p>编辑配置文件<code>uwsgi.ini</code></p>
+<p>flask</p>
 <div class="highlight highlight-source-shell"><pre>[uwsgi]
 socket = 127.0.0.1:8090
 chdir = <span class="pl-s"><span class="pl-pds">"</span>项目路径<span class="pl-pds">"</span></span>
@@ -72,11 +76,33 @@ pidfile=uwsgi.pid
 daemonize=uwsgi.log</pre></div>
 </li>
 <li>
+<p>django</p>
+<div class="highlight highlight-source-shell"><pre>[uwsgi]
+<span class="pl-c"><span class="pl-c">#</span>使用nginx连接时使用</span>
+socket=127.0.0.1:8080
+<span class="pl-c"><span class="pl-c">#</span>项目目录</span>
+chdir=<span class="pl-s"><span class="pl-pds">'</span>/var/PersonBlog<span class="pl-pds">'</span></span>
+<span class="pl-c"><span class="pl-c">#</span>项目中wsgi.py文件的目录，相对于项目目录</span>
+wsgi-file=<span class="pl-s"><span class="pl-pds">'</span>PersonBlog/wsgi.py<span class="pl-pds">'</span></span>
+processes=2
+threads=1
+master=True
+pidfile=uwsgi.pid
+daemonize=uwsgi.log
+module = PersonBlog.wsgi:application
+<span class="pl-c"><span class="pl-c">#</span> 用于检查静态文件目录</span>
+check-static = <span class="pl-s"><span class="pl-pds">'</span>xxx<span class="pl-pds">'</span></span>
+<span class="pl-c"><span class="pl-c">#</span> =前面的/static是uWSGI的URL前缀，而后面的/srv/django/static则是静态文件的路径。 这个路径，通常使用绝对路径，但也支持相对路径。</span>
+static-map = <span class="pl-s"><span class="pl-pds">'</span>xxx<span class="pl-pds">'</span></span></pre></div>
+</li>
+</ul>
+<ol start="2">
+<li>
 <p>启动uwsgi</p>
 <div class="highlight highlight-source-shell"><pre>uwsgi --ini uwsgi.ini</pre></div>
 </li>
 </ol>
-<h3><a id="user-content-三编辑nginx配置文件" class="anchor" aria-hidden="true" href="#三编辑nginx配置文件"><span aria-hidden="true" class="octicon octicon-link"></span></a>三、编辑nginx配置文件</h3>
+<div class="markdown-heading"><h3 class="heading-element">三、编辑nginx配置文件</h3><a id="user-content-三编辑nginx配置文件" class="anchor" aria-label="Permalink: 三、编辑nginx配置文件" href="#三编辑nginx配置文件"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
 <div class="highlight highlight-source-shell"><pre><span class="pl-c"><span class="pl-c">#</span>user  nobody;</span>
 worker_processes  1<span class="pl-k">;</span>
 
@@ -118,9 +144,9 @@ http {
         }
     }
 }</pre></div>
-<h3><a id="user-content-四启动nginx" class="anchor" aria-hidden="true" href="#四启动nginx"><span aria-hidden="true" class="octicon octicon-link"></span></a>四、启动nginx</h3>
+<div class="markdown-heading"><h3 class="heading-element">四、启动nginx</h3><a id="user-content-四启动nginx" class="anchor" aria-label="Permalink: 四、启动nginx" href="#四启动nginx"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
 <div class="highlight highlight-source-shell"><pre>./nginx -s reload</pre></div>
-<h3><a id="user-content-五查看结果" class="anchor" aria-hidden="true" href="#五查看结果"><span aria-hidden="true" class="octicon octicon-link"></span></a>五、查看结果</h3>
+<div class="markdown-heading"><h3 class="heading-element">五、查看结果</h3><a id="user-content-五查看结果" class="anchor" aria-label="Permalink: 五、查看结果" href="#五查看结果"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
 <p>点开浏览器，查看结果...</p>
 
       </article>

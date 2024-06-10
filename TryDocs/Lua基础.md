@@ -4,8 +4,7 @@
     # 安装lua
     # 安装vscode
     # 安装vscode插件
-    # Lua # sumneko
-    # Lua Debug  # actboy168
+    # Lua Helper
     ```
 
 
@@ -144,6 +143,18 @@
             ::continue::
         end
         ```
+
+    - pairs & ipairs
+
+        ```lua
+            -- pairs 
+                -- 既可以遍历数组形式的表，也可以遍历键值形式的表
+                -- 如果遍历过程中遇到nil,则跳过此元素并继续遍历
+            -- ipairs 
+                -- 只能遍历数组形式的表
+                -- 从索引1开始，遍历到nil时，停止遍历
+        ```
+
 
 8. 流程控制
 
@@ -288,7 +299,40 @@
     Args(10, 12, 14)
     ```
 
-12. 模块
+13. 元表（Metatable）
+
+    Lua 提供了元表(Metatable)，允许我们改变 table 的行为
+    
+    setmetatable(table,metatable): 对指定 table 设置元表(metatable)，如果元表(metatable)中存在 __metatable 键值，setmetatable 会失败。
+    
+    getmetatable(table): 返回对象的元表(metatable)。
+
+    ![](images/2024-06-10-08-53-08.png)
+    ![](images/2024-06-10-09-02-49.png)
+
+    ```lua
+    -- 元表 测试 tostring方法
+    local mytable_metatable = {}
+    -- 为表设置元（类似python中的魔法方法）
+    mytable_metatable.__tostring = function(t)
+        local strs = ""
+        for i, v in pairs(t) do
+            -- 字符串拼接
+            strs = strs .. i
+            strs = strs .. v
+        end
+        return strs
+    end
+
+    -- 自定义一个表
+    a = {4, 1, 3}
+    -- 为自定义表绑定元表
+    setmetatable(a, mytable_metatable)
+    -- 尝试tostring方法
+    print(a)
+    ```
+
+14. 模块
 
     Lua 的模块是由变量、函数等已知元素组成的 table，因此创建一个模块很简单，就是创建一个 table，然后把需要导出的常量、函数放入其中，最后返回这个 table 就行。以下为创建自定义模块 module.lua，文件代码格式如下：
 
@@ -316,7 +360,19 @@
     return module
     ```
 
-13. 文件
+    引用lua `require`, 语法 `require("模块名称")`
+
+    ```lua
+    require("module")
+
+    module.say("this is module")
+    ```
+
+15. 协程
+
+    ![](images/2024-06-10-09-33-28.png)
+
+16. 文件
 
     ```lua
     local file = io.open("utils.lua", "r")
@@ -325,3 +381,94 @@
         print(file:read())
     end
     ```
+
+17. 异常
+
+    error函数
+
+        error (message [, level])
+
+        功能：终止正在执行的函数，并返回message的内容作为错误信息(error函数永远都不会返回)
+
+        通常情况下，error会附加一些错误位置的信息到message头部。
+
+        Level参数指示获得错误的位置:
+
+        Level=1[默认]：为调用error位置(文件+行号)
+        Level=2：指出哪个调用error的函数的函数
+        Level=0:不添加错误位置信息
+
+    pcall 函数
+
+        Lua中处理错误，可以使用函数pcall（protected call）来包装需要执行的代码。
+
+        pcall接收一个函数和要传递给后者的参数，并执行，执行结果：有错误、无错误；返回值true或者或false, errorinfo。
+
+        语法格式如下
+
+        if pcall(function_name, ….) then
+        -- 没有错误
+        else
+        -- 一些错误
+        end
+
+18. 垃圾回收
+
+    Lua 提供了以下函数collectgarbage ([opt [, arg]])用来控制自动内存管理:
+
+    collectgarbage("collect"): 做一次完整的垃圾收集循环。通过参数 opt 它提供了一组不同的功能：
+
+    collectgarbage("count"): 以 K 字节数为单位返回 Lua 使用的总内存数。 这个值有小数部分，所以只需要乘上 1024 就能得到 Lua 使用的准确字节数（除非溢出）。
+
+    collectgarbage("restart"): 重启垃圾收集器的自动运行。
+
+    collectgarbage("setpause"): 将 arg 设为收集器的 间歇率。 返回 间歇率 的前一个值。
+
+    collectgarbage("setstepmul"): 返回 步进倍率 的前一个值。
+
+    collectgarbage("step"): 单步运行垃圾收集器。 步长"大小"由 arg 控制。 传入 0 时，收集器步进（不可分割的）一步。 传入非 0 值， 收集器收集相当于 Lua 分配这些多（K 字节）内存的工作。 如果收集器结束一个循环将返回 true 。
+
+    collectgarbage("stop"): 停止垃圾收集器的运行。 在调用重启前，收集器只会因显式的调用运行。
+
+19. 面向对象
+
+    ```lua
+    local dog = {}
+    local mt = {
+        __index = dog
+    }
+
+    -- dog.eat(self) 可以简化为dog:eat()  其中self可以不写，在函数内部可以直接使用
+    function dog.eat(self)
+        print("dog eat", self)
+    end
+
+    function dog:sleep()
+        print("dog sleep", self)
+    end
+
+    function dog.work()
+        print("dog work")
+    end
+
+    function dog.new(self)
+        -- 通过元表，将dog new出去
+        return setmetatable(self, mt)
+    end
+
+
+    local mydog = dog:new()
+    mydog:eat()
+    -- 或者这样调用
+    dog.eat(mydog)
+
+    local mydog2 = dog.new(dog)
+    mydog2:eat()
+    -- 或者这样调用
+    dog.eat(mydog2)
+
+
+    -- : 面向对象的写法，会自动传入self
+    -- . 非面向对象写法，需要手动传入self对象
+    ```
+

@@ -10,6 +10,8 @@ pip install uwsgi
 
 1. 编辑配置文件`uwsgi.ini`
 
+- flask
+
    ```shell
    [uwsgi]
    socket = 127.0.0.1:8090
@@ -24,7 +26,27 @@ pip install uwsgi
    daemonize=uwsgi.log
    ```
 
-   
+- django
+
+   ```shell
+   [uwsgi]
+   #使用nginx连接时使用
+   socket=127.0.0.1:8080
+   #项目目录
+   chdir='/var/PersonBlog'
+   #项目中wsgi.py文件的目录，相对于项目目录
+   wsgi-file='PersonBlog/wsgi.py'
+   processes=2
+   threads=1
+   master=True
+   pidfile=uwsgi.pid
+   daemonize=uwsgi.log
+   module = PersonBlog.wsgi:application
+   # 用于检查静态文件目录
+   check-static = 'xxx'
+   # =前面的/static是uWSGI的URL前缀，而后面的/srv/django/static则是静态文件的路径。 这个路径，通常使用绝对路径，但也支持相对路径。
+   static-map = 'xxx'
+   ```
 
 2. 启动uwsgi
 
