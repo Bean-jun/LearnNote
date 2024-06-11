@@ -346,6 +346,11 @@
 
    👉 [nginx+uwsgi项目部署](DeployDocs/nginx_uwsgi部署.md)👈
 
+   👉	[OpenResty](OtherDocs/OpenResty.md)👈
+
+   - 相关文章推荐
+
+      - 👉	[OpenResty教程](https://openresty.org/download/agentzh-nginx-tutorials-zhcn.html)
 
 4. [uwsgi](https://uwsgi-docs-zh.readthedocs.io/zh_CN/latest/index.html)
 
