@@ -1,0 +1,2 @@
+protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative idl/*.proto
+python -m grpc_tools.protoc -I./idl --python_out=./idl --pyi_out=./idl --grpc_python_out=./idl idl/*.proto

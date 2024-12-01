@@ -123,3 +123,62 @@
             response = stub.SayHello(hello_pb2.HelloRequest(name="tom"))
             print(response.message)
     ```
+
+### 四、使用ssl进行grpc加密通信 (项目地址：./src/grpc_ssl)
+
+1. 生成证书秘钥
+
+    ```shell
+    @REM key： 服务器上的私钥文件，用于对发送给客户端数据的加密，以及对从客户端接收到数据的解密。
+    @REM csr： 证书签名请求文件，用于提交给证书颁发机构（CA）对证书签名。
+    @REM crt： 由证书颁发机构（CA）签名后的证书，或者是开发者自签名的证书，包含证书持有人的信息，持有人的公钥，以及签署者的签名等信息。
+    @REM pem： 是基于Base64编码的证书格式，扩展名包括PEM、CRT和CER。
+    @REM Common Name (e.g. server FQDN or YOUR name) []: 此栏目必填，否则grpc查找无法匹配到这个域名
+
+    @REM ----------------------------
+
+
+    @REM 生成ca根证书
+    @REM 生成密钥
+    openssl genrsa -out ca.key 4096
+    @REM 生成密钥签发请求
+    openssl req -new -sha256 -key ca.key -out ca.csr
+    @REM 生成根证书
+    openssl x509 -req -days 3650 -in ca.csr -signkey ca.key -out ca.crt
+
+
+    @REM ----------------------------
+
+    @REM 生成服务端证书
+    openssl genrsa -out server.key 2048
+    openssl req -new -sha256 -key server.key -out server.csr
+    @REM  用CA证书生成服务端证书
+    openssl x509 -req -days 3650 -CA ca.crt -CAkey ca.key -CAcreateserial -in server.csr -out server.pem
+    ```
+
+2. 改造server端
+    
+    ```python
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    add_UserServiceServicer_to_server(UserService(), server)
+    server.add_secure_port('[::]:50051', grpc.ssl_server_credentials(
+        [(_load_credential_from_file("credentials/server.key"),
+        _load_credential_from_file("credentials/server.pem"))]
+    ))
+    # server.add_insecure_port('[::]:50051')
+    server.start()
+    server.wait_for_termination()
+    ```
+
+3. 改造client端
+
+    ```python
+    # with grpc.insecure_channel('localhost:50051') as channel:
+    with grpc.secure_channel('localhost:50051', grpc.ssl_channel_credentials(
+            _load_credential_from_file("credentials/server.pem")
+    )) as channel:
+        userService = UserServiceStub(channel)
+        res = userService.Login(RequestLogin(username="test", password="<PASSWORD>"))
+        print(res.msg, res.valid)
+        print(res)
+    ```
