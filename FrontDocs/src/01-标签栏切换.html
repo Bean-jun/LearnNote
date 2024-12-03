@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @keyframes left {
+            0% {
+                background-color: rgb(240, 115, 115) !important;
+                transform: translateX(0px);
+            }
+
+            100% {
+                background-color: rgb(240, 115, 115) !important;
+                transform: translateX(-220px);
+            }
+        }
+
+        @keyframes right {
+            0% {
+                background-color: rgb(240, 115, 115) !important;
+                transform: translateX(0px);
+            }
+
+            100% {
+                background-color: rgb(240, 115, 115) !important;
+                transform: translateX(220px);
+            }
+        }
+
+        .container {
+            width: 420px;
+            height: 40px;
+            margin: auto;
+            margin-top: 200px;
+            border-radius: 20px;
+            background-color: #f5f7fa;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            position: relative;
+        }
+
+
+        .mask-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 40px;
+            width: 200px;
+            border-radius: 20px;
+            background-color: rgb(240, 115, 115) !important;
+        }
+
+        .container-content {
+            width: 420px;
+            height: 200px;
+            margin: auto;
+            margin-top: 20px;
+
+            background-color: rgb(226, 231, 235);
+            border-radius: 20px;
+
+            text-align: center;
+            line-height: 200px;
+        }
+
+        .bar {
+            width: 200px;
+            height: 40px;
+
+            border-radius: 20px;
+
+            line-height: 40px;
+            text-align: center;
+
+            cursor: pointer;
+
+            position: relative;
+        }
+    </style>
+    <script>
+        // 先前选中的标签
+        var selectOld = 0;
+        // 当前选中的标签
+        var selected = 0;
+
+        function update_selectd(bars) {
+            for (let index = 0; index < bars.length; index++) {
+                if (index == selected) {
+                    bars[index].setAttribute("style", "color: white;")
+
+                    // 数据切换
+                    document.getElementsByClassName(`bar-${index + 1}`)[0].setAttribute("style", "display: block");
+
+                    // 完成过度动画设置
+
+                    // 如果当前选中比之前选中序号大，向右移动红色遮罩
+                    if (index > selectOld) {
+                        document.getElementsByClassName("mask-bar")[0].style.left = "0";
+                        document.getElementsByClassName("mask-bar")[0].style.animation = "right 0.5s ease normal forwards";
+                    }
+
+                    // 如果当前选中比之前选中序号小，向左移动红色遮罩
+                    if (index < selectOld) {
+                        document.getElementsByClassName("mask-bar")[0].style.animation = "left 0.5s ease normal forwards";
+                        document.getElementsByClassName("mask-bar")[0].style.left = "220px";
+                    }
+
+                    // 设置选中标签
+                    selectOld = index;
+                } else {
+                    bars[index].setAttribute("style", "color: black;")
+                    // 数据切换
+                    document.getElementsByClassName(`bar-${index + 1}`)[0].setAttribute("style", "display: none");
+                }
+            }
+        };
+
+        window.onload = (e) => {
+            let bars = document.getElementsByClassName("bar");
+            update_selectd(bars)
+
+            for (let index = 0; index < bars.length; index++) {
+                const element = bars[index];
+
+                // 绑定事件，当点击时，动态更新选择框
+                element.onclick = (ev) => {
+                    selected = index
+                    update_selectd(bars)
+                }
+
+                // 鼠标移入时 设置背景颜色
+                element.addEventListener("mouseenter", (e) => {
+                    if (selected != index) {
+                        element.style.backgroundColor = '#ebedf0';
+                    }
+                })
+                // 鼠标移出时 禁用背景颜色
+                element.addEventListener("mouseleave", (e) => {
+                    element.style.backgroundColor = '';
+                })
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 用于红色背景遮罩 -->
+        <div class="mask-bar"></div>
+        <div class="bar">Python编程从入门到入土</div>
+        <div class="bar">Go编程从入门到入土</div>
+    </div>
+    <div class="container-content">
+        <div class="bar-1">Python内容</div>
+        <div class="bar-2">Go内容</div>
+    </div>
+</body>
+
+</html>
