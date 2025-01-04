@@ -52,23 +52,21 @@
 
       - 👉	[一个带进度条的下载小工具](PythonDocs/Python-一个带进度条的下载小工具.md)👈
 
-   - 1.3 工作中常见
-
       - 👉	[常见代码](PythonDocs/Python-常见代码.md)👈
 
       - 👉	[Python-grpc&protobuf使用](PythonDocs/grpc&protobuf使用.md)👈
 
       - 👉	[Python+SQLAlchemy 读写分离](DatabaseDocs/MySQL-主从配置.md#四代码测试数据库读写分离pythonsqlalchmey)👈
    
-   - 1.4 无聊的轮子
-
       - 👉	[自定义Python Web Frame](https://github.com/Bean-jun/bframe) 【使用 `pip install bframe` 进行体验】👈
 
       - 👉	[快速实现第三方平台验证登录](https://github.com/Bean-jun/oauth2link) 【使用 `pip install oauth2link` 进行体验】👈
 
-   - 1.5 Python相关文章推荐
+   - 1.3 Python相关文章推荐
 
       - 👉	[Python3多继承](https://www.python.org/download/releases/2.3/mro/) | [译文](https://lotabout.me/2020/C3-Algorithm/) | [见栗子-10](PythonDocs/Python-基础语法.md)👈
+      - 👉	[Python3描述器指南](https://docs.python.org/zh-cn/3.13/howto/descriptor.html)👈
+      - 👉	[Python3 Argparse指南](https://docs.python.org/zh-cn/3.13/howto/argparse.html)👈
       - 👉	[【知乎】-Python部分魔法方法一览](https://zhuanlan.zhihu.com/p/344951719)👈
       - 👉	[【知乎】-Python包发布指南](https://zhuanlan.zhihu.com/p/115302375)👈
    
@@ -82,17 +80,17 @@
 
       - 👉	[基础语法-RPC](GolangDocs/Golang-RPC.md)👈
    
-   - 2.2 和grpc相关的内容
+   - 2.2 无聊的代码
 
       - 👉	[Golang-grpc使用](GolangDocs/Golang-grpc使用.md)👈
+      
+      - 👉	[Nacos服务注册发现&配置管理](GolangDocs/Golang-Nacos服务注册发现&配置管理.md)👈
    
-   - 2.3 无聊的轮子
-
       - 👉	[自定义Golang Web Frame](GolangDocs/Golang-自定义Web框架.md) [| 视频介绍](https://www.bilibili.com/video/BV18D4y1k78d)👈
 
       - 👉	[手搓HTTP制作短链接生成器](GolangDocs/Golang-手搓HTTP制作短链接生成器.md) [| 视频介绍](https://www.bilibili.com/video/BV1Cs4y1H79U)👈
    
-   - 2.4 Go相关文章推荐
+   - 2.3 Go相关文章推荐
 
       - 👉	[Go入门指南](https://github.com/unknwon/the-way-to-go_ZH_CN)👈
       - 👉	[go by example](https://github.com/gobyexample-cn/gobyexample)👈
@@ -387,6 +385,9 @@
 
    内网穿透工具
 
+8. [nacos](https://nacos.io/)
+
+   一个更易于构建云原生应用的动态服务发现、配置管理和服务管理平台 
 
 
 ### 九、开发知识
