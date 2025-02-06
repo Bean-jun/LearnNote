@@ -131,7 +131,8 @@ show global variables like "%query_cache_type%";
 show status like '%Qcache%';
 ```
 
-<img src="images/image-20220615144537260.png" alt="image-20220615144537260" style="float:left;" />
+<!-- <img src="images/image-20220615144537260.png" alt="image-20220615144537260" style="float:left;" /> -->
+![](images/image-20220615144537260.png)
 
 运行结果解析：
 
@@ -448,7 +449,8 @@ mysql> show profile for query 2;
 show variables like 'innodb_buffer_pool_size';
 ```
 
-<img src="images/image-20220615214847480.png" alt="image-20220615214847480" style="zoom:80%;" />
+<!-- <img src="images/image-20220615214847480.png" alt="image-20220615214847480" style="zoom:80%;" /> -->
+![](images/image-20220615214847480.png)
 
 你能看到此时 InnoDB 的缓冲池大小只有 134217728/1024/1024=128MB。我们可以修改缓冲池大小，比如改为256MB，方法如下：
 
@@ -526,7 +528,8 @@ show variables like '%storage_engine%';
 SELECT @@default_storage_engine;
 ```
 
-<img src="images/image-20220615224249491.png" alt="image-20220615224249491" style="zoom:60%;" />
+<!-- <img src="images/image-20220615224249491.png" alt="image-20220615224249491" style="zoom:60%;" /> -->
+![](images/image-20220615224249491.png)
 
 * 修改默认的存储引擎
 
@@ -614,7 +617,8 @@ Create Table: CREATE TABLE `engine_demo_table` (
 
 * 下表展示了ARCHIVE 存储引擎功能
 
-<img src="images/image-20220616124743732.png" alt="image-20220616124743732" style="float:left;" />
+<!-- <img src="images/image-20220616124743732.png" alt="image-20220616124743732" style="float:left;" /> -->
+![](images/image-20220616124743732.png)
 
 ### 4.4 Blackhole 引擎：丢弃写操作，读操作会返回空内容
 

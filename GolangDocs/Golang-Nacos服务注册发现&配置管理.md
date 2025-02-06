@@ -2,7 +2,7 @@
 
 Nacos（Naming and Configuration Service）是一款阿里巴巴开源的动态服务发现、配置管理和服务管理平台。它提供了注册中心、配置中心和元数据管理等功能，帮助开发者轻松实现服务的注册、发现和配置管理。
 
-本文介绍的所有代码存放位置：[./src/nacos/nacos.go](./src/nacos/nacos.go)
+本文介绍的所有代码存放位置：[./src/nacos/nacos.go]#(./src/nacos/nacos.go)
 
 # 二、Nacos安装
 

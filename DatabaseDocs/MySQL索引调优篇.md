@@ -109,7 +109,8 @@ mysql> CREATE TABLE index_demo(
 
 将记录格式示意图的其他信息项暂时去掉并把它竖起来的效果就是这样：
 
-<img src="images/image-20220616152727234.png" alt="image-20220616152727234" style="zoom:80%;" />
+<!-- <img src="images/image-20220616152727234.png" alt="image-20220616152727234" style="zoom:80%;" /> -->
+![](images/image-20220616152727234.png)
 
 把一些记录放到页里的示意图就是：
 
@@ -381,15 +382,18 @@ MyISAM引擎使用 B+Tree 作为索引结构，叶子节点的data域存放的�
 
 ### 4.1 MyISAM索引的原理
 
-<img src="images/image-20220617160325201.png" alt="image-20220617160325201" style="float:left;" />
+<!-- <img src="images/image-20220617160325201.png" alt="image-20220617160325201" style="float:left;" /> -->
+![](images/image-20220617160325201.png)
 
 ![image-20220617160413479](images/image-20220617160413479.png)
 
-<img src="images/image-20220617160533122.png" alt="image-20220617160533122" style="float:left;" />
+<!-- <img src="images/image-20220617160533122.png" alt="image-20220617160533122" style="float:left;" /> -->
+![](images/image-20220617160533122.png)
 
 ![image-20220617160625006](images/image-20220617160625006.png)
 
-<img src="images/image-20220617160813548.png" alt="image-20220617160813548" style="float:left;" />
+<!-- <img src="images/image-20220617160813548.png" alt="image-20220617160813548" style="float:left;" /> -->
+![](images/image-20220617160813548.png)
 
 ### 4.2 MyISAM 与 InnoDB对比
 
@@ -407,7 +411,8 @@ MyISAM引擎使用 B+Tree 作为索引结构，叶子节点的data域存放的�
 
 **小结：**
 
-<img src="images/image-20220617161126022.png" alt="image-20220617161126022" style="float:left;" />
+<!-- <img src="images/image-20220617161126022.png" alt="image-20220617161126022" style="float:left;" /> -->
+![](images/image-20220617161126022.png)
 
 ![image-20220617161151125](images/image-20220617161151125.png)
 
@@ -427,14 +432,16 @@ MyISAM引擎使用 B+Tree 作为索引结构，叶子节点的data域存放的�
 
 ## 6. MySQL数据结构选择的合理性
 
-<img src="images/image-20220617161635521.png" alt="image-20220617161635521" style="float:left;" />
+<!-- <img src="images/image-20220617161635521.png" alt="image-20220617161635521" style="float:left;" /> -->
+![](images/image-20220617161635521.png)
 
 ### 6.1 全表查询
 
 
 ### 6.2 Hash查询
 
-<img src="images/image-20220617161946230.png" alt="image-20220617161946230" style="float:left;" />
+<!-- <img src="images/image-20220617161946230.png" alt="image-20220617161946230" style="float:left;" /> -->
+![](images/image-20220617161946230.png)
 
 **加快查找速度的数据结构，常见的有两类：**
 
@@ -444,7 +451,8 @@ MyISAM引擎使用 B+Tree 作为索引结构，叶子节点的data域存放的�
 
 ![image-20220617162153587](images/image-20220617162153587.png)
 
-<img src="images/image-20220617162548697.png" alt="image-20220617162548697" style="float:left;" />
+<!-- <img src="images/image-20220617162548697.png" alt="image-20220617162548697" style="float:left;" /> -->
+![](images/image-20220617162548697.png)
 
 ![image-20220617162604272](images/image-20220617162604272.png)
 
@@ -496,7 +504,8 @@ public void test2(){
 
 **Hash结构效率高，那为什么索引结构要设计成树型呢？**
 
-<img src="images/image-20220617163202156.png" alt="image-20220617163202156" style="float:left;" />
+<!-- <img src="images/image-20220617163202156.png" alt="image-20220617163202156" style="float:left;" /> -->
+![](images/image-20220617163202156.png)
 
 **Hash索引适用存储引擎如表所示：**
 
@@ -506,7 +515,8 @@ public void test2(){
 
 **Hash索引的适用性：**
 
-<img src="images/image-20220617163619721.png" alt="image-20220617163619721" style="float:left;" />
+<!-- <img src="images/image-20220617163619721.png" alt="image-20220617163619721" style="float:left;" /> -->
+![](images/image-20220617163619721.png)
 
 ![image-20220617163657697](images/image-20220617163657697.png)
 
@@ -529,7 +539,8 @@ mysql> show variables like '%adaptive_hash_index';
 
 **2. 查找规则**
 
-<img src="images/image-20220617163952166.png" alt="image-20220617163952166" style="float:left;" />
+<!-- <img src="images/image-20220617163952166.png" alt="image-20220617163952166" style="float:left;" /> -->
+![](images/image-20220617163952166.png)
 
 ![image-20220617164022728](images/image-20220617164022728.png)
 
@@ -541,7 +552,8 @@ mysql> show variables like '%adaptive_hash_index';
 
 ### 6.4 AVL树
 
-<img src="images/image-20220617165045803.png" alt="image-20220617165045803" style="float:left;" />
+<!-- <img src="images/image-20220617165045803.png" alt="image-20220617165045803" style="float:left;" /> -->
+![](images/image-20220617165045803.png)
 
 ![image-20220617165105005](images/image-20220617165105005.png)
 
@@ -561,7 +573,8 @@ B 树的结构如下图所示：
 
 ![image-20220617165937875](images/image-20220617165937875.png)
 
-<img src="images/image-20220617170124200.png" alt="image-20220617170124200" style="float:left;" />
+<!-- <img src="images/image-20220617170124200.png" alt="image-20220617170124200" style="float:left;" /> -->
+![](images/image-20220617170124200.png)
 
 一个 M 阶的 B 树（M>2）有以下的特性：
 
@@ -581,7 +594,8 @@ B 树的结构如下图所示：
 
 你能看出来在 B 树的搜索过程中，我们比较的次数并不少，但如果把数据读取出来然后在内存中进行比 较，这个时间就是可以忽略不计的。而读取磁盘块本身需要进行 I/O 操作，消耗的时间比在内存中进行 比较所需要的时间要多，是数据查找用时的重要因素。 B 树相比于平衡二叉树来说磁盘 I/O 操作要少 ， 在数据查询中比平衡二叉树效率要高。所以 只要树的高度足够低，IO次数足够少，就可以提高查询性能 。
 
-<img src="images/image-20220617170454023.png" alt="image-20220617170454023" style="float:left;" />
+<!-- <img src="images/image-20220617170454023.png" alt="image-20220617170454023" style="float:left;" /> -->
+![](images/image-20220617170454023.png)
 
 **再举例1：**
 
@@ -589,7 +603,8 @@ B 树的结构如下图所示：
 
 ### 6.6 B+Tree
 
-<img src="images/image-20220617170628394.png" alt="image-20220617170628394" style="float:left;" />
+<!-- <img src="images/image-20220617170628394.png" alt="image-20220617170628394" style="float:left;" /> -->
+![](images/image-20220617170628394.png)
 
 * MySQL官网说明：
 
@@ -602,37 +617,45 @@ B 树的结构如下图所示：
 3. 非叶子节点仅用于索引，不保存数据记录，跟记录有关的信息都放在叶子节点中。而 B 树中， 非 叶子节点既保存索引，也保存数据记录 。 
 4. 所有关键字都在叶子节点出现，叶子节点构成一个有序链表，而且叶子节点本身按照关键字的大 小从小到大顺序链接。
 
-<img src="images/image-20220617171011102.png" alt="image-20220617171011102" style="float:left;" />
+<!-- <img src="images/image-20220617171011102.png" alt="image-20220617171011102" style="float:left;" /> -->
+![](images/image-20220617171011102.png)
 
 ![image-20220617171106671](images/image-20220617171106671.png)
 
 ![image-20220617171131747](images/image-20220617171131747.png)
 
-<img src="images/image-20220617171331282.png" alt="image-20220617171331282" style="float:left;" />
+<!-- <img src="images/image-20220617171331282.png" alt="image-20220617171331282" style="float:left;" /> -->
+![](images/image-20220617171331282.png)
 
-<img src="images/image-20220617171434206.png" alt="image-20220617171434206" style="float:left;" />
+<!-- <img src="images/image-20220617171434206.png" alt="image-20220617171434206" style="float:left;" /> -->
+![](images/image-20220617171434206.png)
 
 > B 树和 B+ 树都可以作为索引的数据结构，在 MySQL 中采用的是 B+ 树。 但B树和B+树各有自己的应用场景，不能说B+树完全比B树好，反之亦然。
 
 **思考题：为了减少IO，索引树会一次性加载吗？**
 
-<img src="images/image-20220617171614460.png" alt="image-20220617171614460" style="float:left;" />
+<!-- <img src="images/image-20220617171614460.png" alt="image-20220617171614460" style="float:left;" /> -->
+![](images/image-20220617171614460.png)
 
 **思考题：B+树的存储能力如何？为何说一般查找行记录，最多只需1~3次磁盘IO**
 
-<img src="images/image-20220617172426725.png" alt="image-20220617172426725" style="float:left;" />
+<!-- <img src="images/image-20220617172426725.png" alt="image-20220617172426725" style="float:left;" /> -->
+![](images/image-20220617172426725.png)
 
 **思考题：为什么说B+树比B-树更适合实际应用中操作系统的文件索引和数据库索引？**
 
-<img src="images/image-20220617175142810.png" alt="im age-20220617175142810" style="float:left;" />
+<!-- <img src="images/image-20220617175142810.png" alt="im age-20220617175142810" style="float:left;" /> -->
+![](images/image-20220617175142810.png)
 
 **思考题：Hash 索引与 B+ 树索引的区别**
 
-<img src="images/image-20220617175230327.png" alt="image-20220617175230327" style="float:left;" />
+<!-- <img src="images/image-20220617175230327.png" alt="image-20220617175230327" style="float:left;" /> -->
+![](images/image-20220617175230327.png)
 
 **思考题：Hash 索引与 B+ 树索引是在建索引的时候手动指定的吗？**
 
-<img src="images/image-20220617175309115.png" alt="image-20220617175309115" style="float:left;" />
+<!-- <img src="images/image-20220617175309115.png" alt="image-20220617175309115" style="float:left;" /> -->
+![](images/image-20220617175309115.png)
 
 ### 6.7 R树
 
@@ -644,7 +667,8 @@ R-Tree在MySQL很少使用，仅支持 geometry数据类型 ，支持该类型�
 
 ### 6.8 小结
 
-<img src="images/image-20220617175440527.png" alt="image-20220617175440527" style="float:left;" />
+<!-- <img src="images/image-20220617175440527.png" alt="image-20220617175440527" style="float:left;" /> -->
+![](images/image-20220617175440527.png)
 
 ### 附录：算法的时间复杂度
 
@@ -656,17 +680,20 @@ R-Tree在MySQL很少使用，仅支持 geometry数据类型 ，支持该类型�
 
 ## 1. 数据库的存储结构：页
 
-<img src="images/image-20220617175755324.png" alt="image-20220617175755324" style="float:left;" />
+<!-- <img src="images/image-20220617175755324.png" alt="image-20220617175755324" style="float:left;" /> -->
+![](images/image-20220617175755324.png)
 
 ### 1.1 磁盘与内存交互基本单位：页
 
-<img src="images/image-20220617193033971.png" alt="image-20220617193033971" style="float:left;" />
+<!-- <img src="images/image-20220617193033971.png" alt="image-20220617193033971" style="float:left;" /> -->
+![](images/image-20220617193033971.png)
 
 ![image-20220617193939742](images/image-20220617193939742.png)
 
 ### 1.2 页结构概述
 
-<img src="images/image-20220617193218557.png" alt="image-20220617193218557" style="float:left;" />
+<!-- <img src="images/image-20220617193218557.png" alt="image-20220617193218557" style="float:left;" /> -->
+![](images/image-20220617193218557.png)
 
 ### 1.3 页的大小
 
@@ -684,7 +711,8 @@ SQL Server 中页的大小为 `8KB`，而在 Oracle 中我们用术语 "`块`" �
 
 ![image-20220617194256988](images/image-20220617194256988.png)
 
-<img src="images/image-20220617194529699.png" alt="image-20220617194529699" style="float:left;" />
+<!-- <img src="images/image-20220617194529699.png" alt="image-20220617194529699" style="float:left;" /> -->
+![](images/image-20220617194529699.png)
 
 ## 2. 页的内部结构
 
@@ -725,9 +753,11 @@ SQL Server 中页的大小为 `8KB`，而在 Oracle 中我们用术语 "`块`" �
 
 当我们从页结构来理解 B+ 树的结构的时候，可以帮我们理解一些通过索引进行检索的原理：
 
-<img src="images/image-20220620221242561.png" alt="image-20220620221242561" style="float:left;" />
+<!-- <img src="images/image-20220620221242561.png" alt="image-20220620221242561" style="float:left;" /> -->
+![](images/image-20220620221242561.png)
 
-<img src="images/image-20220620221442954.png" alt="image-20220620221442954" style="float:left;" />
+<!-- <img src="images/image-20220620221442954.png" alt="image-20220620221442954" style="float:left;" /> -->
+![](images/image-20220620221442954.png)
 
 ## 3. InnoDB行格式 (或记录格式)
 
@@ -737,15 +767,18 @@ SQL Server 中页的大小为 `8KB`，而在 Oracle 中我们用术语 "`块`" �
 
 ### 4.1 为什么要有区？
 
-<img src="images/image-20220621134226624.png" alt="image-20220621134226624" style="float:left;" />
+<!-- <img src="images/image-20220621134226624.png" alt="image-20220621134226624" style="float:left;" /> -->
+![](images/image-20220621134226624.png)
 
 ### 4.2 为什么要有段？
 
-<img src="images/image-20220621140802887.png" alt="image-20220621140802887" style="float:left;" />
+<!-- <img src="images/image-20220621140802887.png" alt="image-20220621140802887" style="float:left;" /> -->
+![](images/image-20220621140802887.png)
 
 ### 4.3 为什么要有碎片区？
 
-<img src="images/image-20220621141225223.png" alt="image-20220621141225223" style="float:left;" />
+<!-- <img src="images/image-20220621141225223.png" alt="image-20220621141225223" style="float:left;" /> -->
+![](images/image-20220621141225223.png)
 
 ### 4.4 区的分类
 
@@ -762,7 +795,8 @@ SQL Server 中页的大小为 `8KB`，而在 Oracle 中我们用术语 "`块`" �
 
 ## 5. 表空间
 
-<img src="images/image-20220621142910222.png" alt="image-20220621142910222" style="float:left;" />
+<!-- <img src="images/image-20220621142910222.png" alt="image-20220621142910222" style="float:left;" /> -->
+![](images/image-20220621142910222.png)
 
 ### 5.1 独立表空间
 
@@ -792,21 +826,27 @@ show variables like 'innodb_file_per_table'
 
 **InnoDB数据字典**
 
-<img src="images/image-20220621150648770.png" alt="image-20220621150648770" style="float:left;" />
+<!-- <img src="images/image-20220621150648770.png" alt="image-20220621150648770" style="float:left;" /> -->
+![](images/image-20220621150648770.png)
 
 删除这些数据并不是我们使用 INSERT 语句插入的用户数据，实际上是为了更好的管理我们这些用户数据而不得以引入的一些额外数据，这些数据页称为 元数据。InnoDB 存储引擎特意定义了一些列的 内部系统表 (internal system table) 来记录这些元数据：
 
-<img src="images/image-20220621150924922.png" alt="image-20220621150924922" style="float:left;" />
+<!-- <img src="images/image-20220621150924922.png" alt="image-20220621150924922" style="float:left;" /> -->
+![](images/image-20220621150924922.png)
 
 这些系统表也称为 `数据字典`，它们都是以 B+ 树的形式保存在系统表空间的某个页面中。其中 `SYS_TABLES、SYS_COLUMNS、SYS_INDEXES、SYS_FIELDS` 这四个表尤其重要，称之为基本系统表 (basic system tables) ，我们先看看这4个表的结构：
 
-<img src="images/image-20220621151139759.png" alt="image-20220621151139759" style="float:left;" />
+<!-- <img src="images/image-20220621151139759.png" alt="image-20220621151139759" style="float:left;" /> -->
+![](images/image-20220621151139759.png)
 
-<img src="images/image-20220621151158361.png" alt="image-20220621151158361" style="float:left;" />
+<!-- <img src="images/image-20220621151158361.png" alt="image-20220621151158361" style="float:left;" /> -->
+![](images/image-20220621151158361.png)
 
-<img src="images/image-20220621151215274.png" alt="image-20220621151215274" style="float:left;" />
+<!-- <img src="images/image-20220621151215274.png" alt="image-20220621151215274" style="float:left;" /> -->
+![](images/image-20220621151215274.png)
 
-<img src="images/image-20220621151238157.png" alt="image-20220621151238157" style="float:left;" />
+<!-- <img src="images/image-20220621151238157.png" alt="image-20220621151238157" style="float:left;" /> -->
+![](images/image-20220621151238157.png)
 
 注意：用户不能直接访问 InnoDB 的这些内部系统表，除非你直接去解析系统表空间对应文件系统上的文件。不过考虑到查看这些表的内容可能有助于大家分析问题，所以在系统数据库 `information_schema` 中提供了一些以 `innodb_sys` 开头的表:
 
@@ -836,13 +876,15 @@ InnoDB从磁盘中读取数据 `最小单位` 是数据页。而你想得到的 
 
 **2. 随机读取**
 
-<img src="images/image-20220621135719847.png" alt="image-20220621135719847" style="float:left;" />
+<!-- <img src="images/image-20220621135719847.png" alt="image-20220621135719847" style="float:left;" /> -->
+![](images/image-20220621135719847.png)
 
 ![image-20220621135737422](images/image-20220621135737422.png)
 
 **3. 顺序读取**
 
-<img src="images/image-20220621135909197.png" alt="image-20220621135909197" style="float:left;" />
+<!-- <img src="images/image-20220621135909197.png" alt="image-20220621135909197" style="float:left;" /> -->
+![](images/image-20220621135909197.png)
 
 # 第8章_索引的创建与设计原则
 
@@ -860,31 +902,38 @@ MySQL的索引包括普通索引、唯一性索引、全文索引、单列索引
 
 **1. 普通索引**
 
-<img src="images/image-20220621202759576.png" alt="image-20220621202759576" style="float:left;" />
+<!-- <img src="images/image-20220621202759576.png" alt="image-20220621202759576" style="float:left;" /> -->
+![](images/image-20220621202759576.png)
 
 **2. 唯一性索引**
 
-<img src="images/image-20220621202850551.png" alt="image-20220621202850551" style="float:left;" />
+<!-- <img src="images/image-20220621202850551.png" alt="image-20220621202850551" style="float:left;" /> -->
+![](images/image-20220621202850551.png)
 
 **3. 主键索引**
 
-<img src="images/image-20220621203302303.png" alt="image-20220621203302303" style="float:left;" />
+<!-- <img src="images/image-20220621203302303.png" alt="image-20220621203302303" style="float:left;" /> -->
+![](images/image-20220621203302303.png)
 
 **4. 单列索引**
 
-<img src="images/image-20220621203333925.png" alt="image-20220621203333925" style="float:left;" />
+<!-- <img src="images/image-20220621203333925.png" alt="image-20220621203333925" style="float:left;" /> -->
+![](images/image-20220621203333925.png)
 
 **5. 多列 (组合、联合) 索引**
 
-<img src="images/image-20220621203454424.png" alt="image-20220621203454424" style="float:left;" />
+<!-- <img src="images/image-20220621203454424.png" alt="image-20220621203454424" style="float:left;" /> -->
+![](images/image-20220621203454424.png)
 
 **6. 全文检索**
 
-<img src="images/image-20220621203645789.png" alt="image-20220621203645789" style="float:left;" />
+<!-- <img src="images/image-20220621203645789.png" alt="image-20220621203645789" style="float:left;" /> -->
+![](images/image-20220621203645789.png)
 
 **7. 补充：空间索引**
 
-<img src="images/image-20220621203736098.png" alt="image-20220621203736098" style="float:left;" />
+<!-- <img src="images/image-20220621203736098.png" alt="image-20220621203736098" style="float:left;" /> -->
+![](images/image-20220621203736098.png)
 
 **小结：不同的存储引擎支持的索引类型也不一样 **
 
@@ -1506,7 +1555,8 @@ CALL insert_stu(1000000);
 
 #### 1. 字段的数值有唯一性的限制
 
-<img src="images/image-20220623154615702.png" alt="image-20220623154615702" style="float:left;" />
+<!-- <img src="images/image-20220623154615702.png" alt="image-20220623154615702" style="float:left;" /> -->
+![](images/image-20220623154615702.png)
 
 > 业务上具有唯一特性的字段，即使是组合字段，也必须建成唯一索引。（来源：Alibaba） 说明：不要以为唯一索引影响了 insert 速度，这个速度损耗可以忽略，但提高查找速度是明显的。
 
@@ -1569,11 +1619,13 @@ WHERE name = '462eed7ac6e791292a79';
 
 #### 7. 使用列的类型小的创建索引
 
-<img src="images/image-20220623175306282.png" alt="image-20220623175306282" style="float:left;" />
+<!-- <img src="images/image-20220623175306282.png" alt="image-20220623175306282" style="float:left;" /> -->
+![](images/image-20220623175306282.png)
 
 #### 8. 使用字符串前缀创建索引
 
-<img src="images/image-20220623175513439.png" alt="image-20220623175513439" style="float:left;" />
+<!-- <img src="images/image-20220623175513439.png" alt="image-20220623175513439" style="float:left;" /> -->
+![](images/image-20220623175513439.png)
 
 创建一张商户表，因为地址字段比较长，在地址字段上建立前缀索引
 
@@ -1644,7 +1696,8 @@ LIMIT 12;
 
 ### 3.3 限制索引的数目
 
-<img src="images/image-20220627151947786.png" alt="image-20220627151947786" style="float:left;" />
+<!-- <img src="images/image-20220627151947786.png" alt="image-20220627151947786" style="float:left;" /> -->
+![](images/image-20220627151947786.png)
 
 ### 3.4 哪些情况不适合创建索引
 
@@ -1844,9 +1897,11 @@ INDEX idx_c1 (col1)
 
 **详细解释一下这张图：**
 
-<img src="images/image-20220627164046438.png" alt="image-20220627164046438" style="float:left;" />
+<!-- <img src="images/image-20220627164046438.png" alt="image-20220627164046438" style="float:left;" /> -->
+![](images/image-20220627164046438.png)
 
-<img src="images/image-20220627164114562.png" alt="image-20220627164114562" style="float:left;" />
+<!-- <img src="images/image-20220627164114562.png" alt="image-20220627164114562" style="float:left;" /> -->
+![](images/image-20220627164114562.png)
 
 ## 2. 查看系统性能参数
 
@@ -1969,7 +2024,8 @@ mysql> SHOW STATUS LIKE 'last_query_cost';
 
 ## 4. 定位执行慢的 SQL：慢查询日志
 
-<img src="images/image-20220628173022699.png" alt="image-20220628173022699" style="float:left;" />
+<!-- <img src="images/image-20220628173022699.png" alt="image-20220628173022699" style="float:left;" /> -->
+![](images/image-20220628173022699.png)
 
 ### 4.1 开启慢查询日志参数
 
@@ -1981,7 +2037,8 @@ mysql> SHOW STATUS LIKE 'last_query_cost';
 mysql > show variables like '%slow_query_log';
 ```
 
-<img src="images/image-20220628173525966.png" alt="image-20220628173525966" style="float:left;" />
+<!-- <img src="images/image-20220628173525966.png" alt="image-20220628173525966" style="float:left;" /> -->
+![](images/image-20220628173525966.png)
 
 我们可以看到 `slow_query_log=OFF`，我们可以把慢查询日志打开，注意设置变量值的时候需要使用 global，否则会报错：
 
@@ -1991,7 +2048,8 @@ mysql > set global slow_query_log='ON';
 
 然后我们再来查看下慢查询日志是否开启，以及慢查询日志文件的位置：
 
-<img src="images/image-20220628175226812.png" alt="image-20220628175226812" style="float:left;" />
+<!-- <img src="images/image-20220628175226812.png" alt="image-20220628175226812" style="float:left;" /> -->
+![](images/image-20220628175226812.png)
 
 你能看到这时慢查询分析已经开启，同时文件保存在 `/var/lib/mysql/atguigu02-slow.log` 文件 中。
 
@@ -2003,7 +2061,8 @@ mysql > set global slow_query_log='ON';
 mysql > show variables like '%long_query_time%';
 ```
 
-<img src="images/image-20220628175353233.png" alt="image-20220628175353233" style="float:left;" />
+<!-- <img src="images/image-20220628175353233.png" alt="image-20220628175353233" style="float:left;" /> -->
+![](images/image-20220628175353233.png)
 
 这里如果我们想把时间缩短，比如设置为 1 秒，可以这样设置：
 
@@ -2017,7 +2076,8 @@ mysql> set long_query_time=1;
 mysql> show variables like '%long_query_time%';
 ```
 
-<img src="images/image-20220628175425922.png" alt="image-20220628175425922" style="zoom:80%; float:left;" />
+<!-- <img src="images/image-20220628175425922.png" alt="image-20220628175425922" style="zoom:80%; float:left;" /> -->
+![](images/image-20220628175425922.png)
 
 **补充：配置文件中一并设置参数**
 
@@ -2175,7 +2235,8 @@ mysql> SELECT * FROM student WHERE name = 'oQmLUr';
 show status like 'slow_queries';
 ```
 
-<img src="images/image-20220628195650079.png" alt="image-20220628195650079" style="float:left;" />
+<!-- <img src="images/image-20220628195650079.png" alt="image-20220628195650079" style="float:left;" /> -->
+![](images/image-20220628195650079.png)
 
 ### 4.5 慢查询日志分析工具：mysqldumpslow
 
@@ -2187,7 +2248,8 @@ show status like 'slow_queries';
 mysqldumpslow --help
 ```
 
-<img src="images/image-20220628195821440.png" alt="image-20220628195821440" style="float:left;" />
+<!-- <img src="images/image-20220628195821440.png" alt="image-20220628195821440" style="float:left;" /> -->
+![](images/image-20220628195821440.png)
 
 mysqldumpslow 命令的具体参数如下：
 
@@ -2290,7 +2352,8 @@ SHOW VARIABLES LIKE '%long_query_time%';
 SHOW VARIABLES LIKE `slow_query_log%`;
 ```
 
-<img src="images/image-20220628203545536.png" alt="image-20220628203545536" style="float:left;" />
+<!-- <img src="images/image-20220628203545536.png" alt="image-20220628203545536" style="float:left;" /> -->
+![](images/image-20220628203545536.png)
 
 从执行结果可以看出，慢查询日志的目录默认为MySQL的数据目录，在该目录下 `手动删除慢查询日志文件` 即可。
 
@@ -2316,7 +2379,8 @@ show profile 是 MySQL 提供的可以用来分析当前会话中 SQL 都做了�
 mysql > show variables like 'profiling';
 ```
 
-<img src="images/image-20220628204922556.png" alt="image-20220628204922556" style="float:left;" />
+<!-- <img src="images/image-20220628204922556.png" alt="image-20220628204922556" style="float:left;" /> -->
+![](images/image-20220628204922556.png)
 
 通过设置 profiling='ON' 来开启 show profile:
 
@@ -2324,7 +2388,8 @@ mysql > show variables like 'profiling';
 mysql > set profiling = 'ON';
 ```
 
-<img src="images/image-20220628205029208.png" alt="image-20220628205029208" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220628205029208.png" alt="image-20220628205029208" style="zoom:80%;float:left" /> -->
+![](images/image-20220628205029208.png)
 
 然后执行相关的查询语句。接着看下当前会话都有哪些 profiles，使用下面这条命令：
 
@@ -2332,7 +2397,8 @@ mysql > set profiling = 'ON';
 mysql > show profiles;
 ```
 
-<img src="images/image-20220628205243769.png" alt="image-20220628205243769" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220628205243769.png" alt="image-20220628205243769" style="zoom:80%;float:left" /> -->
+![](images/image-20220628205243769.png)
 
 你能看到当前会话一共有 2 个查询。如果我们想要查看最近一次查询的开销，可以使用：
 
@@ -2340,13 +2406,15 @@ mysql > show profiles;
 mysql > show profile;
 ```
 
-<img src="images/image-20220628205317257.png" alt="image-20220628205317257" style="float:left;" />
+<!-- <img src="images/image-20220628205317257.png" alt="image-20220628205317257" style="float:left;" /> -->
+![](images/image-20220628205317257.png)
 
 ```mysql
 mysql> show profile cpu,block io for query 2
 ```
 
-<img src="images/image-20220628205354230.png" alt="image-20220628205354230" style="float:left;" />
+<!-- <img src="images/image-20220628205354230.png" alt="image-20220628205354230" style="float:left;" /> -->
+![](images/image-20220628205354230.png)
 
 **show profile的常用查询参数： **
 
@@ -2388,7 +2456,8 @@ mysql> show profile cpu,block io for query 2
 
 ### 6.1 概述
 
-<img src="images/image-20220628210837301.png" alt="image-20220628210837301" style="float:left;" />
+<!-- <img src="images/image-20220628210837301.png" alt="image-20220628210837301" style="float:left;" /> -->
+![](images/image-20220628210837301.png)
 
 **1. 能做什么？**
 
@@ -2412,7 +2481,8 @@ https://dev.mysql.com/doc/refman/8.0/en/explain-output.html
 * MySQL 5.6.3以前只能 EXPLAIN SELECT ；MYSQL 5.6.3以后就可以 EXPLAIN SELECT，UPDATE， DELETE 
 * 在5.7以前的版本中，想要显示 partitions 需要使用 explain partitions 命令；想要显示 filtered 需要使用 explain extended 命令。在5.7版本后，默认explain直接显示partitions和 filtered中的信息。
 
-<img src="images/image-20220628211351678.png" alt="image-20220628211351678" style="float:left;" />
+<!-- <img src="images/image-20220628211351678.png" alt="image-20220628211351678" style="float:left;" /> -->
+![](images/image-20220628211351678.png)
 
 ### 6.2 基本语法
 
@@ -2430,7 +2500,8 @@ DESCRIBE SELECT select_options
 mysql> EXPLAIN SELECT 1;
 ```
 
-<img src="images/image-20220628212029574.png" alt="image-20220628212029574" style="float:left;" />
+<!-- <img src="images/image-20220628212029574.png" alt="image-20220628212029574" style="float:left;" /> -->
+![](images/image-20220628212029574.png)
 
 EXPLAIN 语句输出的各个列的作用如下：
 
@@ -2618,7 +2689,8 @@ WHERE s1.common_field = 'a';
 
 但是下边两种情况下在一条查询语句中会出现多个SELECT关键字：
 
-<img src="images/image-20220628221948512.png" alt="image-20220628221948512" style="float:left;" />
+<!-- <img src="images/image-20220628221948512.png" alt="image-20220628221948512" style="float:left;" /> -->
+![](images/image-20220628221948512.png)
 
 ```mysql
 mysql > EXPLAIN SELECT * FROM s1 WHERE key1 = 'a';
@@ -2644,7 +2716,8 @@ mysql> EXPLAIN SELECT * FROM s1 WHERE key1 IN (SELECT key1 FROM s2) OR key3 = 'a
 
 ![image-20220629165122837](images/image-20220629165122837.png)
 
-<img src="images/image-20220629170848349.png" alt="image-20220629170848349" style="float:left;" />
+<!-- <img src="images/image-20220629170848349.png" alt="image-20220629170848349" style="float:left;" /> -->
+![](images/image-20220629170848349.png)
 
 ```mysql
 # 查询优化器可能对涉及子查询的查询语句进行重写，转变为多表查询的操作。  
@@ -2664,7 +2737,8 @@ mysql> EXPLAIN SELECT * FROM s1 UNION SELECT * FROM s2;
 
 ![image-20220629165909340](images/image-20220629165909340.png)
 
-<img src="images/image-20220629171104375.png" alt="image-20220629171104375" style="float:left;" />
+<!-- <img src="images/image-20220629171104375.png" alt="image-20220629171104375" style="float:left;" /> -->
+![](images/image-20220629171104375.png)
 
 ```mysql
 mysql> EXPLAIN SELECT * FROM s1 UNION ALL SELECT * FROM s2;
@@ -2680,7 +2754,8 @@ mysql> EXPLAIN SELECT * FROM s1 UNION ALL SELECT * FROM s2;
 
 #### 3. select_type
 
-<img src="images/image-20220629171611716.png" alt="image-20220629171611716" style="float:left;" />
+<!-- <img src="images/image-20220629171611716.png" alt="image-20220629171611716" style="float:left;" /> -->
+![](images/image-20220629171611716.png)
 
 ![image-20220629171442624](images/image-20220629171442624.png)
 
@@ -2795,7 +2870,8 @@ PARTITION p1 VALUES less than MAXVALUE
 );
 ```
 
-<img src="images/image-20220629190304966.png" alt="image-20220629190304966" style="float:left;" />
+<!-- <img src="images/image-20220629190304966.png" alt="image-20220629190304966" style="float:left;" /> -->
+![](images/image-20220629190304966.png)
 
 ```mysql
 DESC SELECT * FROM user_partitions WHERE id>200;
@@ -2803,7 +2879,8 @@ DESC SELECT * FROM user_partitions WHERE id>200;
 
 查询id大于200（200>100，p1分区）的记录，查看执行计划，partitions是p1，符合我们的分区规则
 
-<img src="images/image-20220629190335371.png" alt="image-20220629190335371" style="float:left;" />
+<!-- <img src="images/image-20220629190335371.png" alt="image-20220629190335371" style="float:left;" /> -->
+![](images/image-20220629190335371.png)
 
 #### 5. type ☆
 
@@ -2831,7 +2908,8 @@ DESC SELECT * FROM user_partitions WHERE id>200;
   mysql> EXPLAIN SELECT * FROM t;
   ```
 
-  <img src="images/image-20220630164434315.png" alt="image-20220630164434315" style="float:left;" />
+  <!-- <img src="images/image-20220630164434315.png" alt="image-20220630164434315" style="float:left;" /> -->
+  ![](images/image-20220630164434315.png)
 
   可以看到`type`列的值就是`system`了，
 
@@ -2845,7 +2923,8 @@ DESC SELECT * FROM user_partitions WHERE id>200;
   mysql> EXPLAIN SELECT * FROM s1 WHERE id = 10005;
   ```
 
-  <img src="images/image-20220630164724548.png" alt="image-20220630164724548" style="float:left;" />
+  <!-- <img src="images/image-20220630164724548.png" alt="image-20220630164724548" style="float:left;" /> -->
+  ![](images/image-20220630164724548.png)
 
 * `eq_ref`
 
@@ -2855,7 +2934,8 @@ DESC SELECT * FROM user_partitions WHERE id>200;
   mysql> EXPLAIN SELECT * FROM s1 INNER JOIN s2 ON s1.id = s2.id;
   ```
 
-  <img src="images/image-20220630164802559.png" alt="image-20220630164802559" style="float:left;" />
+  <!-- <img src="images/image-20220630164802559.png" alt="image-20220630164802559" style="float:left;" /> -->
+  ![](images/image-20220630164802559.png)
 
   从执行计划的结果中可以看出，MySQL打算将s2作为驱动表，s1作为被驱动表，重点关注s1的访问 方法是 `eq_ref` ，表明在访问s1表的时候可以 `通过主键的等值匹配` 来进行访问。
 
@@ -2867,7 +2947,8 @@ DESC SELECT * FROM user_partitions WHERE id>200;
   mysql> EXPLAIN SELECT * FROM s1 WHERE key1 = 'a';
   ```
 
-  <img src="images/image-20220630164930020.png" alt="image-20220630164930020" style="float:left;" />
+  <!-- <img src="images/image-20220630164930020.png" alt="image-20220630164930020" style="float:left;" /> -->
+  ![](images/image-20220630164930020.png)
 
 * `fulltext`
 
@@ -2881,7 +2962,8 @@ DESC SELECT * FROM user_partitions WHERE id>200;
   mysql> EXPLAIN SELECT * FROM s1 WHERE key1 = 'a' OR key1 IS NULL;
   ```
 
-  <img src="images/image-20220630175133920.png" alt="image-20220630175133920" style="float:left;" />
+  <!-- <img src="images/image-20220630175133920.png" alt="image-20220630175133920" style="float:left;" /> -->
+  ![](images/image-20220630175133920.png)
 
 * `index_merge`
 
@@ -2891,7 +2973,8 @@ DESC SELECT * FROM user_partitions WHERE id>200;
   mysql> EXPLAIN SELECT * FROM s1 WHERE key1 = 'a' OR key3 = 'a';
   ```
 
-  <img src="images/image-20220630175511644.png" alt="image-20220630175511644" style="float:left;" />
+  <!-- <img src="images/image-20220630175511644.png" alt="image-20220630175511644" style="float:left;" /> -->
+  ![](images/image-20220630175511644.png)
 
   从执行计划的 `type` 列的值是 `index_merge` 就可以看出，MySQL 打算使用索引合并的方式来执行 对 s1 表的查询。
 
@@ -2903,7 +2986,8 @@ DESC SELECT * FROM user_partitions WHERE id>200;
   mysql> EXPLAIN SELECT * FROM s1 WHERE key2 IN (SELECT id FROM s2 where s1.key1 = s2.key1) OR key3 = 'a';
   ```
 
-  <img src="images/image-20220630180123913.png" alt="image-20220630180123913" style="float:left;" />
+  <!-- <img src="images/image-20220630180123913.png" alt="image-20220630180123913" style="float:left;" /> -->
+  ![](images/image-20220630180123913.png)
 
 + `index_subquery`
 
@@ -3035,7 +3119,8 @@ char(10)固定字段且不允许NULL = 10 * ( character set：utf8=3,gbk=2,latin
 
 #### 8. ref
 
-<img src="images/image-20220704131759630.png" alt="image-20220704131759630" style="float:left;" />
+<!-- <img src="images/image-20220704131759630.png" alt="image-20220704131759630" style="float:left;" /> -->
+![](images/image-20220704131759630.png)
 
 ```mysql
 mysql> EXPLAIN SELECT * FROM s1 WHERE key1 = 'a';
@@ -3115,7 +3200,8 @@ mysql> EXPLAIN SELECT * FROM s1 INNER JOIN s2 ON s1.key1 = s2.key1 WHERE s1.comm
 
 * `Using where`
 
-  <img src="images/image-20220704140148163.png" alt="image-20220704140148163" style="float:left;" />
+  <!-- <img src="images/image-20220704140148163.png" alt="image-20220704140148163" style="float:left;" /> -->
+  ![](images/image-20220704140148163.png)
 
   ```mysql
   mysql> EXPLAIN SELECT * FROM s1 WHERE common_field = 'a';
@@ -3123,7 +3209,8 @@ mysql> EXPLAIN SELECT * FROM s1 INNER JOIN s2 ON s1.key1 = s2.key1 WHERE s1.comm
 
   ![image-20220704132655342](images/image-20220704132655342.png)
 
-  <img src="images/image-20220704140212813.png" alt="image-20220704140212813" style="float:left;" />
+  <!-- <img src="images/image-20220704140212813.png" alt="image-20220704140212813" style="float:left;" /> -->
+  ![](images/image-20220704140212813.png)
 
   ```mysql
   mysql> EXPLAIN SELECT * FROM s1 WHERE key1 = 'a' AND common_field = 'a';
@@ -3159,9 +3246,11 @@ mysql> EXPLAIN SELECT * FROM s1 INNER JOIN s2 ON s1.key1 = s2.key1 WHERE s1.comm
   SELECT * FROM s1 WHERE key1 > 'z' AND key1 LIKE '%a';
   ```
 
-  <img src="images/image-20220704140344015.png" alt="image-20220704140344015" style="float:left;" />
+  <!-- <img src="images/image-20220704140344015.png" alt="image-20220704140344015" style="float:left;" /> -->
+  ![](images/image-20220704140344015.png)
 
-  <img src="images/image-20220704140411033.png" alt="image-20220704140411033" style="float:left;" />
+  <!-- <img src="images/image-20220704140411033.png" alt="image-20220704140411033" style="float:left;" /> -->
+  ![](images/image-20220704140411033.png)
 
   ```mysql
   mysql> EXPLAIN SELECT * FROM s1 WHERE key1 > 'z' AND key1 LIKE '%b';
@@ -3223,7 +3312,8 @@ mysql> EXPLAIN SELECT * FROM s1 INNER JOIN s2 ON s1.key1 = s2.key1 WHERE s1.comm
 
   ![image-20220704142901857](images/image-20220704142901857.png)
 
-  <img src="images/image-20220704145143170.png" alt="image-20220704145143170" style="float:left;" />
+  <!-- <img src="images/image-20220704145143170.png" alt="image-20220704145143170" style="float:left;" /> -->
+  ![](images/image-20220704145143170.png)
 
   ```mysql
   mysql> EXPLAIN SELECT * FROM s1 ORDER BY common_field LIMIT 10;
@@ -3235,7 +3325,8 @@ mysql> EXPLAIN SELECT * FROM s1 INNER JOIN s2 ON s1.key1 = s2.key1 WHERE s1.comm
 
 * `Using temporary`
 
-  <img src="images/image-20220704145924130.png" alt="image-20220704145924130" style="float:left;" />
+  <!-- <img src="images/image-20220704145924130.png" alt="image-20220704145924130" style="float:left;" /> -->
+  ![](images/image-20220704145924130.png)
 
   ```mysql
   mysql> EXPLAIN SELECT DISTINCT common_field FROM s1;
@@ -3415,7 +3506,8 @@ AS `key1` from `atguigu`.`s1` join `atguigu`.`s2` where ((`atguigu`.`s1`.`key1` 
 
 ## 8. 分析优化器执行计划：trace
 
-<img src="images/image-20220704175711800.png" alt="image-20220704175711800" style="float:left;" />
+<!-- <img src="images/image-20220704175711800.png" alt="image-20220704175711800" style="float:left;" /> -->
+![](images/image-20220704175711800.png)
 
 ```mysql
 SET optimizer_trace="enabled=on",end_markers_in_json=on;
@@ -3660,7 +3752,8 @@ INSUFFICIENT_PRIVILEGES: 0 //缺失权限
 
 ## 9. MySQL监控分析视图-sys schema
 
-<img src="images/image-20220704190726180.png" alt="image-20220704190726180" style="float:left;" />
+<!-- <img src="images/image-20220704190726180.png" alt="image-20220704190726180" style="float:left;" /> -->
+![](images/image-20220704190726180.png)
 
 ### 9.1 Sys schema视图摘要
 
@@ -3732,7 +3825,8 @@ Innodb 相关
 select * from sys.innodb_lock_waits;
 ```
 
-<img src="images/image-20220704192020603.png" alt="image-20220704192020603" style="float:left;" />
+<!-- <img src="images/image-20220704192020603.png" alt="image-20220704192020603" style="float:left;" /> -->
+![](images/image-20220704192020603.png)
 
 ## 10. 小结
 
@@ -3933,7 +4027,8 @@ CALL proc_drop_index("dbname","tablename");
 
 ## 2. 索引失效案例
 
-<img src="images/image-20220704202453482.png" alt="image-20220704202453482" style="float:left;" />
+<!-- <img src="images/image-20220704202453482.png" alt="image-20220704202453482" style="float:left;" /> -->
+![](images/image-20220704202453482.png)
 
 ### 2.1 全值匹配我最爱 
 
@@ -3967,7 +4062,8 @@ mysql> SELECT SQL_NO_CACHE * FROM student WHERE age=30 AND classId=4 AND name = 
 Empty set, 1 warning (0.01 sec)
 ```
 
-<img src="images/image-20220704204140589.png" alt="image-20220704204140589" style="float:left;" />
+<!-- <img src="images/image-20220704204140589.png" alt="image-20220704204140589" style="float:left;" /> -->
+![](images/image-20220704204140589.png)
 
 ### 2.2 最佳左前缀法则
 
@@ -4017,7 +4113,8 @@ mysql> EXPLAIN SELECT SQL_NO_CACHE * FROM student WHERE student.classId=1 AND st
 
 ### 2.3 主键插入顺序
 
-<img src="images/image-20220704212354041.png" alt="image-20220704212354041" style="float:left;" />
+<!-- <img src="images/image-20220704212354041.png" alt="image-20220704212354041" style="float:left;" /> -->
+![](images/image-20220704212354041.png)
 
 如果此时再插入一条主键值为 9 的记录，那它插入的位置就如下图：
 
@@ -4609,7 +4706,8 @@ Index Nested-Loop Join其优化的思路主要是为了`减少内存表数据的
 
 #### 4. Block Nested-Loop Join（块嵌套循环连接）
 
-<img src="images/image-20220705173047234.png" alt="image-20220705173047234" style="float:left;" />
+<!-- <img src="images/image-20220705173047234.png" alt="image-20220705173047234" style="float:left;" /> -->
+![](images/image-20220705173047234.png)
 
 > 注意：
 >
@@ -4795,17 +4893,20 @@ call proc_drop_index('atguigudb2','student';)
 
 **过程三：order by 时顺序错误，索引失效**
 
-<img src="images/image-20220705220033520.png" alt="image-20220705220033520" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220705220033520.png" alt="image-20220705220033520" style="zoom:80%;float:left" /> -->
+![](images/image-20220705220033520.png)
 
 **过程四：order by 时规则不一致，索引失效（顺序错，不索引；方向反，不索引）**
 
-<img src="images/image-20220705220404802.png" alt="image-20220705220404802" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220705220404802.png" alt="image-20220705220404802" style="zoom:80%;float:left" /> -->
+![](images/image-20220705220404802.png)
 
 > 结论：ORDER BY 子句，尽量使用 Index 方式排序，避免使用 FileSort 方式排序
 
 **过程五：无过滤，不索引**
 
-<img src="images/image-20220705221212879.png" alt="image-20220705221212879" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220705221212879.png" alt="image-20220705221212879" style="zoom:80%;float:left" /> -->
+![](images/image-20220705221212879.png)
 
 **小结**
 
@@ -4890,7 +4991,8 @@ EXPLAIN SELECT SQL_NO_CACHE * FROM student WHERE age = 30 AND stuno <101000 ORDE
 
 查询结果如下：
 
-<img src="images/image-20220705222954971.png" alt="image-20220705222954971" style="float:left;" />
+<!-- <img src="images/image-20220705222954971.png" alt="image-20220705222954971" style="float:left;" /> -->
+![](images/image-20220705222954971.png)
 
 **方案二：尽量让where的过滤条件和排序使用上索引**
 
@@ -4937,7 +5039,8 @@ mysql> SELECT SQL_NO_CACHE * FROM student
 
 原因：
 
-<img src="images/image-20220705223329164.png" alt="image-20220705223329164" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220705223329164.png" alt="image-20220705223329164" style="zoom:80%;float:left" /> -->
+![](images/image-20220705223329164.png)
 
 > 结论：
 >
@@ -4980,15 +5083,18 @@ CREATE INDEX idx_age_stuno ON student(age,stuno);
 
 **1. 尝试提高 sort_buffer_size**
 
-<img src="images/image-20220705224410340.png" alt="image-20220705224410340" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220705224410340.png" alt="image-20220705224410340" style="zoom:80%;float:left" /> -->
+![](images/image-20220705224410340.png)
 
 **2. 尝试提高 max_length_for_sort_data**
 
-<img src="images/image-20220705224505668.png" alt="image-20220705224505668" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220705224505668.png" alt="image-20220705224505668" style="zoom:80%;float:left" /> -->
+![](images/image-20220705224505668.png)
 
 **3. Order by 时select * 是一个大忌。最好只Query需要的字段。**
 
-<img src="images/image-20220705224551104.png" alt="image-20220705224551104" style="float:left;" />
+<!-- <img src="images/image-20220705224551104.png" alt="image-20220705224551104" style="float:left;" /> -->
+![](images/image-20220705224551104.png)
 
 ## 6. GROUP BY优化
 
@@ -5001,7 +5107,8 @@ CREATE INDEX idx_age_stuno ON student(age,stuno);
 
 ## 7. 优化分页查询
 
-<img src="images/image-20220705225329130.png" alt="image-20220705225329130" style="float:left;" />
+<!-- <img src="images/image-20220705225329130.png" alt="image-20220705225329130" style="float:left;" /> -->
+![](images/image-20220705225329130.png)
 
 **优化思路一**
 
@@ -5069,7 +5176,8 @@ EXPLAIN SELECT id,age,NAME,classId FROM student WHERE NAME LIKE '%abc';
 
 ### 8.2 覆盖索引的利弊
 
-<img src="images/image-20220706125943936.png" alt="image-20220706125943936" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220706125943936.png" alt="image-20220706125943936" style="zoom:80%;float:left" /> -->
+![](images/image-20220706125943936.png)
 
 ## 9. 如何给字符串添加索引
 
@@ -5107,7 +5215,8 @@ mysql> alter table teacher add index index2(email(6));
 
 以及
 
-<img src="images/image-20220706130921934.png" alt="image-20220706130921934" style="zoom:70%;" />
+<!-- <img src="images/image-20220706130921934.png" alt="image-20220706130921934" style="zoom:70%;" /> -->
+![](images/image-20220706130921934.png)
 
 **如果使用的是index1**（即email整个字符串的索引结构），执行顺序是这样的：
 
@@ -5136,7 +5245,8 @@ mysql> alter table teacher add index index2(email(6));
 
 Index Condition Pushdown(ICP)是MySQL 5.6中新特性，是一种在存储引擎层使用索引过滤数据的一种优化方式。
 
-<img src="images/image-20220706131320477.png" alt="image-20220706131320477" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220706131320477.png" alt="image-20220706131320477" style="zoom:80%;float:left" /> -->
+![](images/image-20220706131320477.png)
 
 ### 10.2 ICP的开启/关闭
 
@@ -5154,9 +5264,11 @@ SET optimizer_switch = 'index_condition_pushdown=off';
 
 ### 10.3 ICP使用案例
 
-<img src="images/image-20220706135436316.png" alt="image-20220706135436316" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220706135436316.png" alt="image-20220706135436316" style="zoom:80%;float:left" /> -->
+![](images/image-20220706135436316.png)
 
-<img src="images/image-20220706135506409.png" alt="image-20220706135506409" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220706135506409.png" alt="image-20220706135506409" style="zoom:80%;float:left" /> -->
+![](images/image-20220706135506409.png)
 
 * 主键索引 (简图)
 
@@ -5166,13 +5278,16 @@ SET optimizer_switch = 'index_condition_pushdown=off';
 
 ![image-20220706135701187](images/image-20220706135701187.png)
 
-<img src="images/image-20220706135723203.png" alt="image-20220706135723203" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220706135723203.png" alt="image-20220706135723203" style="zoom:80%;float:left" /> -->
+![](images/image-20220706135723203.png)
 
 ### 10.4 开启和关闭ICP性能对比
 
-<img src="images/image-20220706135904713.png" alt="image-20220706135904713" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220706135904713.png" alt="image-20220706135904713" style="zoom:80%;float:left" /> -->
+![](images/image-20220706135904713.png)
 
-<img src="images/image-20220706140213382.png" alt="image-20220706140213382" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220706140213382.png" alt="image-20220706140213382" style="zoom:80%;float:left" /> -->
+![](images/image-20220706140213382.png)
 
 ### 10.5 ICP的使用条件
 
@@ -5243,7 +5358,8 @@ index (k)
 
 **回答：**
 
-<img src="images/image-20220706141957185.png" alt="image-20220706141957185" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220706141957185.png" alt="image-20220706141957185" style="zoom:80%;float:left" /> -->
+![](images/image-20220706141957185.png)
 
 ### 12.2 COUNT(*)与COUNT(具体字段)效率
 
@@ -5251,7 +5367,8 @@ index (k)
 
 答：
 
-<img src="images/image-20220706142648452.png" alt="image-20220706142648452" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220706142648452.png" alt="image-20220706142648452" style="zoom:80%;float:left" /> -->
+![](images/image-20220706142648452.png)
 
 ### 12.3 关于SELECT(*)
 
@@ -5488,7 +5605,8 @@ SELECT @uuid,uuid_to_bin(@uuid),uuid_to_bin(@uuid,TRUE);
 
 我们来做一个测试，插入1亿条数据，每条数据占用500字节，含有3个二级索引，最终的结果如下所示：
 
-<img src="images/image-20220706162947613.png" alt="image-20220706162947613" style="zoom:67%;" />
+<!-- <img src="images/image-20220706162947613.png" alt="image-20220706162947613" style="zoom:67%;" /> -->
+![](images/image-20220706162947613.png)
 
 从上图可以看到插入1亿条数据有序UUID是最快的，而且在实际业务使用中有序UUID在 `业务端就可以生成` 。还可以进一步减少SQL的交互次数。
 
@@ -5514,9 +5632,11 @@ SELECT @uuid,uuid_to_bin(@uuid),uuid_to_bin(@uuid,TRUE);
 
 ## 1. 为什么需要数据库设计
 
-<img src="images/image-20220706164201695.png" alt="image-20220706164201695" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220706164201695.png" alt="image-20220706164201695" style="zoom:80%;float:left" /> -->
+![](images/image-20220706164201695.png)
 
-<img src="images/image-20220706164359539.png" alt="image-20220706164359539" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220706164359539.png" alt="image-20220706164359539" style="zoom:80%;float:left" /> -->
+![](images/image-20220706164359539.png)
 
 ## 2. 范 式
 
@@ -5536,7 +5656,8 @@ SELECT @uuid,uuid_to_bin(@uuid),uuid_to_bin(@uuid,TRUE);
 
 ### 2.3 键和相关属性的概念
 
-<img src="images/image-20220706165231022.png" alt="image-20220706165231022" style="float:left;" />
+<!-- <img src="images/image-20220706165231022.png" alt="image-20220706165231022" style="float:left;" /> -->
+![](images/image-20220706165231022.png)
 
 **举例:**
 
@@ -5701,13 +5822,15 @@ Orders表和OrderDetails表如下，此时符合第二范式。
 
 ### 2.7 小结
 
-<img src="images/image-20220707124343085.png" alt="image-20220707124343085" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220707124343085.png" alt="image-20220707124343085" style="zoom:80%;float:left" /> -->
+![](images/image-20220707124343085.png)
 
 ## 3. 反范式化
 
 ### 3.1 概述
 
-<img src="images/image-20220707124741675.png" alt="image-20220707124741675" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220707124741675.png" alt="image-20220707124741675" style="zoom:80%;float:left" /> -->
+![](images/image-20220707124741675.png)
 
 **规范化 vs 性能**
 
@@ -5760,7 +5883,8 @@ on e.department_id = d.department_id;
 
 `学生表 student` ，对应的字段名称及含义如下：
 
-<img src="images/image-20220707125545891.png" alt="image-20220707125545891" style="zoom:80%;" />
+<!-- <img src="images/image-20220707125545891.png" alt="image-20220707125545891" style="zoom:80%;" /> -->
+![](images/image-20220707125545891.png)
 
 在实际应用中，我们在显示课程评论的时候，通常会显示这个学生的昵称，而不是学生 ID，因此当我们 想要查询某个课程的前 1000 条评论时，需要关联 class_comment 和 student这两张表来进行查询。
 
@@ -5783,7 +5907,8 @@ LIMIT 1000;
 
 运行结果（1000 条数据行）：
 
-<img src="images/image-20220707125642908.png" alt="image-20220707125642908" style="zoom:80%;" />
+<!-- <img src="images/image-20220707125642908.png" alt="image-20220707125642908" style="zoom:80%;" /> -->
+![](images/image-20220707125642908.png)
 
 运行时长为 0.395 秒，对于网站的响应来说，这已经很慢了，用户体验会非常差。
 
@@ -5800,7 +5925,8 @@ ORDER BY class_id DESC LIMIT 1000;
 
 运行结果（1000 条数据）：
 
-<img src="images/image-20220707125718469.png" alt="image-20220707125718469" style="zoom:80%;" />
+<!-- <img src="images/image-20220707125718469.png" alt="image-20220707125718469" style="zoom:80%;" /> -->
+![](images/image-20220707125718469.png)
 
 优化之后只需要扫描一次聚集索引即可，运行时间为 0.039 秒，查询时间是之前的 1/10。 你能看到， 在数据量大的情况下，查询效率会有显著的提升。
 
@@ -5847,7 +5973,8 @@ ORDER BY class_id DESC LIMIT 1000;
 
 我们分析如下表的范式情况：
 
-<img src="images/image-20220707131428597.png" alt="image-20220707131428597" style="zoom:80%;" />
+<!-- <img src="images/image-20220707131428597.png" alt="image-20220707131428597" style="zoom:80%;" /> -->
+![](images/image-20220707131428597.png)
 
 在这个表中，一个仓库只有一个管理员，同时一个管理员也只管理一个仓库。我们先来梳理下这些属性之间的依赖关系。
 
@@ -5994,11 +6121,13 @@ ORDER BY class_id DESC LIMIT 1000;
 
 商品信息表：
 
-<img src="images/image-20220707163807205.png" alt="image-20220707163807205" style="float:left;" />
+<!-- <img src="images/image-20220707163807205.png" alt="image-20220707163807205" style="float:left;" /> -->
+![](images/image-20220707163807205.png)
 
 进货单表：
 
-<img src="images/image-20220707163828614.png" alt="image-20220707163828614" style="float:left;" />
+<!-- <img src="images/image-20220707163828614.png" alt="image-20220707163828614" style="float:left;" /> -->
+![](images/image-20220707163828614.png)
 
 此外，字段"supplierid(供应商编号)""suppliername(供应商名称)""stock(仓库)“只依赖于"listnumber(单号)"，不完全依赖于主键，所以，我们可以把"supplierid""suppliername""stock"这3个字段拆出去，再加上它们依赖的字段"listnumber(单号)"，就形成了一个新的表"进货单头表"。剩下的字段，会组成新的表，我们叫它"进货单明细表"。
 
@@ -6026,41 +6155,49 @@ ORDER BY class_id DESC LIMIT 1000;
 
 供货商表：
 
-<img src="images/image-20220707165011050.png" alt="image-20220707165011050" style="float:left;" />
+<!-- <img src="images/image-20220707165011050.png" alt="image-20220707165011050" style="float:left;" /> -->
+![](images/image-20220707165011050.png)
 
 进货单头表：
 
-<img src="images/image-20220707165038108.png" alt="image-20220707165038108" style="float:left;" />
+<!-- <img src="images/image-20220707165038108.png" alt="image-20220707165038108" style="float:left;" /> -->
+![](images/image-20220707165038108.png)
 
 这2个表都满足第三范式的要求了。
 
 ### 7.4 反范式化：业务优先的原则
 
-<img src="images/image-20220707165459547.png" alt="image-20220707165459547" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220707165459547.png" alt="image-20220707165459547" style="zoom:80%;float:left" /> -->
+![](images/image-20220707165459547.png)
 
 因此，最后我们可以把进货单表拆分成下面的4个表：
 
 供货商表：
 
-<img src="images/image-20220707165011050.png" alt="image-20220707165011050" style="float:left;" />
+<!-- <img src="images/image-20220707165011050.png" alt="image-20220707165011050" style="float:left;" /> -->
+![](images/image-20220707165011050.png)
 
 进货单头表：
 
-<img src="images/image-20220707165038108.png" alt="image-20220707165038108" style="float:left;" />
+<!-- <img src="images/image-20220707165038108.png" alt="image-20220707165038108" style="float:left;" /> -->
+![](images/image-20220707165038108.png)
 
 进货单明细表：
 
-<img src="images/image-20220707164146216.png" alt="image-20220707164146216" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220707164146216.png" alt="image-20220707164146216" style="zoom:80%;float:left" /> -->
+![](images/image-20220707164146216.png)
 
 商品信息表：
 
-<img src="images/image-20220707164227845.png" alt="image-20220707164227845" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220707164227845.png" alt="image-20220707164227845" style="zoom:80%;float:left" /> -->
+![](images/image-20220707164227845.png)
 
 这样一来，我们就避免了冗余数据，而且还能够满足业务的需求，这样的数据库设计，才是合格的设计。
 
 ## 8. ER模型
 
-<img src="images/image-20220707170027637.png" alt="image-20220707170027637" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220707170027637.png" alt="image-20220707170027637" style="zoom:80%;float:left" /> -->
+![](images/image-20220707170027637.png)
 
 ### 8.1 ER模型包括哪些要素？
 
@@ -6169,37 +6306,49 @@ ER 模型看起来比较麻烦，但是对我们把控项目整体非常重要�
 
 `用户实体`转换成用户表(user_info)的代码如下所示。
 
-<img src="images/image-20220707171335255.png" alt="image-20220707171335255" style="float:left;" />
+<!-- <img src="images/image-20220707171335255.png" alt="image-20220707171335255" style="float:left;" /> -->
+![](images/image-20220707171335255.png)
 
-<img src="images/image-20220707171412363.png" alt="image-20220707171412363" style="float:left;" />
+<!-- <img src="images/image-20220707171412363.png" alt="image-20220707171412363" style="float:left;" /> -->
+![](images/image-20220707171412363.png)
 
-<img src="images/image-20220707171915637.png" alt="image-20220707171915637" style="float:left;" />
+<!-- <img src="images/image-20220707171915637.png" alt="image-20220707171915637" style="float:left;" /> -->
+![](images/image-20220707171915637.png)
 
 **下面我们再把弱实体转换成数据表：**
 
-<img src="images/image-20220707172033399.png" alt="image-20220707172033399" style="float:left;" />
+<!-- <img src="images/image-20220707172033399.png" alt="image-20220707172033399" style="float:left;" /> -->
+![](images/image-20220707172033399.png)
 
-<img src="images/image-20220707172052236.png" alt="image-20220707172052236" style="float:left;" />
+<!-- <img src="images/image-20220707172052236.png" alt="image-20220707172052236" style="float:left;" /> -->
+![](images/image-20220707172052236.png)
 
-<img src="images/image-20220707172143793.png" alt="image-20220707172143793" style="float:left;" />
+<!-- <img src="images/image-20220707172143793.png" alt="image-20220707172143793" style="float:left;" /> -->
+![](images/image-20220707172143793.png)
 
-<img src="images/image-20220707172217772.png" alt="image-20220707172217772" style="float:left;" />
+<!-- <img src="images/image-20220707172217772.png" alt="image-20220707172217772" style="float:left;" /> -->
+![](images/image-20220707172217772.png)
 
-<img src="images/image-20220707172236606.png" alt="image-20220707172236606" style="float:left;" />
+<!-- <img src="images/image-20220707172236606.png" alt="image-20220707172236606" style="float:left;" /> -->
+![](images/image-20220707172236606.png)
 
-<img src="images/image-20220707172259143.png" alt="image-20220707172259143" style="float:left;" />
+<!-- <img src="images/image-20220707172259143.png" alt="image-20220707172259143" style="float:left;" /> -->
+![](images/image-20220707172259143.png)
 
 #### 2. 一个多对多的关系转换成一个数据表
 
-<img src="images/image-20220707172350226.png" alt="image-20220707172350226" style="float:left;" />
+<!-- <img src="images/image-20220707172350226.png" alt="image-20220707172350226" style="float:left;" /> -->
+![](images/image-20220707172350226.png)
 
 #### 3. 通过外键来表达1对多的关系
 
-<img src="images/image-20220707172609833.png" alt="image-20220707172609833" style="float:left;" />
+<!-- <img src="images/image-20220707172609833.png" alt="image-20220707172609833" style="float:left;" /> -->
+![](images/image-20220707172609833.png)
 
 #### 4. 把属性转换成表的字段
 
-<img src="images/image-20220707172819174.png" alt="image-20220707172819174" style="float:left;" />
+<!-- <img src="images/image-20220707172819174.png" alt="image-20220707172819174" style="float:left;" /> -->
+![](images/image-20220707172819174.png)
 
 ![image-20220707172918017](images/image-20220707172918017.png)
 
@@ -6209,19 +6358,23 @@ ER 模型看起来比较麻烦，但是对我们把控项目整体非常重要�
 
 **1. 数据表的个数越少越好**
 
-<img src="images/image-20220707173028203.png" alt="image-20220707173028203" style="float:left;" />
+<!-- <img src="images/image-20220707173028203.png" alt="image-20220707173028203" style="float:left;" /> -->
+![](images/image-20220707173028203.png)
 
 **2. 数据表中的字段个数越少越好**
 
-<img src="images/image-20220707173402491.png" alt="image-20220707173402491" style="float:left;" />
+<!-- <img src="images/image-20220707173402491.png" alt="image-20220707173402491" style="float:left;" /> -->
+![](images/image-20220707173402491.png)
 
 **3. 数据表中联合主键的字段个数越少越好**
 
-<img src="images/image-20220707173522971.png" alt="image-20220707173522971" style="float:left;" />
+<!-- <img src="images/image-20220707173522971.png" alt="image-20220707173522971" style="float:left;" /> -->
+![](images/image-20220707173522971.png)
 
 **4. 使用主键和外键越多越好**
 
-<img src="images/image-20220707173557568.png" alt="image-20220707173557568" style="float:left;" />
+<!-- <img src="images/image-20220707173557568.png" alt="image-20220707173557568" style="float:left;" /> -->
+![](images/image-20220707173557568.png)
 
 ## 10. 数据库对象编写建议
 
@@ -6337,7 +6490,8 @@ PowerDesigner是一款开发人员常用的数据库建模工具，用户利用�
 
 当前使用的PowerDesigner版本是16.5的。打开软件即是此页面，可选择Create Model,也可以选择Do Not Show page Again,自行在打开软件后创建也可以！完全看个人的喜好，在此我在后面的学习中不在显示此页面。
 
-<img src="images/image-20220707175250944.png" alt="image-20220707175250944" style="zoom:80%;float:left" />
+<!-- <img src="images/image-20220707175250944.png" alt="image-20220707175250944" style="zoom:80%;float:left" /> -->
+![](images/image-20220707175250944.png)
 
 “Create Model”的作用类似于普通的一个文件，该文件可以单独存放也可以归类存放。
 
@@ -6347,17 +6501,20 @@ PowerDesigner是一款开发人员常用的数据库建模工具，用户利用�
 
 常用的模型有4种，分别是 `概念模型(CDM Conceptual Data Model)` ， `物理模型（PDM,Physical Data Model）` ， `面向对象的模型（OOM Objcet Oriented Model）` 和 `业务模型（BPM Business Process Model）` ，我们先创建概念数据模型。
 
-<img src="images/image-20220707175350250.png" alt="image-20220707175350250" style="float:left;" />
+<!-- <img src="images/image-20220707175350250.png" alt="image-20220707175350250" style="float:left;" /> -->
+![](images/image-20220707175350250.png)
 
 点击上面的ok，即可出现下图左边的概念模型1，可以自定义概念模型的名字，在概念模型中使用最多的 就是如图所示的Entity(实体),Relationship(关系)
 
-<img src="images/image-20220707175604026.png" alt="image-20220707175604026" style="float:left;" />
+<!-- <img src="images/image-20220707175604026.png" alt="image-20220707175604026" style="float:left;" /> -->
+![](images/image-20220707175604026.png)
 
 **Entity实体**
 
 选中右边框中Entity这个功能，即可出现下面这个方框，需要注意的是书写name的时候，code自行补全，name可以是英文的也可以是中文的，但是code必须是英文的。
 
-<img src="images/image-20220707175653689.png" alt="image-20220707175653689" style="float:left;" />
+<!-- <img src="images/image-20220707175653689.png" alt="image-20220707175653689" style="float:left;" /> -->
+![](images/image-20220707175653689.png)
 
 **填充实体字段**
 
@@ -6372,23 +6529,27 @@ General中的name和code填好后，就可以点击Attributes（属性）来设�
 * P:Primary Identifer是否是主标识符，表示实体唯一标识符 
 * D:Displayed显示出来，默认全部勾选
 
-<img src="images/image-20220707175805226.png" alt="image-20220707175805226" style="float:left;" />
+<!-- <img src="images/image-20220707175805226.png" alt="image-20220707175805226" style="float:left;" /> -->
+![](images/image-20220707175805226.png)
 
 在此上图说明name和code的起名方法
 
-<img src="images/image-20220707175827417.png" alt="image-20220707175827417" style="float:left;" />
+<!-- <img src="images/image-20220707175827417.png" alt="image-20220707175827417" style="float:left;" /> -->
+![](images/image-20220707175827417.png)
 
 **设置主标识符**
 
 如果不希望系统自动生成标识符而是手动设置的话，那么切换到Identifiers选项卡，添加一行Identifier， 然后单击左上角的“属性”按钮，然后弹出的标识属性设置对话框中单击“添加行”按钮，选择该标识中使用的属性。例如将学号设置为学生实体的标识。
 
-<img src="images/image-20220707175858031.png" alt="image-20220707175858031" style="float:left;" />
+<!-- <img src="images/image-20220707175858031.png" alt="image-20220707175858031" style="float:left;" /> -->
+![](images/image-20220707175858031.png)
 
 **放大模型**
 
 创建好概念数据模型如图所示，但是创建好的字体很小，读者可以按着ctrl键同时滑动鼠标的可滑动按钮 即可放大缩写字体，同时也可以看到主标识符有一个*号的标志，同时也显示出来了，name,Data type和 length这些可见的属性
 
-<img src="images/image-20220707175925155.png" alt="image-20220707175925155" style="float:left;" />
+<!-- <img src="images/image-20220707175925155.png" alt="image-20220707175925155" style="float:left;" /> -->
+![](images/image-20220707175925155.png)
 
 **实体关系**
 
@@ -6396,23 +6557,28 @@ General中的name和code填好后，就可以点击Attributes（属性）来设�
 
 如图所示
 
-<img src="images/image-20220707175954634.png" alt="image-20220707175954634" style="float:left;" />
+<!-- <img src="images/image-20220707175954634.png" alt="image-20220707175954634" style="float:left;" /> -->
+![](images/image-20220707175954634.png)
 
 需要注意的是点击Relationship这个按钮，就把班级和学生联系起来了，就是一条线，然后双击这条线进 行编辑，在General这块起name和code
 
-<img src="images/image-20220707180021612.png" alt="image-20220707180021612" style="float:left;" />
+<!-- <img src="images/image-20220707180021612.png" alt="image-20220707180021612" style="float:left;" /> -->
+![](images/image-20220707180021612.png)
 
 上面的name和code起好后就可以在Cardinalities这块查看班级和学生的关系，可以看到班级的一端是一 条线，学生的一端是三条，代表班级对学生是一对多的关系即one对many的关系，点击应用，然后确定 即可
 
-<img src="images/image-20220707180044291.png" alt="image-20220707180044291" style="float:left;" />
+<!-- <img src="images/image-20220707180044291.png" alt="image-20220707180044291" style="float:left;" /> -->
+![](images/image-20220707180044291.png)
 
 一对多和多对一练习完还有多对多的练习，如下图操作所示，老师实体和上面介绍的一样，自己将 name，data type等等修改成自己需要的即可，满足项目开发需求即可。（comment是解释说明，自己可以写相关的介绍和说明）
 
-<img src="images/image-20220707180113532.png" alt="image-20220707180113532" style="float:left;" />
+<!-- <img src="images/image-20220707180113532.png" alt="image-20220707180113532" style="float:left;" /> -->
+![](images/image-20220707180113532.png)
 
 多对多需要注意的是自己可以手动点击按钮将关系调整称为多对多的关系many对many的关系，然后点击应用和确定即可
 
-<img src="images/image-20220707180159184.png" alt="image-20220707180159184" style="float:left;" />
+<!-- <img src="images/image-20220707180159184.png" alt="image-20220707180159184" style="float:left;" /> -->
+![](images/image-20220707180159184.png)
 
 综上即可完成最简单的学生，班级，教师这种概念数据模型的设计，需要考虑数据的类型和主标识码， 是否为空。关系是一对一还是一对多还是多对多的关系，自己需要先规划好再设计，然后就ok了。
 
@@ -6422,77 +6588,96 @@ General中的name和code填好后，就可以点击Attributes（属性）来设�
 
 上面是概念数据模型，下面介绍一下物理数据模型，以后 经常使用 的就是物理数据模型。打开 PowerDesigner，然后点击File-->New Model然后选择如下图所示的物理数据模型，物理数据模型的名字自己起，然后选择自己所使用的数据库即可。
 
-<img src="images/image-20220707180327712.png" alt="image-20220707180327712" style="float:left;" />
+<!-- <img src="images/image-20220707180327712.png" alt="image-20220707180327712" style="float:left;" /> -->
+![](images/image-20220707180327712.png)
 
 创建好主页面如图所示，但是右边的按钮和概念模型略有差别，物理模型最常用的三个是 `table(表)` ， `view(视图)`， `reference(关系) `；
 
-<img src="images/image-20220707180418090.png" alt="image-20220707180418090" style="float:left;" />
+<!-- <img src="images/image-20220707180418090.png" alt="image-20220707180418090" style="float:left;" /> -->
+![](images/image-20220707180418090.png)
 
 鼠标先点击右边table这个按钮然后在新建的物理模型点一下，即可新建一个表，然后双击新建如下图所示，在General的name和code填上自己需要的，点击应用即可），如下图：
 
-<img src="images/image-20220707180449212.png" alt="image-20220707180449212" style="float:left;" />
+<!-- <img src="images/image-20220707180449212.png" alt="image-20220707180449212" style="float:left;" /> -->
+![](images/image-20220707180449212.png)
 
 然后点击Columns,如下图设置，非常简单，需要注意的就是P（primary主键） , F （foreign key外键） , M（mandatory强制性的，代表不可为空） 这三个。
 
-<img src="images/image-20220707180537251.png" alt="image-20220707180537251" style="float:left;" />
+<!-- <img src="images/image-20220707180537251.png" alt="image-20220707180537251" style="float:left;" /> -->
+![](images/image-20220707180537251.png)
 
 在此设置学号的自增（MYSQL里面的自增是这个AUTO_INCREMENT），班级编号同理，不多赘述！
 
-<img src="images/image-20220707180556645.png" alt="image-20220707180556645" style="float:left;" />
+<!-- <img src="images/image-20220707180556645.png" alt="image-20220707180556645" style="float:left;" /> -->
+![](images/image-20220707180556645.png)
 
 在下面的这个点上对号即可，就设置好了自增
 
-<img src="images/image-20220707180619440.png" alt="image-20220707180619440" style="float:left;" />
+<!-- <img src="images/image-20220707180619440.png" alt="image-20220707180619440" style="float:left;" /> -->
+![](images/image-20220707180619440.png)
 
 全部完成后如下图所示。
 
-<img src="images/image-20220707180643107.png" alt="image-20220707180643107" style="float:left;" />
+<!-- <img src="images/image-20220707180643107.png" alt="image-20220707180643107" style="float:left;" /> -->
+![](images/image-20220707180643107.png)
 
 班级物理模型同理如下图所示创建即可
 
-<img src="images/image-20220707180723698.png" alt="image-20220707180723698" style="float:left;" />
+<!-- <img src="images/image-20220707180723698.png" alt="image-20220707180723698" style="float:left;" /> -->
+![](images/image-20220707180723698.png)
 
-<img src="images/image-20220707180744600.png" alt="image-20220707180744600" style="float:left;" />
+<!-- <img src="images/image-20220707180744600.png" alt="image-20220707180744600" style="float:left;" /> -->
+![](images/image-20220707180744600.png)
 
 完成后如下图所示
 
-<img src="images/image-20220707180806150.png" alt="image-20220707180806150" style="float:left;" />
+<!-- <img src="images/image-20220707180806150.png" alt="image-20220707180806150" style="float:left;" /> -->
+![](images/image-20220707180806150.png)
 
 上面的设置好如上图所示，然后下面是关键的地方，点击右边按钮Reference这个按钮，因为是班级对学 生是一对多的，所以鼠标从学生拉到班级如下图所示，学生表将发生变化，学生表里面增加了一行，这 行是班级表的主键作为学生表的外键，将班级表和学生表联系起来。（仔细观察即可看到区别。）
 
-<img src="images/image-20220707180828164.png" alt="image-20220707180828164" style="float:left;" />
+<!-- <img src="images/image-20220707180828164.png" alt="image-20220707180828164" style="float:left;" /> -->
+![](images/image-20220707180828164.png)
 
 做完上面的操作，就可以双击中间的一条线，显示如下图，修改name和code即可
 
-<img src="images/image-20220707183743297.png" alt="image-20220707183743297" style="float:left;" />
+<!-- <img src="images/image-20220707183743297.png" alt="image-20220707183743297" style="float:left;" /> -->
+![](images/image-20220707183743297.png)
 
 但是需要注意的是，修改完毕后显示的结果却如下图所示，并没有办法直接像概念模型那样，修改过后 显示在中间的那条线上面，自己明白即可。
 
-<img src="images/image-20220707193816176.png" alt="image-20220707193816176" style="float:left;" />
+<!-- <img src="images/image-20220707193816176.png" alt="image-20220707193816176" style="float:left;" /> -->
+![](images/image-20220707193816176.png)
 
 学习了多对一或者一对多的关系，接下来学习多对对的关系，同理自己建好老师表，这里不在叙述，记得老师编号自增，建好如下图所示
 
-<img src="images/image-20220707193932694.png" alt="image-20220707193932694" style="float:left;" />
+<!-- <img src="images/image-20220707193932694.png" alt="image-20220707193932694" style="float:left;" /> -->
+![](images/image-20220707193932694.png)
 
 下面是多对多关系的关键，由于物理模型多对多的关系需要一个中间表来连接，如下图，只设置一个字 段，主键，自增
 
-<img src="images/image-20220707193957629.png" alt="image-20220707193957629" style="float:left;" />
+<!-- <img src="images/image-20220707193957629.png" alt="image-20220707193957629" style="float:left;" /> -->
+![](images/image-20220707193957629.png)
 
 点击应用，然后设置Columns，只添加一个字段
 
-<img src="images/image-20220707194048843.png" alt="image-20220707194048843" style="float:left;" />
+<!-- <img src="images/image-20220707194048843.png" alt="image-20220707194048843" style="float:left;" /> -->
+![](images/image-20220707194048843.png)
 
 这是设置字段递增，前面已经叙述过好几次
 
-<img src="images/image-20220707194111885.png" alt="image-20220707194111885" style="float:left;" />
+<!-- <img src="images/image-20220707194111885.png" alt="image-20220707194111885" style="float:left;" /> -->
+![](images/image-20220707194111885.png)
 
 设置好后如下图所示，需要注意的是有箭头的一方是一，无箭头的一方是多，即一对多的多对一的关系 需要搞清楚，学生也可以有很多老师，老师也可以有很多学生，所以学生和老师都可以是主体；
 
-<img src="images/image-20220707194138137.png" alt="image-20220707194138137" style="float:left;" />
+<!-- <img src="images/image-20220707194138137.png" alt="image-20220707194138137" style="float:left;" /> -->
+![](images/image-20220707194138137.png)
 
 可以看到添加关系以后学生和教师的关系表前后发生的变化
 
-<img src="images/image-20220707194158936.png" alt="image-20220707194158936" style="float:left;" />
+<!-- <img src="images/image-20220707194158936.png" alt="image-20220707194158936" style="float:left;" /> -->
+![](images/image-20220707194158936.png)
 
 ### 11.4 概念模型转为物理模型
 
@@ -6552,11 +6737,13 @@ General中的name和code填好后，就可以点击Attributes（属性）来设�
 
 ### 1.2 如何定位调优问题
 
-<img src="images/image-20220707200915836.png" alt="image-20220707200915836" style="float:left;" />
+<!-- <img src="images/image-20220707200915836.png" alt="image-20220707200915836" style="float:left;" /> -->
+![](images/image-20220707200915836.png)
 
 如何确定呢？一般情况下，有如下几种方式：
 
-<img src="images/image-20220707201133424.png" alt="image-20220707201133424" style="float:left;" />
+<!-- <img src="images/image-20220707201133424.png" alt="image-20220707201133424" style="float:left;" /> -->
+![](images/image-20220707201133424.png)
 
 ### 1.3 调优的维度和步骤
 
@@ -6564,21 +6751,25 @@ General中的name和code填好后，就可以点击Attributes（属性）来设�
 
 #### 第1步：选择适合的 DBMS
 
-<img src="images/image-20220707201443229.png" alt="image-20220707201443229" style="float:left;" />
+<!-- <img src="images/image-20220707201443229.png" alt="image-20220707201443229" style="float:left;" /> -->
+![](images/image-20220707201443229.png)
 
 #### 第2步：优化表设计
 
-<img src="images/image-20220707201617799.png" alt="image-20220707201617799" style="float:left;" />
+<!-- <img src="images/image-20220707201617799.png" alt="image-20220707201617799" style="float:left;" /> -->
+![](images/image-20220707201617799.png)
 
 #### 第3步：优化逻辑查询
 
-<img src="images/image-20220707202059972.png" alt="image-20220707202059972" style="float:left;" />
+<!-- <img src="images/image-20220707202059972.png" alt="image-20220707202059972" style="float:left;" /> -->
+![](images/image-20220707202059972.png)
 
 #### 第4步：优化物理查询
 
 物理查询优化是在确定了逻辑查询优化之后，采用物理优化技术（比如索引等），通过计算代价模型对 各种可能的访问路径进行估算，从而找到执行方式中代价最小的作为执行计划。**在这个部分中，我们需要掌握的重点是对索引的创建和使用。**
 
-<img src="images/image-20220707202156660.png" alt="image-20220707202156660" style="float:left;" />
+<!-- <img src="images/image-20220707202156660.png" alt="image-20220707202156660" style="float:left;" /> -->
+![](images/image-20220707202156660.png)
 
 #### 第5步：使用 Redis 或 Memcached 作为缓存
 
@@ -6590,23 +6781,29 @@ General中的name和code填好后，就可以点击Attributes（属性）来设�
 
 常用的键值存储数据库有 Redis 和 Memcached，它们都可以将数据存放到内存中。
 
-<img src="images/image-20220707202436467.png" alt="image-20220707202436467" style="float:left;" />
+<!-- <img src="images/image-20220707202436467.png" alt="image-20220707202436467" style="float:left;" /> -->
+![](images/image-20220707202436467.png)
 
 #### 第6步：库级优化
 
-<img src="images/image-20220707202555506.png" alt="image-20220707202555506" style="float:left;" />
+<!-- <img src="images/image-20220707202555506.png" alt="image-20220707202555506" style="float:left;" /> -->
+![](images/image-20220707202555506.png)
 
-<img src="images/image-20220707202732911.png" alt="image-20220707202732911" style="float:left;" />
+<!-- <img src="images/image-20220707202732911.png" alt="image-20220707202732911" style="float:left;" /> -->
+![](images/image-20220707202732911.png)
 
-<img src="images/image-20220707203538155.png" alt="image-20220707203538155" style="float:left;" />
+<!-- <img src="images/image-20220707203538155.png" alt="image-20220707203538155" style="float:left;" /> -->
+![](images/image-20220707203538155.png)
 
-<img src="images/image-20220707203607993.png" alt="image-20220707203607993" style="float:left;" />
+<!-- <img src="images/image-20220707203607993.png" alt="image-20220707203607993" style="float:left;" /> -->
+![](images/image-20220707203607993.png)
 
 > 但需要注意的是，分拆在提升数据库性能的同时，也会增加维护和使用成本。
 
 ## 2. 优化MySQL服务器
 
-<img src="images/image-20220707203818987.png" alt="image-20220707203818987" style="float:left;" />
+<!-- <img src="images/image-20220707203818987.png" alt="image-20220707203818987" style="float:left;" /> -->
+![](images/image-20220707203818987.png)
 
 ### 2.1 优化服务器硬件
 
@@ -6622,7 +6819,8 @@ General中的name和code填好后，就可以点击Attributes（属性）来设�
 
 ### 2.2 优化MySQL的参数
 
-<img src="images/image-20220707204403406.png" alt="image-20220707204403406" style="float:left;" />
+<!-- <img src="images/image-20220707204403406.png" alt="image-20220707204403406" style="float:left;" /> -->
+![](images/image-20220707204403406.png)
 
 * innodb_buffer_pool_size ：这个参数是Mysql数据库最重要的参数之一，表示InnoDB类型的 表 和索引的最大缓存 。它不仅仅缓存 索引数据 ，还会缓存 表的数据 。这个值越大，查询的速度就会越 快。但是这个值太大会影响操作系统的性能。
 
@@ -6722,27 +6920,33 @@ query_cache_size=32M
 
 **举例：**
 
-<img src="images/image-20220707210351452.png" alt="image-20220707210351452" style="float:left;" />
+<!-- <img src="images/image-20220707210351452.png" alt="image-20220707210351452" style="float:left;" /> -->
+![](images/image-20220707210351452.png)
 
 **(1) 调整系统参数 InnoDB_flush_log_at_trx_commit**
 
-<img src="images/image-20220707210447501.png" alt="image-20220707210447501" style="float:left;" />
+<!-- <img src="images/image-20220707210447501.png" alt="image-20220707210447501" style="float:left;" /> -->
+![](images/image-20220707210447501.png)
 
 **(2)  调整系统参数 InnoDB_buffer_pool_size**
 
-<img src="images/image-20220707210555848.png" alt="image-20220707210555848" style="float:left;" />
+<!-- <img src="images/image-20220707210555848.png" alt="image-20220707210555848" style="float:left;" /> -->
+![](images/image-20220707210555848.png)
 
 **(3) 调整系统参数 InnoDB_buffer_pool_instances**
 
-<img src="images/image-20220707210720394.png" alt="image-20220707210720394" style="float:left;" />
+<!-- <img src="images/image-20220707210720394.png" alt="image-20220707210720394" style="float:left;" /> -->
+![](images/image-20220707210720394.png)
 
 ## 3. 优化数据库结构
 
-<img src="images/image-20220707211709553.png" alt="image-20220707211709553" style="float:left;" />
+<!-- <img src="images/image-20220707211709553.png" alt="image-20220707211709553" style="float:left;" /> -->
+![](images/image-20220707211709553.png)
 
 ### 3.1 拆分表：冷热数据分离
 
-<img src="images/image-20220707211802756.png" alt="image-20220707211802756" style="float:left;" />
+<!-- <img src="images/image-20220707211802756.png" alt="image-20220707211802756" style="float:left;" /> -->
+![](images/image-20220707211802756.png)
 
 **举例1：** `会员members表` 存储会员登录认证信息，该表中有很多字段，如id、姓名、密码、地址、电 话、个人描述字段。其中地址、电话、个人描述等字段并不常用，可以将这些不常用的字段分解出另一 个表。将这个表取名叫members_detail，表中有member_id、address、telephone、description等字段。 这样就把会员表分成了两个表，分别为 `members表` 和 `members_detail表` 。
 
@@ -6776,7 +6980,8 @@ members_detail.member_id;
 
 ### 3.2 增加中间表
 
-<img src="images/image-20220707212800544.png" alt="image-20220707212800544" style="float:left;" />
+<!-- <img src="images/image-20220707212800544.png" alt="image-20220707212800544" style="float:left;" /> -->
+![](images/image-20220707212800544.png)
 
 举例1： 学生信息表 和 班级表 的SQL语句如下：
 
@@ -6832,7 +7037,8 @@ insert into temp_student(stu_name,className,monitor)
 
 ### 3.4 优化数据类型
 
-<img src="images/image-20220707213524137.png" alt="image-20220707213524137" style="float:left;" />
+<!-- <img src="images/image-20220707213524137.png" alt="image-20220707213524137" style="float:left;" /> -->
+![](images/image-20220707213524137.png)
 
 **情况1：对整数类型数据进行优化。**
 
@@ -6846,7 +7052,8 @@ insert into temp_student(stu_name,className,monitor)
 
 **情况3：避免使用TEXT、BLOB数据类型**
 
-<img src="images/image-20220707214640374.png" alt="image-20220707214640374" style="float:left;" />
+<!-- <img src="images/image-20220707214640374.png" alt="image-20220707214640374" style="float:left;" /> -->
+![](images/image-20220707214640374.png)
 
 **情况4：避免使用ENUM类型**
 
@@ -6875,11 +7082,13 @@ Decimal类型为精准浮点数，在计算时不会丢失精度，尤其是财�
 
 **① 禁用索引**
 
-<img src="images/image-20220707215305640.png" alt="image-20220707215305640" style="float:left;" />
+<!-- <img src="images/image-20220707215305640.png" alt="image-20220707215305640" style="float:left;" /> -->
+![](images/image-20220707215305640.png)
 
 **② 禁用唯一性检查**
 
-<img src="images/image-20220707215356893.png" alt="image-20220707215356893" style="float:left;" />
+<!-- <img src="images/image-20220707215356893.png" alt="image-20220707215356893" style="float:left;" /> -->
+![](images/image-20220707215356893.png)
 
 **③ 使用批量插入**
 
@@ -6916,15 +7125,18 @@ insert into student values
 
 **② 禁用外键检查**
 
-<img src="images/image-20220707220034534.png" alt="image-20220707220034534" style="float:left;" />
+<!-- <img src="images/image-20220707220034534.png" alt="image-20220707220034534" style="float:left;" /> -->
+![](images/image-20220707220034534.png)
 
 **③ 禁止自动提交**
 
-<img src="images/image-20220707220131891.png" alt="image-20220707220131891" style="float:left;" />
+<!-- <img src="images/image-20220707220131891.png" alt="image-20220707220131891" style="float:left;" /> -->
+![](images/image-20220707220131891.png)
 
 ### 3.6 使用非空约束
 
-<img src="images/image-20220707220157606.png" alt="image-20220707220157606" style="float:left;" />
+<!-- <img src="images/image-20220707220157606.png" alt="image-20220707220157606" style="float:left;" /> -->
+![](images/image-20220707220157606.png)
 
 ### 3.7 分析表、检查表与优化表
 
@@ -7017,11 +7229,13 @@ LOCAL | NO_WRITE_TO_BINLOG关键字的意义和分析表相同，都是指定不
 
 > 说明： 在多数的设置中，根本不需要运行OPTIMIZE TABLE。即使对可变长度的行进行了大量的更 新，也不需要经常运行，` 每周一次` 或 `每月一次` 即可，并且只需要对 `特定的表` 运行。
 
-<img src="images/image-20220707222156765.png" alt="image-20220707222156765" style="float:left;" />
+<!-- <img src="images/image-20220707222156765.png" alt="image-20220707222156765" style="float:left;" /> -->
+![](images/image-20220707222156765.png)
 
 **方式二：使用mysqlcheck命令**
 
-<img src="images/image-20220707222305302.png" alt="image-20220707222305302" style="float:left;" />
+<!-- <img src="images/image-20220707222305302.png" alt="image-20220707222305302" style="float:left;" /> -->
+![](images/image-20220707222305302.png)
 
 #### 3.8 小结
 
@@ -7070,11 +7284,13 @@ LOCAL | NO_WRITE_TO_BINLOG关键字的意义和分析表相同，都是指定不
 
 ### 4.4 水平拆分
 
-<img src="images/image-20220707222954304.png" alt="image-20220707222954304" style="float:left;" />
+<!-- <img src="images/image-20220707222954304.png" alt="image-20220707222954304" style="float:left;" /> -->
+![](images/image-20220707222954304.png)
 
 ![image-20220707222739120](images/image-20220707222739120.png)
 
-<img src="images/image-20220707223024163.png" alt="image-20220707223024163" style="float:left;" />
+<!-- <img src="images/image-20220707223024163.png" alt="image-20220707223024163" style="float:left;" /> -->
+![](images/image-20220707223024163.png)
 
 下面补充一下数据库分片的两种常见方案：
 
@@ -7099,10 +7315,13 @@ SET SESSION MAX_EXECUTION_TIME=2000; #指定该会话中SELECT语句的超时时
 
 ### 5.2 创建全局通用表空间
 
-<img src="images/image-20220707223246684.png" alt="image-20220707223246684" style="float:left;" />
+<!-- <img src="images/image-20220707223246684.png" alt="image-20220707223246684" style="float:left;" /> -->
+![](images/image-20220707223246684.png)
 
-<img src="images/image-20220707223349879.png" alt="image-20220707223349879" style="float:left;" />
+<!-- <img src="images/image-20220707223349879.png" alt="image-20220707223349879" style="float:left;" /> -->
+![](images/image-20220707223349879.png)
 
 ### 5.3 MySQL 8.0新特性：隐藏索引对调优的帮助
 
-<img src="images/image-20220707223420496.png" alt="image-20220707223420496" style="float:left;" />
+<!-- <img src="images/image-20220707223420496.png" alt="image-20220707223420496" style="float:left;" /> -->
+![](images/image-20220707223420496.png)

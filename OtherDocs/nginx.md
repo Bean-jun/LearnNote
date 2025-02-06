@@ -64,7 +64,7 @@
 
 ### 二、常见模块
 
-1. auth_request 实现nginx端鉴权控制  官方介绍[https://nginx.org/en/docs/http/ngx_http_auth_request_module.html](`https://nginx.org/en/docs/http/ngx_http_auth_request_module.html`)
+1. auth_request 实现nginx端鉴权控制  官方介绍[https://nginx.org/en/docs/http/ngx_http_auth_request_module.html]#(`https://nginx.org/en/docs/http/ngx_http_auth_request_module.html`)
 
    auth_request指令允许放在http、server和location上下文中，在配置好后，每当指定的作用域在收到HTTP请求时，Nginx会向指定的路径发起一个GET类型的子请求，子请求的请求头部分与原HTTP请求的请求头部分一致。
 

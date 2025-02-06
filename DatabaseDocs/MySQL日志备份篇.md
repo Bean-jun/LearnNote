@@ -1,6 +1,7 @@
 # 第17章_其他数据库日志
 
-<img src="images//image-20220715141705004.png" alt="image-20220715141705004" style="float:left;" />
+<!-- <img src="images//image-20220715141705004.png" alt="image-20220715141705004" style="float:left;" /> -->
+![](images/image-20220715141705004.png)
 
 **千万不要小看日志**。很多看似奇怪的问题，答案往往就藏在日志里。很多情况下，只有通过查看日志才 能发现问题的原因，真正解决问题。所以，一定要学会查看日志，养成检查日志的习惯，对提升你的数 据库应用开发能力至关重要。
 
@@ -38,7 +39,8 @@ MySQL有不同类型的日志文件，用来存储不同类型的日志，分为
 
 ### 3.1 问题场景
 
-<img src="images//image-20220715145650406.png" alt="image-20220715145650406" style="float:left;" />
+<!-- <img src="images//image-20220715145650406.png" alt="image-20220715145650406" style="float:left;" /> -->
+![](images/image-20220715145650406.png)
 
 ### 3.2 查看当前状态
 
@@ -53,7 +55,8 @@ mysql> SHOW VARIABLES LIKE '%general%';
 2 rows in set (0.03 sec)
 ```
 
-<img src="images//image-20220715155010381.png" alt="image-20220715155010381" style="float:left;" />
+<!-- <img src="images//image-20220715155010381.png" alt="image-20220715155010381" style="float:left;" /> -->
+![](images/image-20220715155010381.png)
 
 ### 3.3 启动日志
 
@@ -190,7 +193,8 @@ mysqladmin -uroot -p flush-logs
 
 ## 4. 错误日志(error log)
 
-<img src="images//image-20220715160249271.png" alt="image-20220715160249271" style="float:left;" />
+<!-- <img src="images//image-20220715160249271.png" alt="image-20220715160249271" style="float:left;" /> -->
+![](images/image-20220715160249271.png)
 
 ### 4.1 启动日志
 
@@ -226,7 +230,8 @@ mysql> SHOW VARIABLES LIKE 'log_err%';
 
 执行结果中可以看到错误日志文件是mysqld.log，位于MySQL默认的数据目录下。
 
-<img src="images//image-20220715160657093.png" alt="image-20220715160657093" style="float:left;" />
+<!-- <img src="images//image-20220715160657093.png" alt="image-20220715160657093" style="float:left;" /> -->
+![](images/image-20220715160657093.png)
 
 ### 4.3 删除\刷新日志
 
@@ -271,11 +276,13 @@ mysql> SHOW VARIABLES LIKE 'log_err%';
 install -omysql -gmysql -m0644 /dev/null /var/log/mysqld.log
 ```
 
-<img src="images//image-20220715161216556.png" alt="image-20220715161216556" style="float:left;" />
+<!-- <img src="images//image-20220715161216556.png" alt="image-20220715161216556" style="float:left;" /> -->
+![](images/image-20220715161216556.png)
 
 ### 4.4 MySQL 8.0 新特性
 
-<img src="images//image-20220715161321565.png" alt="image-20220715161321565" style="float:left;" />
+<!-- <img src="images//image-20220715161321565.png" alt="image-20220715161321565" style="float:left;" /> -->
+![](images/image-20220715161321565.png)
 
 > 小结：
 >
@@ -293,7 +300,8 @@ binlog即binary log，二进制日志文件，也叫作变更日志（update log
 
 binlog主要应用场景：
 
-  <img src="images//image-20220715161800635.png" alt="image-20220715161800635" style="zoom:100%;" />
+  <!-- <img src="images//image-20220715161800635.png" alt="image-20220715161800635" style="zoom:100%;" /> -->
+  ![](images/image-20220715161800635.png)
 
 ![image-20220715161842703](images//image-20220715161842703.png)
 
@@ -316,7 +324,8 @@ mysql> show variables like '%log_bin%';
 6 rows in set (0.00 sec)
 ```
 
-<img src="images//image-20220715163520596.png" alt="image-20220715163520596" style="float:left;" />
+<!-- <img src="images//image-20220715163520596.png" alt="image-20220715163520596" style="float:left;" /> -->
+![](images/image-20220715163520596.png)
 
 ### 5.2 日志参数设置
 
@@ -332,7 +341,8 @@ binlog_expire_logs_seconds=600
 max_binlog_size=100M
 ```
 
-<img src="images//image-20220715163811664.png" alt="image-20220715163811664" style="float:left;" />
+<!-- <img src="images//image-20220715163811664.png" alt="image-20220715163811664" style="float:left;" /> -->
+![](images/image-20220715163811664.png)
 
 重新启动MySQL服务，查询二进制日志的信息，执行结果：
 
@@ -366,7 +376,8 @@ log-bin="/var/lib/mysql/binlog/atguigu-bin"
 chown -R -v mysql:mysql binlog
 ```
 
-<img src="images//image-20220715164107352.png" alt="image-20220715164107352" style="float:left;" />
+<!-- <img src="images//image-20220715164107352.png" alt="image-20220715164107352" style="float:left;" /> -->
+![](images/image-20220715164107352.png)
 
 **方式2：临时性方式**
 
@@ -409,11 +420,14 @@ update student set name='张三_back' where id=1;
 
 开始查看binlog
 
-<img src="images//image-20220715164718970.png" alt="image-20220715164718970" style="float:left;" />
+<!-- <img src="images//image-20220715164718970.png" alt="image-20220715164718970" style="float:left;" /> -->
+![](images/image-20220715164718970.png)
 
-<img src="images//image-20220715164743351.png" alt="image-20220715164743351" style="float:left;" />
+<!-- <img src="images//image-20220715164743351.png" alt="image-20220715164743351" style="float:left;" /> -->
+![](images/image-20220715164743351.png)
 
-<img src="images//image-20220715164809401.png" alt="image-20220715164809401" style="float:left;" />
+<!-- <img src="images//image-20220715164809401.png" alt="image-20220715164809401" style="float:left;" /> -->
+![](images/image-20220715164809401.png)
 
 ```mysql
 mysqlbinlog -v "/var/lib/mysql/binlog/atguigu-bin.000002"
@@ -548,7 +562,8 @@ mysql> show binlog events in 'atguigu-bin.000002';
 14 行于数据集 (0.02 秒)
 ```
 
-<img src="images//image-20220715165603879.png" alt="image-20220715165603879" style="float:left;" />
+<!-- <img src="images//image-20220715165603879.png" alt="image-20220715165603879" style="float:left;" /> -->
+![](images/image-20220715165603879.png)
 
 上面我们讲了这么多都是基于binlog的默认格式，binlog格式查看
 
@@ -617,13 +632,16 @@ PURGE {MASTER | BINARY} LOGS TO ‘指定日志文件名’
 PURGE {MASTER | BINARY} LOGS BEFORE ‘指定日期’
 ```
 
-<img src="images//image-20220715171712026.png" alt="image-20220715171712026" style="float:left;" />
+<!-- <img src="images//image-20220715171712026.png" alt="image-20220715171712026" style="float:left;" /> -->
+![](images/image-20220715171712026.png)
 
-<img src="images//image-20220715172015185.png" alt="image-20220715172015185" style="float:left;" />
+<!-- <img src="images//image-20220715172015185.png" alt="image-20220715172015185" style="float:left;" /> -->
+![](images/image-20220715172015185.png)
 
 **2. RESET MASTER: 删除所有二进制日志文件**
 
-<img src="images//image-20220715172104967.png" alt="image-20220715172104967" style="float:left;" />
+<!-- <img src="images//image-20220715172104967.png" alt="image-20220715172104967" style="float:left;" /> -->
+![](images/image-20220715172104967.png)
 
 ### 5.6 其它场景
 
@@ -774,7 +792,8 @@ CD95YCABAAAAKAAAAGgDAAAAAFsAAAAAAAEAAgAB/wABAAAAfATkBw==
 
 **第3个作用是具有高可用性。**数据备份实际上是一种冗余的机制，通过这种冗余的方式可以换取数据库的高可用性，也就是当服务器出现故障或宕机的情况下，可以切换到从服务器上，保证服务的正常运行。
 
-<img src="images//image-20220715214055057.png" alt="image-20220715214055057" style="float:left;" />
+<!-- <img src="images//image-20220715214055057.png" alt="image-20220715214055057" style="float:left;" /> -->
+![](images/image-20220715214055057.png)
 
 ## 2. 主从复制的原理
 
@@ -1080,7 +1099,8 @@ SHOW SLAVE STATUS\G;
 6. 主服务器mysql权限
 ```
 
-<img src="images//image-20220718142045114.png" alt="image-20220718142045114" style="zoom:80%;" />
+<!-- <img src="images//image-20220718142045114.png" alt="image-20220718142045114" style="zoom:80%;" /> -->
+![](images/image-20220718142045114.png)
 
 ### 3.6 测试
 
@@ -1140,7 +1160,8 @@ reset master; #删除Master中所有的binglog文件，并将日志索引文件�
 
 进行主从同步的内容是二进制日志，它是一个文件，在进行 `网络传输` 的过程中就一定会 `存在主从延迟` （比如 500ms），这样就可能造成用户在从库上读取的数据不是最新的数据，也就是主从同步中的 `数据不一致性` 问题。
 
-<img src="images//image-20220718144051094.png" alt="image-20220718144051094" style="float:left;" />
+<!-- <img src="images//image-20220718144051094.png" alt="image-20220718144051094" style="float:left;" /> -->
+![](images/image-20220718144051094.png)
 
 ### 4.2 主从延迟问题原因
 
@@ -1190,7 +1211,8 @@ reset master; #删除Master中所有的binglog文件，并将日志索引文件�
 
 #### 方法 2：半同步复制
 
-<img src="images//image-20220718144926758.png" alt="image-20220718144926758" style="float:left;" />
+<!-- <img src="images//image-20220718144926758.png" alt="image-20220718144926758" style="float:left;" /> -->
+![](images/image-20220718144926758.png)
 
 ![image-20220718144958357](images//image-20220718144958357.png)
 
@@ -1249,7 +1271,8 @@ MGR 将 MySQL 带入了数据强一致性的时代，是一个划时代的创新
 
 # 第19章_数据库备份与恢复
 
-<img src="images//image-20220718145936444.png" alt="image-20220718145936444" style="float:left;" />
+<!-- <img src="images//image-20220718145936444.png" alt="image-20220718145936444" style="float:left;" /> -->
+![](images/image-20220718145936444.png)
 
 ## 1. 物理备份与逻辑备份
 
@@ -1872,7 +1895,8 @@ mysql> SHOW GLOBAL VARIABLES LIKE '%secure%';
 2 rows in set (0.02 sec)
 ```
 
-<img src="images//image-20220718163627669.png" alt="image-20220718163627669" style="float:left;" />
+<!-- <img src="images//image-20220718163627669.png" alt="image-20220718163627669" style="float:left;" /> -->
+![](images/image-20220718163627669.png)
 
 （3）上面结果中显示，secure_file_priv变量的值为/var/lib/mysql-files/，导出目录设置为该目录，SQL语句如下。
 
@@ -2256,21 +2280,26 @@ mysql –h host2 –uroot –p
 
 ## 8. 删库了不敢跑，能干点啥？
 
-<img src="images//image-20220718165738367.png" alt="image-20220718165738367" style="float:left;" />
+<!-- <img src="images//image-20220718165738367.png" alt="image-20220718165738367" style="float:left;" /> -->
+![](images/image-20220718165738367.png)
 
 ### 8.1 delete：误删行
 
-<img src="images//image-20220718165909464.png" alt="image-20220718165909464" style="float:left;" />
+<!-- <img src="images//image-20220718165909464.png" alt="image-20220718165909464" style="float:left;" /> -->
+![](images/image-20220718165909464.png)
 
 ### 8.2 truncate/drop ：误删库/表
 
-<img src="images//image-20220718170026929.png" alt="image-20220718170026929" style="float:left;" />
+<!-- <img src="images//image-20220718170026929.png" alt="image-20220718170026929" style="float:left;" /> -->
+![](images/image-20220718170026929.png)
 
 ### 8.3 预防使用truncate/drop误删库/表
 
-<img src="images//image-20220718170132339.png" alt="image-20220718170132339" style="float:left;" />
+<!-- <img src="images//image-20220718170132339.png" alt="image-20220718170132339" style="float:left;" /> -->
+![](images/image-20220718170132339.png)
 
-<img src="images//image-20220718170215247.png" alt="image-20220718170215247" style="float:left;" />
+<!-- <img src="images//image-20220718170215247.png" alt="image-20220718170215247" style="float:left;" /> -->
+![](images/image-20220718170215247.png)
 
 ### 8.4 rm：误删MySQL实例
 

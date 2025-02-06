@@ -102,7 +102,8 @@ UPDATE accounts SET money = money + 50 WHERE NAME = 'BB';
 
   一个基本的状态转换图如下所示：
 
-  <img src="images/image-20220708171859055.png" alt="image-20220708171859055" style="zoom:80%;" />
+  <!-- <img src="images/image-20220708171859055.png" alt="image-20220708171859055" style="zoom:80%;" /> -->
+  ![](images/image-20220708171859055.png)
 
   图中可见，只有当事务处于`提交的`或者`中止的`状态时，一个事务的生命周期才算是结束了。对于已经提交的事务来说，该事务对数据库所做的修改将永久生效，对于处于中止状态的事务，该事务对数据库所做的所有修改都会被回滚到没执行该事务之前的状态。
 
@@ -357,7 +358,8 @@ mysql> SELECT * FROM user;
 1 行于数据集 (0.01 秒)
 ```
 
-<img src="images/image-20220708201221316.png" alt="image-20220708201221316" style="float:left;" />
+<!-- <img src="images/image-20220708201221316.png" alt="image-20220708201221316" style="float:left;" /> -->
+![](images/image-20220708201221316.png)
 
 > 当我们设置 autocommit=0 时，不论是否采用 START TRANSACTION 或者 BEGIN 的方式来开启事 务，都需要用 COMMIT 进行提交，让事务生效，使用 ROLLBACK 对事务进行回滚。
 >
@@ -498,7 +500,8 @@ Session A和Session B各开启了一个事务，Session B中的事务先将stude
 
 Session A中的事务先根据条件 studentno > 0这个条件查询表student，得到了name列值为'张三'的记录； 之后Session B中提交了一个 `隐式事务` ，该事务向表student中插入了一条新记录；之后Session A中的事务 再根据相同的条件 studentno > 0查询表student，得到的结果集中包含Session B中的事务新插入的那条记 录，这种现象也被称之为 幻读 。我们把新插入的那些记录称之为 `幻影记录` 。
 
-<img src="images/image-20220708220228436.png" alt="image-20220708220228436" style="float:left;" />
+<!-- <img src="images/image-20220708220228436.png" alt="image-20220708220228436" style="float:left;" /> -->
+![](images/image-20220708220228436.png)
 
 ### 3.3 SQL中的四种隔离级别
 
@@ -523,11 +526,13 @@ Session A中的事务先根据条件 studentno > 0这个条件查询表student�
 
 不同的隔离级别有不同的现象，并有不同的锁和并发机制，隔离级别越高，数据库的并发性能就越差，4 种事务隔离级别与并发性能的关系如下：
 
-<img src="images/image-20220708220957108.png" alt="image-20220708220957108" style="zoom:80%;" />
+<!-- <img src="images/image-20220708220957108.png" alt="image-20220708220957108" style="zoom:80%;" /> -->
+![](images/image-20220708220957108.png)
 
 ### 3.4 MySQL支持的四种隔离级别
 
-<img src="images/image-20220708221639979.png" alt="image-20220708221639979" style="float:left;" />
+<!-- <img src="images/image-20220708221639979.png" alt="image-20220708221639979" style="float:left;" /> -->
+![](images/image-20220708221639979.png)
 
 MySQL的默认隔离级别为REPEATABLE READ，我们可以手动修改一下事务的隔离级别。
 
@@ -623,7 +628,8 @@ TRUNCATE TABLE account;
 INSERT INTO account VALUES (1,'张三','100'), (2,'李四','0');
 ```
 
-<img src="images/image-20220708223250773.png" alt="image-20220708223250773" style="float:left;" />
+<!-- <img src="images/image-20220708223250773.png" alt="image-20220708223250773" style="float:left;" /> -->
+![](images/image-20220708223250773.png)
 
 **演示1. 读未提交之脏读**
 
@@ -649,7 +655,8 @@ INSERT INTO account VALUES (1,'张三','100'), (2,'李四','0');
 
 ![image-20220710194042096](images/image-20220710194042096.png)
 
-<img src="images/image-20220710194612317.png" alt="image-20220710194612317" style="float:left;" />
+<!-- <img src="images/image-20220710194612317.png" alt="image-20220710194612317" style="float:left;" /> -->
+![](images/image-20220710194612317.png)
 
 ## 4. 事务的常见分类
 
@@ -778,7 +785,8 @@ redo log的写入并不是直接写入磁盘的，InnoDB引擎会在写redo log�
 * `设置为1` ：表示每次事务提交时都将进行同步，刷盘操作（ 默认值 ） 
 * `设置为2` ：表示每次事务提交时都只把 redo log buffer 内容写入 page cache，不进行同步。由os自 己决定什么时候同步到磁盘文件。
 
-<img src="images/image-20220710205948156.png" alt="image-20220710205948156" style="float:left;" />
+<!-- <img src="images/image-20220710205948156.png" alt="image-20220710205948156" style="float:left;" /> -->
+![](images/image-20220710205948156.png)
 
 另外，InnoDB存储引擎有一个后台线程，每隔`1秒`，就会把`redo log buffer`中的内容写到文件系统缓存(`page cache`)，然后调用刷盘操作。
 
@@ -794,17 +802,23 @@ redo log的写入并不是直接写入磁盘的，InnoDB引擎会在写redo log�
 
 #### 1. 流程图
 
-<img src="images/image-20220710210751414.png" alt="image-20220710210751414" style="float:left;" />
+<!-- <img src="images/image-20220710210751414.png" alt="image-20220710210751414" style="float:left;" /> -->
+![](images/image-20220710210751414.png)
 
-<img src="images/image-20220710211318120.png" alt="image-20220710211318120" style="float:left;" />
+<!-- <img src="images/image-20220710211318120.png" alt="image-20220710211318120" style="float:left;" /> -->
+![](images/image-20220710211318120.png)
 
-<img src="images/image-20220710211335379.png" alt="image-20220710211335379" style="float:left;" />
+<!-- <img src="images/image-20220710211335379.png" alt="image-20220710211335379" style="float:left;" /> -->
+![](images/image-20220710211335379.png)
 
-<img src="images/image-20220710211618789.png" alt="image-20220710211618789" style="float:left;" />
+<!-- <img src="images/image-20220710211618789.png" alt="image-20220710211618789" style="float:left;" /> -->
+![](images/image-20220710211618789.png)
 
-<img src="images/image-20220710211831675.png" alt="image-20220710211831675" style="float:left;" />
+<!-- <img src="images/image-20220710211831675.png" alt="image-20220710211831675" style="float:left;" /> -->
+![](images/image-20220710211831675.png)
 
-<img src="images/image-20220710212041563.png" alt="image-20220710212041563" style="float:left;" />
+<!-- <img src="images/image-20220710212041563.png" alt="image-20220710212041563" style="float:left;" /> -->
+![](images/image-20220710212041563.png)
 
 #### 2. 举例
 
@@ -832,7 +846,8 @@ END //
 DELIMITER;
 ```
 
-<img src="images/image-20220710215001482.png" alt="image-20220710215001482" style="float:left;" />
+<!-- <img src="images/image-20220710215001482.png" alt="image-20220710215001482" style="float:left;" /> -->
+![](images/image-20220710215001482.png)
 
 ```mysql
 mysql> CALL p_load(30000);
@@ -863,7 +878,8 @@ mysql> CALL p_load(30000);
 Query OK, 0 rows affected(46 sec)
 ```
 
-<img src="images/image-20220710215353893.png" alt="image-20220710215353893" style="float:left;" />
+<!-- <img src="images/image-20220710215353893.png" alt="image-20220710215353893" style="float:left;" /> -->
+![](images/image-20220710215353893.png)
 
 ### 1.7 写入redo log buffer 过程
 
@@ -877,11 +893,13 @@ MySQL把对底层页面中的一次原子访问过程称之为一个`Mini-Transa
 
 #### 2. redo 日志写入log buffer
 
-<img src="images/image-20220710220838744.png" alt="image-20220710220838744" style="float:left;" />
+<!-- <img src="images/image-20220710220838744.png" alt="image-20220710220838744" style="float:left;" /> -->
+![](images/image-20220710220838744.png)
 
 ![image-20220710220919271](images/image-20220710220919271.png)
 
-<img src="images/image-20220710221221981.png" alt="image-20220710221221981" style="float:left;" />
+<!-- <img src="images/image-20220710221221981.png" alt="image-20220710221221981" style="float:left;" /> -->
+![](images/image-20220710221221981.png)
 
 ![image-20220710221318271](images/image-20220710221318271.png)
 
@@ -895,7 +913,8 @@ MySQL把对底层页面中的一次原子访问过程称之为一个`Mini-Transa
 
 一个redo log block是由`日志头、日志体、日志尾`组成。日志头占用12字节，日志尾占用8字节，所以一个block真正能存储的数据是512-12-8=492字节。
 
-<img src="images/image-20220710223117420.png" alt="image-20220710223117420" style="float:left;" />
+<!-- <img src="images/image-20220710223117420.png" alt="image-20220710223117420" style="float:left;" /> -->
+![](images/image-20220710223117420.png)
 
 ![image-20220710223135374](images/image-20220710223135374.png)
 
@@ -903,7 +922,8 @@ MySQL把对底层页面中的一次原子访问过程称之为一个`Mini-Transa
 
 ![image-20220711144546439](images/image-20220711144546439.png)
 
-<img src="images/image-20220711144608223.png" alt="image-20220711144608223" style="float:left;" />
+<!-- <img src="images/image-20220711144608223.png" alt="image-20220711144608223" style="float:left;" /> -->
+![](images/image-20220711144608223.png)
 
 ### 1.8 redo log file
 
@@ -948,7 +968,8 @@ innodb_log_file_size=200M
 
 #### 2. 日志文件组
 
-<img src="images/image-20220711152137012.png" alt="image-20220711152137012" style="float:left;" />
+<!-- <img src="images/image-20220711152137012.png" alt="image-20220711152137012" style="float:left;" /> -->
+![](images/image-20220711152137012.png)
 
 ![image-20220711152242300](images/image-20220711152242300.png)
 
@@ -965,15 +986,18 @@ innodb_log_file_size=200M
 
 每次刷盘 redo log 记录到日志文件组中，write pos 位置就会后移更新。每次MySQL加载日志文件组恢复数据时，会清空加载过的 redo log 记录，并把check point后移更新。write pos 和 checkpoint 之间的还空着的部分可以用来写入新的 redo log 记录。
 
-<img src="images/image-20220711152631108.png" alt="image-20220711152631108" style="zoom:80%;" />
+<!-- <img src="images/image-20220711152631108.png" alt="image-20220711152631108" style="zoom:80%;" /> -->
+![](images/image-20220711152631108.png)
 
 如果 write pos 追上 checkpoint ，表示`日志文件组`满了，这时候不能再写入新的 redo log记录，MySQL 得 停下来，清空一些记录，把 checkpoint 推进一下。
 
-<img src="images/image-20220711152802294.png" alt="image-20220711152802294" style="zoom:80%;" />
+<!-- <img src="images/image-20220711152802294.png" alt="image-20220711152802294" style="zoom:80%;" /> -->
+![](images/image-20220711152802294.png)
 
 ### 1.9 redo log 小结
 
-<img src="images/image-20220711152930911.png" alt="image-20220711152930911" style="float:left;" />
+<!-- <img src="images/image-20220711152930911.png" alt="image-20220711152930911" style="float:left;" /> -->
+![](images/image-20220711152930911.png)
 
 ## 2. Undo日志
 
@@ -988,13 +1012,15 @@ redo log是事务持久性的保证，undo log是事务原子性的保证。在�
 
 以上情况出现，我们需要把数据改回原先的样子，这个过程称之为 `回滚` ，这样就可以造成一个假象：这 个事务看起来什么都没做，所以符合 `原子性` 要求。
 
-<img src="images/image-20220711153523704.png" alt="image-20220711153523704" style="float:left;" />
+<!-- <img src="images/image-20220711153523704.png" alt="image-20220711153523704" style="float:left;" /> -->
+![](images/image-20220711153523704.png)
 
 ### 2.2 Undo日志的作用
 
 * **作用1：回滚数据**
 
-<img src="images/image-20220711153645204.png" alt="image-20220711153645204" style="float:left;" />
+<!-- <img src="images/image-20220711153645204.png" alt="image-20220711153645204" style="float:left;" /> -->
+![](images/image-20220711153645204.png)
 
 * **作用2：MVCC**
 
@@ -1018,9 +1044,11 @@ mysql> show variables like 'innodb_undo_logs';
 +------------------+-------+
 ```
 
-<img src="images/image-20220711154936382.png" alt="image-20220711154936382" style="float:left;" />
+<!-- <img src="images/image-20220711154936382.png" alt="image-20220711154936382" style="float:left;" /> -->
+![](images/image-20220711154936382.png)
 
-<img src="images/image-20220711155044078.png" alt="image-20220711155044078" style="float:left;" />
+<!-- <img src="images/image-20220711155044078.png" alt="image-20220711155044078" style="float:left;" /> -->
+![](images/image-20220711155044078.png)
 
 #### 2. 回滚段与事务
 
@@ -1075,7 +1103,8 @@ mysql> show variables like 'innodb_undo_logs';
 
 假设有两个数值，分别为A=1和B=2，然后将A修改为3，B修改为4
 
-<img src="images/image-20220711162414928.png" alt="image-20220711162414928" style="float:left;" />
+<!-- <img src="images/image-20220711162414928.png" alt="image-20220711162414928" style="float:left;" /> -->
+![](images/image-20220711162414928.png)
 
 **只有Buffer Pool的流程：**
 
@@ -1089,7 +1118,8 @@ mysql> show variables like 'innodb_undo_logs';
 
 #### 2. 详细生成过程
 
-<img src="images/image-20220711162919157.png" alt="image-20220711162919157" style="float:left;" />
+<!-- <img src="images/image-20220711162919157.png" alt="image-20220711162919157" style="float:left;" /> -->
+![](images/image-20220711162919157.png)
 
 **当我们执行INSERT时：**
 
@@ -1161,7 +1191,8 @@ redo log是物理日志，记录的是数据页的物理变化，undo log不是r
 
 ## 1. 概述
 
-<img src="images/image-20220711165954976.png" alt="image-20220711165954976" style="float:left;" />
+<!-- <img src="images/image-20220711165954976.png" alt="image-20220711165954976" style="float:left;" /> -->
+![](images/image-20220711165954976.png)
 
 在数据库中，除传统的计算资源（如CPU、RAM、I/O等）的争用以外，数据也是一种供许多用户共享的 资源。为保证数据的一致性，需要对 `并发操作进行控制` ，因此产生了 `锁` 。同时 `锁机制` 也为实现MySQL 的各个隔离级别提供了保证。 `锁冲突` 也是影响数据库 `并发访问性能` 的一个重要因素。所以锁对数据库而言显得尤其重要，也更加复杂。
 
@@ -1226,7 +1257,8 @@ redo log是物理日志，记录的是数据页的物理变化，undo log不是r
 
 * 方案一：读操作利用多版本并发控制（ `MVCC` ，下章讲解），写操作进行 `加锁` 。
 
-<img src="images/image-20220711202206405.png" alt="image-20220711202206405" style="float:left;" />
+<!-- <img src="images/image-20220711202206405.png" alt="image-20220711202206405" style="float:left;" /> -->
+![](images/image-20220711202206405.png)
 
 > 普通的SELECT语句在READ COMMITTED和REPEATABLE READ隔离级别下会使用到MVCC读取记录。
 >
@@ -1235,7 +1267,8 @@ redo log是物理日志，记录的是数据页的物理变化，undo log不是r
 
 * 方案二：读、写操作都采用 `加锁` 的方式。
 
-<img src="images/image-20220711203250284.png" alt="image-20220711203250284" style="float:left;" />
+<!-- <img src="images/image-20220711203250284.png" alt="image-20220711203250284" style="float:left;" /> -->
+![](images/image-20220711203250284.png)
 
 * 小结对比发现：
 
@@ -1252,34 +1285,42 @@ redo log是物理日志，记录的是数据页的物理变化，undo log不是r
 
 ### 3.1 从数据操作的类型划分：读锁、写锁
 
-<img src="images/image-20220711203723941.png" alt="image-20220711203723941" style="float:left;" />
+<!-- <img src="images/image-20220711203723941.png" alt="image-20220711203723941" style="float:left;" /> -->
+![](images/image-20220711203723941.png)
 
 * `读锁` ：也称为 `共享锁` 、英文用 S 表示。针对同一份数据，多个事务的读操作可以同时进行而不会互相影响，相互不阻塞的。
 * `写锁` ：也称为 `排他锁` 、英文用 X 表示。当前写操作没有完成前，它会阻断其他写锁和读锁。这样 就能确保在给定的时间里，只有一个事务能执行写入，并防止其他用户读取正在写入的同一资源。
 
 **需要注意的是对于 InnoDB 引擎来说，读锁和写锁可以加在表上，也可以加在行上。**
 
-<img src="images/image-20220711204843684.png" alt="image-20220711204843684" style="float:left;" />
+<!-- <img src="images/image-20220711204843684.png" alt="image-20220711204843684" style="float:left;" /> -->
+![](images/image-20220711204843684.png)
 
 #### 1. 锁定读
 
-<img src="images/image-20220711212931912.png" alt="image-20220711212931912" style="float:left;" />
+<!-- <img src="images/image-20220711212931912.png" alt="image-20220711212931912" style="float:left;" /> -->
+![](images/image-20220711212931912.png)
 
-<img src="images/image-20220711213741630.png" alt="image-20220711213741630" style="float:left;" />
+<!-- <img src="images/image-20220711213741630.png" alt="image-20220711213741630" style="float:left;" /> -->
+![](images/image-20220711213741630.png)
 
-<img src="images/image-20220711214013208.png" alt="image-20220711214013208" style="float:left;" />
+<!-- <img src="images/image-20220711214013208.png" alt="image-20220711214013208" style="float:left;" /> -->
+![](images/image-20220711214013208.png)
 
 #### 2. 写操作
 
-<img src="images/image-20220711214412163.png" alt="image-20220711214412163" style="float:left;" />
+<!-- <img src="images/image-20220711214412163.png" alt="image-20220711214412163" style="float:left;" /> -->
+![](images/image-20220711214412163.png)
 
 ### 3.2 从数据操作的粒度划分：表级锁、页级锁、行锁
 
-<img src="images/image-20220711214719510.png" alt="image-20220711214719510" style="float:left;" />
+<!-- <img src="images/image-20220711214719510.png" alt="image-20220711214719510" style="float:left;" /> -->
+![](images/image-20220711214719510.png)
 
 #### 1. 表锁（Table Lock）
 
-<img src="images/image-20220711214805088.png" alt="image-20220711214805088" style="float:left;" />
+<!-- <img src="images/image-20220711214805088.png" alt="image-20220711214805088" style="float:left;" /> -->
+![](images/image-20220711214805088.png)
 
 ##### ① 表级别的S锁、X锁
 
@@ -1323,11 +1364,13 @@ SHOW OPEN TABLES; # 主要关注In_use字段的值
 SHOW OPEN TABLES where In_use > 0;
 ```
 
-<img src="images/image-20220711220342251.png" alt="image-20220711220342251" style="float:left;" />
+<!-- <img src="images/image-20220711220342251.png" alt="image-20220711220342251" style="float:left;" /> -->
+![](images/image-20220711220342251.png)
 
 或者
 
-<img src="images/image-20220711220418859.png" alt="image-20220711220418859" style="float:left;" />
+<!-- <img src="images/image-20220711220418859.png" alt="image-20220711220418859" style="float:left;" /> -->
+![](images/image-20220711220418859.png)
 
 上面的结果表明，当前数据库中没有被锁定的表
 
@@ -1340,7 +1383,8 @@ LOCK TABLES t WRITE; # 存储引擎会对表t加表级别的排他锁。排他�
 
 比如：
 
-<img src="images/image-20220711220442269.png" alt="image-20220711220442269" style="float:left;" />
+<!-- <img src="images/image-20220711220442269.png" alt="image-20220711220442269" style="float:left;" /> -->
+![](images/image-20220711220442269.png)
 
 步骤4：释放表锁
 
@@ -1350,7 +1394,8 @@ UNLOCK TABLES; # 使用此命令解锁当前加锁的表
 
 比如：
 
-<img src="images/image-20220711220502141.png" alt="image-20220711220502141" style="float:left;" />
+<!-- <img src="images/image-20220711220502141.png" alt="image-20220711220502141" style="float:left;" /> -->
+![](images/image-20220711220502141.png)
 
 步骤5：加读锁
 
@@ -1408,7 +1453,8 @@ InnoDB 支持 `多粒度锁（multiple granularity locking）` ，它允许 `行
 
 **1. 意向锁要解决的问题**
 
-<img src="images/image-20220711222132300.png" alt="image-20220711222132300" style="float:left;" />
+<!-- <img src="images/image-20220711222132300.png" alt="image-20220711222132300" style="float:left;" /> -->
+![](images/image-20220711222132300.png)
 
 **举例：**创建表teacher,插入6条数据，事务的隔离级别默认为`Repeatable-Read`，如下所示。
 
@@ -1453,7 +1499,8 @@ BEGIN;
 LOCK TABLES teacher READ;
 ```
 
-<img src="images/image-20220712124209006.png" alt="image-20220712124209006" style="float:left;" />
+<!-- <img src="images/image-20220712124209006.png" alt="image-20220712124209006" style="float:left;" /> -->
+![](images/image-20220712124209006.png)
 
 ```mysql
 BEGIN;
@@ -1555,7 +1602,8 @@ mysql> select * from teacher;
 
 这些是“Simple inserts”语句但是指定部分新行的自动递增值。例如 `INSERT INTO teacher (id,name) VALUES (1,'a'), (NULL,'b'), (5,'c'), (NULL,'d');` 只是指定了部分id的值。另一种类型的“混合模式插入”是 `INSERT ... ON DUPLICATE KEY UPDATE` 。
 
-<img src="images/image-20220712175552985.png" alt="image-20220712175552985" style="float:left;" />
+<!-- <img src="images/image-20220712175552985.png" alt="image-20220712175552985" style="float:left;" /> -->
+![](images/image-20220712175552985.png)
 
 innodb_autoinc_lock_mode有三种取值，分别对应与不同锁定模式：
 
@@ -1621,7 +1669,8 @@ mysql> show processlist;
 
 通过会话C可以看出会话B被阻塞，这是由于会话A拿到了teacher表的元数据读锁，会话B想申请teacher表的元数据写锁，由于读写锁互斥，会话B需要等待会话A释放元数据锁才能执行。
 
-<img src="images/image-20220713143156759.png" alt="image-20220713143156759" style="float:left;" />
+<!-- <img src="images/image-20220713143156759.png" alt="image-20220713143156759" style="float:left;" /> -->
+![](images/image-20220713143156759.png)
 
 #### 2. InnoDB中的行锁
 
@@ -1657,7 +1706,8 @@ INSERT INTO student VALUES
 mysql> SELECT * FROM student;
 ```
 
-<img src="images/image-20220713161549241.png" alt="image-20220713161549241" style="float:left;" />
+<!-- <img src="images/image-20220713161549241.png" alt="image-20220713161549241" style="float:left;" /> -->
+![](images/image-20220713161549241.png)
 
 student表中的聚簇索引的简图如下所示。
 
@@ -1699,7 +1749,8 @@ student表中的聚簇索引的简图如下所示。
 
 这里session2并不会被堵住。因为表里并没有id=5这条记录，因此session1嘉的是间隙锁(3,8)。而session2也是在这个间隙加的间隙锁。它们有共同的目标，即：保护这个间隙锁，不允许插入值。但，它们之间是不冲突的。
 
-<img src="images/image-20220713174726264.png" alt="image-20220713174726264" style="float:left;" />
+<!-- <img src="images/image-20220713174726264.png" alt="image-20220713174726264" style="float:left;" /> -->
+![](images/image-20220713174726264.png)
 
 * `Infimum`记录，表示该页面中最小的记录。
 * `Supremun`记录，表示该页面中最大的记录。
@@ -1719,9 +1770,11 @@ Empty set (0.01 sec)
 
 ![image-20220713174602102](images/image-20220713174602102.png)
 
-<img src="images/image-20220713175032619.png" alt="image-20220713175032619" style="float:left;" />
+<!-- <img src="images/image-20220713175032619.png" alt="image-20220713175032619" style="float:left;" /> -->
+![](images/image-20220713175032619.png)
 
-<img src="images/image-20220713192418730.png" alt="image-20220713192418730" style="float:left;" />
+<!-- <img src="images/image-20220713192418730.png" alt="image-20220713192418730" style="float:left;" /> -->
+![](images/image-20220713192418730.png)
 
 ##### ③ 临键锁（Next-Key Locks）
 
@@ -1736,13 +1789,17 @@ begin;
 select * from student where id <=8 and id > 3 for update;
 ```
 
-<img src="images/image-20220713203124889.png" alt="image-20220713203124889" style="float:left;" />
+<!-- <img src="images/image-20220713203124889.png" alt="image-20220713203124889" style="float:left;" /> -->
+![](images/image-20220713203124889.png)
 
-<img src="images/image-20220713203532124.png" alt="image-20220713203532124" style="float:left;" />
+<!-- <img src="images/image-20220713203532124.png" alt="image-20220713203532124" style="float:left;" /> -->
+![](images/image-20220713203532124.png)
 
-<img src="images/image-20220713203619704.png" alt="image-20220713203619704" style="float:left;" />
+<!-- <img src="images/image-20220713203619704.png" alt="image-20220713203619704" style="float:left;" /> -->
+![](images/image-20220713203619704.png)
 
-<img src="images/image-20220713203714577.png" alt="image-20220713203714577" style="float:left;" />
+<!-- <img src="images/image-20220713203714577.png" alt="image-20220713203714577" style="float:left;" /> -->
+![](images/image-20220713203714577.png)
 
 #### 3. 页锁
 
@@ -1762,11 +1819,14 @@ select * from student where id <=8 and id > 3 for update;
 
 **秒杀案例1：**
 
-<img src="images/image-20220713204544767.png" alt="image-20220713204544767" style="float:left;" />
+<!-- <img src="images/image-20220713204544767.png" alt="image-20220713204544767" style="float:left;" /> -->
+![](images/image-20220713204544767.png)
 
-<img src="images/image-20220713205010502.png" alt="image-20220713205010502" style="float:left;" />
+<!-- <img src="images/image-20220713205010502.png" alt="image-20220713205010502" style="float:left;" /> -->
+![](images/image-20220713205010502.png)
 
-<img src="images/image-20220713205135694.png" alt="image-20220713205135694" style="float:left;" />
+<!-- <img src="images/image-20220713205135694.png" alt="image-20220713205135694" style="float:left;" /> -->
+![](images/image-20220713205135694.png)
 
 #### 2. 乐观锁（Optimistic Locking）
 
@@ -1784,9 +1844,11 @@ select * from student where id <=8 and id > 3 for update;
 
 你能看到乐观锁就是程序员自己控制数据并发操作的权限，基本是通过给数据行增加一个戳（版本号或 者时间戳），从而证明当前拿到的数据是否最新。
 
-<img src="images/image-20220713210951100.png" alt="image-20220713210951100" style="float:left;" />
+<!-- <img src="images/image-20220713210951100.png" alt="image-20220713210951100" style="float:left;" /> -->
+![](images/image-20220713210951100.png)
 
-<img src="images/image-20220713211139670.png" alt="image-20220713211139670" style="float:left;" />
+<!-- <img src="images/image-20220713211139670.png" alt="image-20220713211139670" style="float:left;" /> -->
+![](images/image-20220713211139670.png)
 
 #### 3. 两种锁的适用场景
 
@@ -1795,18 +1857,21 @@ select * from student where id <=8 and id > 3 for update;
 1. `乐观锁` 适合 `读操作多` 的场景，相对来说写的操作比较少。它的优点在于 `程序实现` ， `不存在死锁` 问题，不过适用场景也会相对乐观，因为它阻止不了除了程序以外的数据库操作。
 2. `悲观锁` 适合 `写操作多` 的场景，因为写的操作具有 `排它性` 。采用悲观锁的方式，可以在数据库层 面阻止其他事务对该数据的操作权限，防止 `读 - 写` 和 `写 - 写` 的冲突。
 
-<img src="images/image-20220713211417909.png" alt="image-20220713211417909" style="float:left;" />
+<!-- <img src="images/image-20220713211417909.png" alt="image-20220713211417909" style="float:left;" /> -->
+![](images/image-20220713211417909.png)
 
 ### 3.4 按加锁的方式划分：显式锁、隐式锁
 
 #### 1. 隐式锁
 
-<img src="images/image-20220713211525845.png" alt="image-20220713211525845" style="float:left;" />
+<!-- <img src="images/image-20220713211525845.png" alt="image-20220713211525845" style="float:left;" /> -->
+![](images/image-20220713211525845.png)
 
 * **情景一**：对于聚簇索引记录来说，有一个 `trx_id` 隐藏列，该隐藏列记录着最后改动该记录的 `事务 id` 。那么如果在当前事务中新插入一条聚簇索引记录后，该记录的 trx_id 隐藏列代表的的就是 当前事务的 事务id ，如果其他事务此时想对该记录添加 S锁 或者 X锁 时，首先会看一下该记录的 trx_id 隐藏列代表的事务是否是当前的活跃事务，如果是的话，那么就帮助当前事务创建一个 X 锁 （也就是为当前事务创建一个锁结构， is_waiting 属性是 false ），然后自己进入等待状态 （也就是为自己也创建一个锁结构， is_waiting 属性是 true ）。
 * **情景二**：对于二级索引记录来说，本身并没有 trx_id 隐藏列，但是在二级索引页面的 Page Header 部分有一个 `PAGE_MAX_TRX_ID` 属性，该属性代表对该页面做改动的最大的 `事务id` ，如 果 PAGE_MAX_TRX_ID 属性值小于当前最小的活跃 事务id ，那么说明对该页面做修改的事务都已 经提交了，否则就需要在页面中定位到对应的二级索引记录，然后回表找到它对应的聚簇索引记 录，然后再重复 情景一 的做法。
 
-<img src="images/image-20220713214522709.png" alt="image-20220713214522709" style="float:left;" />
+<!-- <img src="images/image-20220713214522709.png" alt="image-20220713214522709" style="float:left;" /> -->
+![](images/image-20220713214522709.png)
 
 **session 1:**
 
@@ -1896,7 +1961,8 @@ Flush tables with read lock
 
 用户A给用户B转账100，再次同时，用户B也给用户A转账100。这个过程，可能导致死锁。
 
-<img src="images/image-20220713220936236.png" alt="image-20220713220936236" style="float:left;" />
+<!-- <img src="images/image-20220713220936236.png" alt="image-20220713220936236" style="float:left;" /> -->
+![](images/image-20220713220936236.png)
 
 #### 2. 产生死锁的必要条件
 
@@ -1911,7 +1977,8 @@ Flush tables with read lock
 
 **方式1：**等待，直到超时（innodb_lock_wait_timeout=50s)
 
-<img src="images/image-20220713221418100.png" alt="image-20220713221418100" style="float:left;" />
+<!-- <img src="images/image-20220713221418100.png" alt="image-20220713221418100" style="float:left;" /> -->
+![](images/image-20220713221418100.png)
 
 **方式2：**使用死锁检测处理死锁程序
 
@@ -1942,7 +2009,8 @@ Flush tables with read lock
 
 #### 4. 如何避免死锁
 
-<img src="images/image-20220714131008260.png" alt="image-20220714131008260" style="float:left;" />
+<!-- <img src="images/image-20220714131008260.png" alt="image-20220714131008260" style="float:left;" /> -->
+![](images/image-20220714131008260.png)
 
 ## 4. 锁的内部结构
 
@@ -2410,7 +2478,8 @@ UPDATE student SET ... # 排他锁
 
 ![image-20220714140441064](images/image-20220714140441064.png)
 
-<img src="images/image-20220714140510426.png" alt="image-20220714140510426" style="float:left;" />
+<!-- <img src="images/image-20220714140510426.png" alt="image-20220714140510426" style="float:left;" /> -->
+![](images/image-20220714140510426.png)
 
 ![image-20220714140541555](images/image-20220714140541555.png)
 
@@ -2421,7 +2490,8 @@ UPDATE student SET ... # 排他锁
 * `trx_id` ：每次一个事务对某条聚簇索引记录进行改动时，都会把该事务的 `事务id` 赋值给 `trx_id` 隐藏列。 
 * `roll_pointer` ：每次对某条聚簇索引记录进行改动时，都会把旧的版本写入到 `undo日志` 中，然 后这个隐藏列就相当于一个指针，可以通过它来找到该记录修改前的信息。
 
-<img src="images/image-20220714140716427.png" alt="image-20220714140716427" style="float:left;" />
+<!-- <img src="images/image-20220714140716427.png" alt="image-20220714140716427" style="float:left;" /> -->
+![](images/image-20220714140716427.png)
 
 假设插入该记录的`事务id`为`8`，那么此刻该条记录的示意图如下所示：
 
@@ -2433,7 +2503,8 @@ UPDATE student SET ... # 排他锁
 
 ![image-20220714140846658](images/image-20220714140846658.png)
 
-<img src="images/image-20220714140908661.png" alt="image-20220714140908661" style="float:left;" />
+<!-- <img src="images/image-20220714140908661.png" alt="image-20220714140908661" style="float:left;" /> -->
+![](images/image-20220714140908661.png)
 
 每次对记录进行改动，都会记录一条undo日志，每条undo日志也都有一个 `roll_pointer` 属性 （ `INSERT` 操作对应的undo日志没有该属性，因为该记录并没有更早的版本），可以将这些 `undo日志` 都连起来，串成一个链表：
 
@@ -2449,7 +2520,8 @@ MVCC 的实现依赖于：`隐藏字段`、`Undo Log`、`Read View`。
 
 ### 4.1 什么是ReadView
 
-<img src="images/image-20220714141154235.png" alt="image-20220714141154235" style="float:left;" />
+<!-- <img src="images/image-20220714141154235.png" alt="image-20220714141154235" style="float:left;" /> -->
+![](images/image-20220714141154235.png)
 
 ### 4.2 设计思路
 
@@ -2473,7 +2545,8 @@ MVCC 的实现依赖于：`隐藏字段`、`Undo Log`、`Read View`。
 
 > 注意：low_limit_id并不是trx_ids中的最大值，事务id是递增分配的。比如，现在有id为1， 2，3这三个事务，之后id为3的事务提交了。那么一个新的读事务在生成ReadView时， trx_ids就包括1和2，up_limit_id的值就是1，low_limit_id的值就是4。
 
-<img src="images/image-20220714142254768.png" alt="image-20220714142254768" style="float:left;" />
+<!-- <img src="images/image-20220714142254768.png" alt="image-20220714142254768" style="float:left;" /> -->
+![](images/image-20220714142254768.png)
 
 ### 4.3 ReadView的规则
 
@@ -2496,7 +2569,8 @@ MVCC 的实现依赖于：`隐藏字段`、`Undo Log`、`Read View`。
 4. 如果不符合 ReadView 规则，就需要从 Undo Log 中获取历史快照； 
 5. 最后返回符合规则的数据。
 
-<img src="images/image-20220715130639408.png" alt="image-20220715130639408" style="float:left;" />
+<!-- <img src="images/image-20220715130639408.png" alt="image-20220715130639408" style="float:left;" /> -->
+![](images/image-20220715130639408.png)
 
 在隔离级别为读已提交（Read Committed）时，一个事务中的每一次 SELECT 查询都会重新获取一次 Read View。
 
@@ -2512,7 +2586,8 @@ MVCC 的实现依赖于：`隐藏字段`、`Undo Log`、`Read View`。
 
 ## 5. 举例说明
 
-<img src="images/image-20220715131200077.png" alt="image-20220715131200077" style="float:left;" />
+<!-- <img src="images/image-20220715131200077.png" alt="image-20220715131200077" style="float:left;" /> -->
+![](images/image-20220715131200077.png)
 
 ### 5.1 READ COMMITTED隔离级别下
 
@@ -2547,7 +2622,8 @@ BEGIN;
 SELECT * FROM student WHERE id = 1; # 得到的列name的值为'张三'
 ```
 
-<img src="images/image-20220715134540737.png" alt="image-20220715134540737" style="float:left;" />
+<!-- <img src="images/image-20220715134540737.png" alt="image-20220715134540737" style="float:left;" /> -->
+![](images/image-20220715134540737.png)
 
 之后，我们把 `事务id` 为 `10` 的事务提交一下：
 
@@ -2587,9 +2663,11 @@ SELECT * FROM student WHERE id = 1; # 得到的列name的值为'张三'
 SELECT * FROM student WHERE id = 1; # 得到的列name的值为'王五'
 ```
 
-<img src="images/image-20220715135017000.png" alt="image-20220715135017000" style="float:left;" />
+<!-- <img src="images/image-20220715135017000.png" alt="image-20220715135017000" style="float:left;" /> -->
+![](images/image-20220715135017000.png)
 
-<img src="images/image-20220715135143939.png" alt="image-20220715135143939" style="float:left;" />
+<!-- <img src="images/image-20220715135143939.png" alt="image-20220715135143939" style="float:left;" /> -->
+![](images/image-20220715135143939.png)
 
 ### 5.2 REPEATABLE READ隔离级别下
 
@@ -2622,7 +2700,8 @@ BEGIN;
 SELECT * FROM student WHERE id = 1; # 得到的列name的值为'张三'
 ```
 
-<img src="images/image-20220715140155744.png" alt="image-20220715140155744" style="float:left;" />
+<!-- <img src="images/image-20220715140155744.png" alt="image-20220715140155744" style="float:left;" /> -->
+![](images/image-20220715140155744.png)
 
 之后，我们把 `事务id` 为 `10` 的事务提交一下，就像这样：
 
@@ -2662,9 +2741,11 @@ SELECT * FROM student WHERE id = 1; # 得到的列name的值为'张三'
 SELECT * FROM student WHERE id = 1; # 得到的列name的值仍为'张三'
 ```
 
-<img src="images/image-20220715140555172.png" alt="image-20220715140555172" style="float:left;" />
+<!-- <img src="images/image-20220715140555172.png" alt="image-20220715140555172" style="float:left;" /> -->
+![](images/image-20220715140555172.png)
 
-<img src="images/image-20220715140620328.png" alt="image-20220715140620328" style="float:left;" />
+<!-- <img src="images/image-20220715140620328.png" alt="image-20220715140620328" style="float:left;" /> -->
+![](images/image-20220715140620328.png)
 
 这次`SELECT`查询得到的结果是重复的，记录的列`c`值都是`张三`，这就是`可重复读`的含义。如果我们之后再把`事务id`为`20`的记录提交了，然后再到刚才使用`REPEATABLE READ`隔离级别的事务中继续查找这个`id`为`1`的记录，得到的结果还是`张三`，具体执行过程大家可以自己分析一下。
 
@@ -2674,7 +2755,8 @@ SELECT * FROM student WHERE id = 1; # 得到的列name的值仍为'张三'
 
 假设现在表 student 中只有一条数据，数据内容中，主键 id=1，隐藏的 trx_id=10，它的 undo log 如下图所示。
 
-<img src="images/image-20220715141002035.png" alt="image-20220715141002035" style="zoom:80%;" />
+<!-- <img src="images/image-20220715141002035.png" alt="image-20220715141002035" style="zoom:80%;" /> -->
+![](images/image-20220715141002035.png)
 
 假设现在有事务 A 和事务 B 并发执行，`事务 A` 的事务 id 为 `20` ， `事务 B` 的事务 id 为 `30` 。
 
@@ -2722,8 +2804,10 @@ insert into student(id,name) values(3,'王五');
 * `READ COMMITTD` 在每一次进行普通SELECT操作前都会生成一个ReadView 
 * `REPEATABLE READ` 只在第一次进行普通SELECT操作前生成一个ReadView，之后的查询操作都重复 使用这个ReadView就好了。
 
-<img src="images/image-20220715141413135.png" alt="image-20220715141413135" style="float:left;" />
+<!-- <img src="images/image-20220715141413135.png" alt="image-20220715141413135" style="float:left;" /> -->
+![](images/image-20220715141413135.png)
 
 通过MVCC我们可以解决：
 
-<img src="images/image-20220715141515370.png" alt="image-20220715141515370" style="float:left;" />
+<!-- <img src="images/image-20220715141515370.png" alt="image-20220715141515370" style="float:left;" /> -->
+![](images/image-20220715141515370.png)
