@@ -269,7 +269,7 @@
 
       推荐: [Django REST framework](https://www.django-rest-framework.org/)
 
-      👉	[Django入门使用](WebFrameDocs/Django-入门.md)👈
+      👉	[Django入门使用（修复中）]#(WebFrameDocs/Django-入门.md)👈
 
       👉	[DRF入门使用](WebFrameDocs/DRF-入门.md)👈
 
@@ -412,7 +412,7 @@
 
 1. cookie离谱的生效范围
 
-      👉 [cookie离谱的生效范围](BugDocs/cookies/cookie离谱的生效范围.md)👈
+      👉 [cookie离谱的生效范围](BugDocs/cookie离谱的生效范围.md)👈
    
 
 2. go 加密库 slow bug
