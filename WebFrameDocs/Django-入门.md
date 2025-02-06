@@ -69,6 +69,7 @@
     text.render(content)
     ```
 
+
 2. 变量
 
   - 变量传递给模板的数据
@@ -122,6 +123,7 @@
       text.render(content)
       ```
 
+
 3. 标签
 
   - 3.1 if 标签
@@ -132,101 +134,122 @@
       - 注意：上述的and、or 或not不允许使用(),真遇到了，可以使用嵌套结构
       - 格式1
 
-              {% if %}
-                  内容
-              {% endif %}
+          ```shell
+          {% if %}
+              内容
+          {% endif %}
+          ```
       - 格式2
-
-              {% if %}
-                  内容
-              {% else %}
-                  内容
-              {% endif %}
+          ```shell
+          {% if %}
+              内容
+          {% else %}
+              内容
+          {% endif %}
+          ```
       - 格式3
-
-              {% if %}
-                  内容
-              {% elif %}
-                  内容
-              {% elif %}
-                  内容
-              ...
-              {% else %}
-                  内容
-              {% endif %}
+          ```shell
+          {% if %}
+              内容
+          {% elif %}
+              内容
+          {% elif %}
+              内容
+          ...
+          {% else %}
+              内容
+          {% endif %}
+          ```
 
   - 3.2 for 标签
       - 用于迭代序列中的各个元素
 
       - 格式1
-
-              {% for 变量 in Python对象 %}
-                  语句
-              {% endfor %}
+          ```shell
+          {% for 变量 in Python对象 %}
+              语句
+          {% endfor %}
+          ```
       - 格式2
-
-              {% for 变量 in Python对象 %}
-                  语句
-              {% empty %}  # 注意：列表为空或者列表不存在时执行empty内的内容
-                  语句2
-              {% endfor %}
+          ```shell
+          {% for 变量 in Python对象 %}
+              语句
+          {% empty %}  # 注意：列表为空或者列表不存在时执行empty内的内容
+              语句2
+          {% endfor %}
+          ```
       - 格式3
-
-              {{ forloop.counter }}
+          ```shell
+          {{ forloop.counter }}
+          ```
 
   - 3.3 ifequal/ifnotequal 标签
       - 标签比较两个值，如果相等/不相等，显示内部的内容
       - 本质上可以使用if 和 ==/!= 来替代
       - 格式
-
-              {% ifequal user currentuser %}
-                  内容
-              {% endifequal %}
+          ```shell
+          {% ifequal user currentuser %}
+              内容
+          {% endifequal %}
+          ```
 
   - 3.4 注释
       - 用来注释代码，让其不显示
       - 注释不可以嵌套
 
       - 单行注释：
-
-              {# 被注释的内容 #}
+          ```shell
+          {# 被注释的内容 #}
+          ```
       - 多行注释
-
-              {% comment %}
-                  注释内容
-              {% endcomment %}
+          ```shell
+          {% comment %}
+              注释内容
+          {% endcomment %}
+          ```
 
   - 3.5 include 
       - 加载模板并以标签内的参数渲染
       - 格式：
+          ```shell
+          {% include '模板目录' 参数1 参数2 %}
+          ```
 
-              {% include '模板目录' 参数1 参数2 %}
 
 4. 过滤器
 
   模板过滤器是在显示变量之前调整变量值的简单方式。过滤器使用管道符号指定
 
   - 基本格式
-
+    ```shell
     语法 {{ var|过滤器 }}
+    ```
 
   - 示例：
 
     - 过滤器可以传递参数，参数用引号引起来
-      `join 格式 列表|join:"#"`
-      示例：{{list1|join:"#"}}
+    ```shell
+    `join 格式 列表|join:"#"`
+    示例：{{list1|join:"#"}}
+    ```
     - 如果一个变量没有被提供，或者值为false,空，我们可以通过 default 语法使用默认值
-      格式： {{str1|default:"没有"}}
-      根据给定格式转换日期为字符串：date
-      格式： {{dateVal|date:'y-m-d'}}
-      HTML转义：escape
-    - 问题：return render(request, 'myApp/index.html', {"code": "`<h1>sunck is a very good man</h1>`"})中的{{code}}
-      {{code}}里的code被当作`<h1>sunck is a very good man</h1>`显示，未经过渲染
-      解决方法：
-      {{code|safe}}
-      或  {% autoescape off %}
-      {{code}}
-      {% endautoescape %}  # 这个可以一口气解决一堆
+    ```shell
+    格式： {{str1|default:"没有"}}
+    根据给定格式转换日期为字符串：date
+    格式： {{dateVal|date:'y-m-d'}}
+    ```
+    - HTML转义：escape
+    ```shell
+    问题：return render(request, 'myApp/index.html', {"code": "`<h1>sunck is a very good man</h1>`"})中的{{code}}
+    {{code}}里的code被当作`<h1>sunck is a very good man</h1>`显示，未经过渲染
+
+    解决方法：
+    {{code|safe}}
+    或  {% autoescape off %}
+    {{code}}
+    {% endautoescape %}  # 这个可以一口气解决一堆
+    ```
+
     
 5. 模板
 
@@ -235,22 +258,25 @@
   - block标签：在父模板中预留区域 ，子模板去填充
 
   - 语法 ： 
-
+    ```shell
     {% block 标签名 %}
 
     {% endblock 标签名 %}
+    ```
     
   - extends标签：继承模板，需要写在模板文件的第一行
 
   - 语法 ： 
-
+    ```shell
     {% extends 'myApp/base.html' %}
     {% block main %}
     内容
     {% endblock 标签名 %}
+    ```
 
     - 示例：
-    ```markdown
+
+    ```shell
     定义父模板
         body标签中
         {% block main %}
@@ -274,12 +300,15 @@
   - include
 
     作用：加载模板并以标签内的参数渲染
-    格式：{% include '模板目录' 参数1 参数2 %}
+    格式：
+    ```shell
+    {% include '模板目录' 参数1 参数2 %}
+    ```
 
 6. 反向解析
 
   - 在模板中需要将href设置为`{% url "namespace:name" %}`
-  ```markdown
+  ```shell
   在模板文件中使用时，格式如下:
   {% url 'namespace名字：name' %} 例如{% url 'booktest:fan2'%}
   带位置参数：
@@ -288,7 +317,7 @@
   {% url 'namespace名字：name' 关键字参数 %} 例如{% url 'booktest:fan2' id=1 %}
   ```
   - 在视图中的操作
-  ```markdown
+  ```shell
   在重定向的时候使用反向解析：
   from django.core.urlresolvers import reverse
   无参数：
@@ -298,7 +327,6 @@
   如果有关键字参数
   reverse('namespace名字:name名字', kwargs=字典)
   ```
-
 
 
 ### 三、模型

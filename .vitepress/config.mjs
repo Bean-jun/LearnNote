@@ -118,7 +118,7 @@ export default defineConfig({
           {
             text: 'Django',
             items: [
-              { text: 'Django入门使用（修复中）', link: 'WebFrameDocs/Django-入门' },
+              { text: 'Django入门使用', link: 'WebFrameDocs/Django-入门' },
               { text: 'DRF入门使用', link: 'WebFrameDocs/DRF-入门' },
               { text: '基于django实现的PersonBlog', link: 'https://github.com/Bean-jun/PersonBlogSystem.git' },
               { text: '基于django实现的AuthSystem', link: 'https://github.com/Bean-jun/AuthSystem.git' },

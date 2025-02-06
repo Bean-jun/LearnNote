@@ -269,7 +269,7 @@
 
       推荐: [Django REST framework](https://www.django-rest-framework.org/)
 
-      👉	[Django入门使用（修复中）]#(WebFrameDocs/Django-入门.md)👈
+      👉	[Django入门使用](WebFrameDocs/Django-入门.md)👈
 
       👉	[DRF入门使用](WebFrameDocs/DRF-入门.md)👈
 
