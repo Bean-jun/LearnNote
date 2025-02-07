@@ -79,6 +79,8 @@
       - 👉	[基础语法-操作MySQL](GolangDocs/Golang-操作MySQL.md)👈
 
       - 👉	[基础语法-RPC](GolangDocs/Golang-RPC.md)👈
+
+      - 👉	[错误处理](GolangDocs/Golang-错误处理.md)👈
    
    - 2.2 无聊的代码
 

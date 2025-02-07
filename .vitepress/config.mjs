@@ -2,10 +2,13 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  lang: "zh-CN",
   base: "/LearnNote/",
   title: "LearnGuide",
   description: "A LearnGuide Site",
   themeConfig: {
+    lastUpdated: true,
+    lastUpdatedText: '最后更新',
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },

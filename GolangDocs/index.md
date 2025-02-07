@@ -5,7 +5,9 @@
 - 👉	[基础语法-操作MySQL](Golang-操作MySQL.md)👈
 
 - 👉	[基础语法-RPC](Golang-RPC.md)👈
-   
+
+- 👉	[错误处理](Golang-错误处理.md)👈
+
 ## 2 无聊的代码
 
 - 👉	[Golang-grpc使用](Golang-grpc使用.md)👈
