@@ -183,11 +183,22 @@ export default defineConfig({
         ]
       },
       {
-        text: '遇见的BUG',
+        text: '遇见的BUG&解决方案',
         items: [
-          { text: 'cookie离谱的生效范围', link: 'BugDocs/cookie离谱的生效范围' },
-          { text: 'go加密库执行慢的bug', link: 'BugDocs/go加密库执行慢的bug' },
-          { text: '解决文件名冲突的工具函数竟是slow的元凶', link: 'BugDocs/解决文件名冲突的工具函数竟是slow的元凶' }
+          {
+            text: '遇见的一些Bug',
+            items: [
+              { text: '1-cookie离谱的生效范围', link: 'BugDocs/cookie离谱的生效范围' },
+              { text: '2-go加密库执行慢的bug', link: 'BugDocs/go加密库执行慢的bug' },
+              { text: '3-解决文件名冲突的工具函数竟是slow的元凶', link: 'BugDocs/解决文件名冲突的工具函数竟是slow的元凶' }
+            ]
+          },
+          {
+            text: "AI Solution",
+            items: [
+              { text: '1-后端开发-数据库表内容排序-分数排序-滑动排序解决方案', link: 'AISolution/1-后端开发-数据库表内容排序-分数排序-滑动排序解决方案' },
+            ]
+          }
         ]
       },
       {
