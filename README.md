@@ -430,6 +430,9 @@
 
       👉 [解决文件名冲突的工具函数竟是slow的元凶](BugDocs/解决文件名冲突的工具函数竟是slow的元凶.md)👈
 
+4. python默认参数的问题
+
+      👉 [python默认参数的问题](BugDocs/python默认参数使用错误导致的幽灵数据bug.md)👈
 
 ### 十一、其他
 
