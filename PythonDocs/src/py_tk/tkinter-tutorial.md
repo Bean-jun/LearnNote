@@ -494,3 +494,244 @@ stext.pack(fill=tk.BOTH, side=tk.LEFT, expand=True)
 stext.focus_set()
 stext.mainloop()
 ```
+
+### 3.5 Listbox 列表框
+
+Listbox 允许你浏览这些物品，同时选择一个或多个项目.
+
+使用 Listbox 构造器创建一个列表框小部件：
+
+`tk.Listbox(master=None, cnf={}, **kw)`
+
+
+#### 3.5.1 列表框小部件添加项目：
+
+首先，创建一个变量对象，并将其值初始化为项列表：
+
+```python
+items = ["Item 1", "Item 2", "Item 3", "Item 4"]
+list_items = tk.Variable(value=items)
+```
+
+其次，将该变量对象分配给列表框控件的列表变量选项：
+
+```python
+listbox = tk.Listbox(root, listvariable=list_items)
+listbox.pack()
+```
+
+完整例子：
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+items = ["Item 1", "Item 2", "Item 3", "Item 4"]
+list_items = tk.Variable(value=items)
+
+listbox = tk.Listbox(root, listvariable=list_items)
+listbox.pack()
+
+root.mainloop()
+```
+
+#### 3.5.2 设置选择模式 selectmode：
+
+- tk.BROWSE  允许单一选择。如果你选中一个项目并拖到另一行，选择会跟随鼠标移动。这是默认的。
+- tk.EXTENDED  通过点击第一个项目并拖到最后一行，一次性选择相邻的一组物品。
+- tk.SINGLE  允许你选择一行，且不能拖动鼠标。
+- tk.MULTIPLE  一次选择任意数量的行。点击任意一行可以切换是否被选中。
+
+#### 3.5.3 绑定事件
+
+如果你想在用户选择列表项目时自动执行某个函数，可以将该函数绑定到 <<ListboxSelect>> 事件：
+
+`listbox.bind('<<ListboxSelect>>', callback)`
+
+通过列表框实例的 `curselection（）` 方法获取当前选中的列表项目。
+
+完整例子：
+```python
+import tkinter as tk
+from tkinter.messagebox import showinfo
+
+
+def handle_item_select(event):
+    selected_indices = listbox.curselection()
+    selected_languages = ",".join([listbox.get(i) for i in selected_indices])
+
+    showinfo(title="Information", message=f"You selected: {selected_languages}")
+
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+items = ["Item 1", "Item 2", "Item 3", "Item 4"]
+list_items = tk.Variable(value=items)
+
+listbox = tk.Listbox(
+    root,
+    listvariable=list_items,
+    selectmode=tk.SINGLE,
+)
+
+listbox.bind("<<ListboxSelect>>", handle_item_select)
+listbox.pack()
+
+
+root.mainloop()
+```
+
+#### 3.5.4 在Listbox中添加滚动条
+
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+scroller = ttk.Scrollbar(root, orient=tk.VERTICAL)
+scroller.pack(side=tk.RIGHT, fill=tk.Y)
+
+items = [f"Item {i}" for i in range(100)]
+list_items = tk.Variable(value=items)
+
+listbox = tk.Listbox(
+    root,
+    listvariable=list_items,
+    selectmode=tk.SINGLE,
+)
+listbox.config(yscrollcommand=scroller.set)
+scroller.config(command=listbox.yview)
+listbox.pack(fill=tk.BOTH)
+
+root.mainloop()
+```
+
+### 3.6 Separator 分隔符
+
+分隔器小部件在两组小部件之间放置一条细的水平或垂直线。
+
+`sep = ttk.Separator(master=None, orient=tk.HORIZONTAL)`
+
+完整例子：
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+ttk.Label(root, text="label-1").pack(side=tk.LEFT, expand=True)
+
+# 水平分割线
+# separator = ttk.Separator(root, orient=tk.HORIZONTAL)
+separator = ttk.Separator(root, orient=tk.VERTICAL)
+separator.pack(side=tk.LEFT, fill=tk.Y, pady=10)
+
+ttk.Label(root, text="label-2").pack(side=tk.RIGHT, expand=True)
+
+
+root.mainloop()
+```
+
+### 3.7 checkbox 复选框
+
+复选框小部件允许用户选择一个或多个选项。
+
+`checkbox = ttk.Checkbutton(master=None, cnf={}, **kw)`
+
+完整例子：
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+agreement_var = tk.StringVar()
+
+checkbox = ttk.Checkbutton(
+    root,
+    text="Check me",
+    offvalue="OFF",
+    onvalue="ON",
+    variable=agreement_var,
+    command=lambda: print(agreement_var.get()),
+)
+
+checkbox.pack()
+
+root.mainloop()
+```
+
+### 3.8 Radiobutton 单选按钮
+
+单选按钮允许你在多个互斥选项中选择。
+
+`ttk.Radiobutton(container, text='Option 1', value='Value 1', variable=selected)`
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+selector_var = tk.StringVar()
+
+r1 = ttk.Radiobutton(
+    root,
+    text="Check me - 1",
+    value="1",
+    variable=selector_var,
+    command=lambda: print(selector_var.get()),
+)
+r2 = ttk.Radiobutton(
+    root,
+    text="Check me - 2",
+    value="2",
+    variable=selector_var,
+    command=lambda: print(selector_var.get()),
+)
+r1.pack()
+r2.pack()
+
+
+root.mainloop()
+```
+
+### 3.9 Comboxbox 下拉选择框
+
+下拉选择框（Combobox）允许用户从预定义选项中选择一个值。
+
+`ttk.Combobox(container, textvariable=selected, values=options)`
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+selector_var = tk.StringVar()
+
+combo = ttk.Combobox(
+    root,
+    textvariable=selector_var,
+    values=["Option 1", "Option 2", "Option 3"],
+)
+# 只读状态，用户只能选择已有的选项，不能输入自定义值
+combo["state"] = "readonly"
+combo.bind("<<ComboboxSelected>>", lambda event: print(selector_var.get()))
+combo.pack()
+
+
+root.mainloop()
+```
+
