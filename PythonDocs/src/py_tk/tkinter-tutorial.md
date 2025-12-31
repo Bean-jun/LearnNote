@@ -735,3 +735,375 @@ combo.pack()
 root.mainloop()
 ```
 
+### 3.10 panedwindow 分隔窗口
+
+PaneWindow 小部件用于分割框架或窗口的空间。 A PaneWindow is like a Frame，作为容器来存放子控件
+
+通常，PanedWindow 包含一个垂直或水平的子控件堆栈：
+
+![](images/2025-12-30-22-22-55.png)
+
+
+完整例子：
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+# style = ttk.Style()
+# style.theme_use("classic")
+
+
+pw = ttk.PanedWindow(root, orient=tk.HORIZONTAL)
+
+listbox1 = tk.Listbox(root)
+pw.add(listbox1)
+listbox2 = tk.Listbox(root)
+pw.add(listbox2)
+
+pw.pack()
+
+root.mainloop()
+```
+
+### 3.11 slider 滑动条
+
+滑动条（Slider）允许用户通过拖动滑块来选择一个数值范围。
+
+`ttk.Scale(container, from_=min, to=max, orient=tk.HORIZONTAL)`
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+slider_var = tk.DoubleVar()
+
+
+slider = ttk.Scale(
+    root,
+    from_=0,
+    to=100,
+    variable=slider_var,
+    orient=tk.HORIZONTAL,
+    # orient=tk.VERTICAL,
+    command=lambda event: print(slider_var.get()),
+)
+# 禁用滑动条
+# slider["state"] = "disabled"
+slider.pack()
+
+
+root.mainloop()
+```
+
+### 3.12 spinbox 微调框
+
+微调框（Spinbox）允许用户通过点击按钮来增加或减少数值。
+
+`ttk.Spinbox(master, from_, to, textvariable, wrap)`
+
+如果 wrap 设置为 True，当当前值达到最大值时，点击向上箭头时，当前值会被设置为最低值，反之亦然。
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+spinbox_var = tk.StringVar(value=0)
+
+spinbox = ttk.Spinbox(
+    root,
+    from_=0,
+    to=100,
+    textvariable=spinbox_var,
+    # wrap=True,
+    command=lambda: print(spinbox_var.get()),
+)
+# 禁用微调框
+# spinbox["state"] = "disabled"
+spinbox.pack()
+
+
+root.mainloop()
+```
+
+### 3.13 Sizegrip 大小调整 grip
+
+大小调整 grip 是一个小的可拖动区域，用于调整父容器的大小。
+
+`ttk.Sizegrip(container)`
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+sizegrip = ttk.Sizegrip(root)
+sizegrip.pack(side=tk.BOTTOM, anchor=tk.SE)
+
+root.mainloop()
+```
+
+### 3.14 LabelFrame 标签框架
+
+标签框架（LabelFrame）是一个带标签的框架，用于组织其他小部件。例如，你可以将 Radiobutton 小部件分组，并将其放置在 LabelFrame 上。
+
+`ttk.LabelFrame(container, text='Frame Title')`
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+labelframe = ttk.LabelFrame(
+    root,
+    text="Frame Title",
+    height=150,
+    width=150,
+    padding=10,
+)
+labelframe.pack(padx=10, pady=10)
+
+checkbox = ttk.Checkbutton(labelframe, text="Check me")
+checkbox.pack()
+
+root.mainloop()
+```
+
+### 3.15 Progressbar 进度条
+
+进度条（Progressbar）用于显示任务的完成进度。
+
+`ttk.Progressbar(container, orient, length, mode)`
+
+#### 3.15.1 进度条模式mode
+
+进度条有两种模式：
+
+- determinate：进度条显示任务的完成进度。
+- indeterminate：进度条显示任务正在进行中，没有具体的完成进度。
+
+#### 3.15.2 进度条方法
+
+进度条有以下方法：
+
+- start()：开始进度条动画。
+- stop()：停止进度条动画。
+- step()：增加进度条的进度。
+- configure()：配置进度条的属性。
+
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+progressbar = ttk.Progressbar(
+    root,
+    orient=tk.HORIZONTAL,
+    length=100,
+    mode="determinate",
+)
+progressbar.pack()
+
+
+def start_progress():
+    progressbar.start()
+    val = progressbar["value"]
+    progress_label.config(text=f"Progress: {val}%")
+
+
+progress_label = ttk.Label(root, text="Progress: 0%")
+progress_label.pack()
+
+btn = ttk.Button(root, text="Start", command=start_progress)
+btn.pack()
+
+
+root.mainloop()
+```
+
+### 3.16 NoteBook 选项卡
+
+选项卡（Notebook）是一个容器，用于组织多个子控件。每个子控件都有一个选项卡，用户可以通过点击选项卡来切换显示的子控件。
+
+`ttk.Notebook(container)`
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+notebook = ttk.Notebook(root)
+notebook.pack()
+
+frame1 = ttk.Frame(notebook, width=300, height=200)
+notebook.add(frame1, text="Tab 1")
+
+frame2 = ttk.Frame(notebook, width=300, height=200)
+notebook.add(frame2, text="Tab 2")
+
+frame3 = ttk.Frame(notebook, width=300, height=200)
+notebook.add(frame3, text="Tab 3")
+
+# 选择第二个选项卡
+notebook.select(frame2)
+
+# 获取当前选择的选项卡
+current_tab = notebook.select()
+print(current_tab)
+
+# 隐藏第一个选项卡
+notebook.hide(frame1)
+
+# 移除第一个选项卡
+notebook.forget(frame1)
+
+root.mainloop()
+```
+
+### 3.17 Treeview 树视图
+
+树视图小部件允许你显示分层的项目集合。每个项目都有标签、可选图标和可选的数据值列表。 树视图控件在树标签后连续列显示数据值。
+
+![](images/2025-12-30-22-56-00.png)
+
+`treeview = ttk.Treeview(master=None, **kw)`
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("400x200")
+root.title("Tkinter Treeview")
+
+# 创建树视图
+treeview = ttk.Treeview(columns=("Name", "Number"))
+# 设置列标题
+treeview.heading("#0", text="City")
+treeview.heading("Name", text="Name")
+treeview.heading("Number", text="Number")
+
+scrollbar = ttk.Scrollbar(root, orient="vertical", command=treeview.yview)
+scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+treeview.configure(yscroll=scrollbar.set)
+
+# 插入一级项目
+level1 = treeview.insert("", tk.END, text="湖北", open=True)
+# 插入二级项目
+treeview.insert(level1, tk.END, text="武汉", values=("100000",))
+treeview.insert(level1, tk.END, text="荆州", values=("100001",))
+treeview.insert(level1, tk.END, text="宜昌", values=("100002",))
+treeview.insert(level1, tk.END, text="黄石", values=("100003",))
+treeview.insert(level1, tk.END, text="黄石", values=("100003",))
+treeview.insert(level1, tk.END, text="黄石", values=("100003",))
+treeview.insert(level1, tk.END, text="黄石", values=("100003",))
+treeview.insert(level1, tk.END, text="黄石", values=("100003",))
+
+treeview.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+root.mainloop()
+```
+
+### 3.18 Canvas 画布
+
+Canvas小部件是 Tkinter 中最灵活的小部件。Canvas 小部件允许你构建从自定义小部件到完整用户界面的任何东西。
+
+`tk.Canvas(root, width=600, height=400, bg='white')`
+
+#### 3.18.1 画布方法
+- Line  线路	create_line()
+- Rectangle  矩形	create_rectangle()
+- Oval  椭圆赛道	create_oval()
+- Arc  故事弧	create_arc()
+- Polygon  多边形	create_polygon()
+- Text  发短信	create_text()
+- Image  图像	create_image()
+
+#### 3.18.2 事件处理
+
+同Text事件处理tag_bind()
+
+```python
+canvas.tag_bind(
+    image_item,
+    '<Button-1>',
+    lambda e: canvas.delete(image_item)
+)
+```
+
+完整例子
+```python
+import tkinter as tk
+
+root = tk.Tk()
+
+root.geometry("400x300")
+canvas = tk.Canvas(root, width=600, height=400, bg="white")
+
+a = canvas.create_line(100, 100, 200, 200, fill="red")
+b = canvas.create_rectangle(100, 100, 150, 150, fill="blue")
+
+# 绑定事件&canvas.delete用来删除对应标记原始
+canvas.tag_bind(b, "<Button-1>", lambda e: canvas.delete(a))
+
+canvas.pack()
+
+root.mainloop()
+```
+
+### 3.19 cursor 光标
+
+在 Tkinter 应用中设置控件的光标状态。
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("400x300")
+# 设置光标为watch,忙碌状态
+root.config(cursor="")
+
+
+def handler_click():
+    root.config(cursor="watch")
+    btn.config(cursor="watch")
+
+
+btn = ttk.Button(
+    root,
+    text="Click me",
+    cursor="arrow",
+    command=handler_click,
+)
+btn.pack()
+
+root.mainloop()
+```
+
+## 4. tkinter messagebox 消息框
+
