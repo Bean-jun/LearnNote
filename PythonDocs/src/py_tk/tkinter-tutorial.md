@@ -1105,5 +1105,314 @@ btn.pack()
 root.mainloop()
 ```
 
-## 4. tkinter messagebox 消息框
+## 4. tkinter Dialog and Menus
 
+### 4.1 messagebox 消息框
+
+showinfo()
+showwarning()
+showerror()
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import messagebox, ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+ttk.Button(
+    root,
+    text="INFO",
+    command=lambda: messagebox.showinfo(
+        "Info",
+        "Hello from py-tk!",
+    ),
+).pack()
+ttk.Button(
+    root,
+    text="WARNING",
+    command=lambda: messagebox.showwarning(
+        "WARNING",
+        "Hello from py-tk!",
+    ),
+).pack()
+ttk.Button(
+    root,
+    text="ERROR",
+    command=lambda: messagebox.showerror(
+        "ERROR",
+        "Hello from py-tk!",
+    ),
+).pack()
+
+root.mainloop()
+```
+
+### 4.2 askyesno() 确认消息框
+
+```python
+import tkinter as tk
+from tkinter import messagebox, ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+
+def handle_click():
+    answer = messagebox.askyesno(
+        "Info",
+        "Hello from py-tk!",
+    )
+    if answer:
+        print("Yes")
+    else:
+        print("No")
+
+
+ttk.Button(
+    root,
+    text="Click me",
+    command=handle_click,
+).pack()
+
+root.mainloop()
+```
+
+### 4.3 askokcancel() 确认取消消息框
+
+```python
+import tkinter as tk
+from tkinter import messagebox, ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+
+def handle_click():
+    answer = messagebox.askokcancel(
+        "Info",
+        "Hello from py-tk!",
+    )
+    if answer:
+        print("OK")
+    else:
+        print("Cancel")
+
+
+ttk.Button(
+    root,
+    text="Click me",
+    command=handle_click,
+).pack()
+
+root.mainloop()
+```
+
+### 4.4 askretrycancel() 重试取消消息框
+
+```python
+import tkinter as tk
+from tkinter import messagebox, ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+
+def handle_click():
+    answer = messagebox.askretrycancel(
+        "Info",
+        "Hello from py-tk!",
+    )
+    if answer:
+        print("Retry")
+    else:
+        print("Cancel")
+
+
+ttk.Button(
+    root,
+    text="Click me",
+    command=handle_click,
+).pack()
+
+root.mainloop()
+```
+
+### 4.5 open file dialog 打开文件对话框
+
+`from tkinter import filedialog`
+
+- `filedialog.askopenfilename()` 打开文件对话框并选择一个文件后返回文件路径
+- `filedialog.askopenfilenames()` 打开多个文件对话框并选择多个文件后返回多个文件路径
+- `filedialog.askopenfile()` 直接打开文件
+- ...
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import filedialog, messagebox, ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+
+def handle_click():
+    filename = filedialog.askopenfilename(
+        title="Open file",
+        filetypes=[
+            ("Text files", "*.txt"),
+            ("All files", "*.*"),
+        ],
+    )
+    if filename:
+        print(filename)
+
+
+ttk.Button(
+    root,
+    text="Click me",
+    command=handle_click,
+).pack()
+
+root.mainloop()
+```
+
+### 4.6 color choose dialog 颜色选择对话框
+
+`from tkinter import colorchooser`
+
+- `colorchooser.askcolor()` 打开颜色选择对话框并返回选择的颜色
+- ...
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import colorchooser, messagebox, ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+
+def handle_click():
+    color = colorchooser.askcolor(
+        title="Choose color",
+    )
+    if color:
+        print(color)
+
+
+ttk.Button(
+    root,
+    text="Click me",
+    command=handle_click,
+).pack()
+
+root.mainloop()
+```
+
+### 4.7 Menu 菜单
+
+Tkinter 原生支持菜单。它会显示程序所运行目标平台的外观和界面，例如 Windows、macOS 和 Linux。
+
+```python
+from tkinter import Menu
+# 初始化菜单
+menu_bar = Menu(root)
+# 添加菜单到root
+root.config(menu=menu_bar)
+# 添加菜单选项
+menu_bar.add_command(
+    label="M1",
+    command=lambda: print("M1"),
+)
+```
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import Menu
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+# 初始化菜单
+menu_bar = Menu(root)
+# 添加菜单到root
+root.config(menu=menu_bar)
+
+# 添加菜单选项
+menu_bar.add_command(
+    label="M1",
+    command=lambda: print("M1"),
+)
+menu_bar.add_command(
+    label="M2",
+    command=lambda: print("M2"),
+)
+
+# 添加子菜单
+# 初始化子菜单
+sub_menu = Menu(menu_bar, tearoff=0)
+# 添加子菜单到主菜单
+menu_bar.add_cascade(label="M3", menu=sub_menu)
+# 添加子菜单选项
+sub_menu.add_command(label="S1", command=lambda: print("S1"))
+# 添加分隔线
+sub_menu.add_separator()
+sub_menu.add_command(label="S2", command=lambda: print("S2"))
+
+# 添加子菜单选项
+sub_menu_options = Menu(sub_menu, tearoff=0)
+# 添加子菜单选项到子菜单
+sub_menu.add_cascade(label="Options", menu=sub_menu_options)
+# 添加子菜单选项到子菜单选项
+sub_menu_options.add_command(label="O1", command=lambda: print("O1"))
+sub_menu_options.add_command(label="O2", command=lambda: print("O2"))
+
+
+root.mainloop()
+```
+
+### 4.8 Menubutton 菜单按钮
+
+用来创建一个菜单按钮，点击它会弹出一个菜单。
+
+`ttk.Menubutton(master, **kw)`
+
+![](images/2025-12-31-20-48-01.png)
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import Menu, ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+mb = ttk.Menubutton(root, text="Menu Button")
+mb.pack()
+
+# 初始化菜单
+menu_bar = Menu(mb, tearoff=0)
+# 添加菜单到root
+mb.config(menu=menu_bar)
+
+# 添加菜单选项
+menu_bar.add_command(
+    label="M1",
+    command=lambda: print("M1"),
+)
+menu_bar.add_command(
+    label="M2",
+    command=lambda: print("M2"),
+)
+
+root.mainloop()
+```
+
+### 4.9 OptionMenu 选项菜单
+
+用来创建一个选项菜单，用户可以从多个选项中选择一个。
+
+`ttk.OptionMenu(master, variable, default, *values, **kw)`
