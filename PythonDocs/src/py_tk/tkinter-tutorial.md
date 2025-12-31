@@ -1416,3 +1416,180 @@ root.mainloop()
 用来创建一个选项菜单，用户可以从多个选项中选择一个。
 
 `ttk.OptionMenu(master, variable, default, *values, **kw)`
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+
+obstr = tk.StringVar()
+obstr.set("M1")
+
+ob = ttk.OptionMenu(
+    root,
+    obstr,
+    "M1",
+    "M1",
+    "M2",
+    command=lambda *args: print(args, obstr.get()),
+)
+ob.pack()
+
+root.mainloop()
+```
+
+## 5. Tkinter OOP
+
+### 5.1 简单的 OOP 例子
+
+```python
+import tkinter as tk
+from tkinter import ttk
+
+
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.geometry("300x200+100+100")
+        self.title("Simple App")
+        # 按钮
+        btn = ttk.Button(self, text="Click me!")
+        btn.pack()
+
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+```
+
+### 5.2 继承 Tk.Frame 类
+
+一个 Tkinter 应用程序应该只有一个 Tk 实例。
+
+```python
+import tkinter as tk
+from tkinter import ttk
+from tkinter.messagebox import showinfo
+
+
+class MainFrame(ttk.Frame):
+    def __init__(self, container):
+        super().__init__(container)
+
+        options = {"padx": 5, "pady": 5}
+
+        # label
+        self.label = ttk.Label(self, text="Hello, Tkinter!")
+        self.label.pack(**options)
+
+        # button
+        self.button = ttk.Button(self, text="Click Me")
+        self.button["command"] = self.button_clicked
+        self.button.pack(**options)
+
+        # show the frame on the container
+        self.pack(**options)
+
+    def button_clicked(self):
+        showinfo(title="Information", message="Hello, Tkinter!")
+
+
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.geometry("300x200+100+100")
+        self.title("Simple App")
+
+
+if __name__ == "__main__":
+    app = App()
+    frame = MainFrame(app)
+    app.mainloop()
+```
+
+### 5.3 switching between frames 切换帧
+
+通常，Tkinter 应用由多个`frames`组成。而且你经常需要在帧之间切换，以显示与用户选择相关的画面。
+
+Tkinter 允许你把`frames`叠在一起。要显示特定`frames`，你可以按叠加顺序将`frames`往上加。顶部的框架会显现出来。
+
+要将框架带到顶部，使用框架控件中的 tkraise（） 方法，如下所示：
+
+```python
+frame.tkraise()
+```
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("帧切换示例")
+        self.geometry("400x300")
+
+        # 1. 创建父容器（所有Frame的共同父级）
+        self.container = ttk.Frame(self)
+        self.container.pack(fill="both", expand=True)  # 占满主窗口
+
+        # 2. 定义所有需要切换的Frame
+        self.frames = {}  # 存储Frame实例，方便调用
+        for F in (HomePage, SettingsPage):
+            frame = F(self.container, self)  # 父容器是self.container
+            self.frames[F] = frame
+            # 关键：所有Frame用grid布局重叠（row=0, column=0，占满父容器）
+            frame.grid(row=0, column=0, sticky="nsew")
+
+        # 3. 初始显示首页
+        self.show_frame(HomePage)
+
+    def show_frame(self, frame_class):
+        """切换到指定Frame的方法"""
+        frame = self.frames[frame_class]
+        frame.tkraise()  # 核心：将目标Frame提升到最上层
+
+
+# 定义首页Frame
+class HomePage(ttk.Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        # controller是主App实例，用于调用show_frame切换页面
+        self.controller = controller
+
+        # 首页控件
+        ttk.Label(self, text="首页").pack(pady=50)
+        # 切换到设置页的按钮
+        ttk.Button(
+            self,
+            text="进入设置页",
+            command=lambda: self.controller.show_frame(SettingsPage),
+        ).pack(pady=20)
+
+
+# 定义设置页Frame
+class SettingsPage(ttk.Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+
+        # 设置页控件
+        ttk.Label(self, text="设置页").pack(pady=50)
+        # 切换回首页的按钮
+        ttk.Button(
+            self, text="返回首页", command=lambda: self.controller.show_frame(HomePage)
+        ).pack(pady=20)
+
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+```
+
+## 6. Tkinter Themes 主题
+
