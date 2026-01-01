@@ -1593,3 +1593,207 @@ if __name__ == "__main__":
 
 ## 6. Tkinter Themes 主题
 
+在 Tkinter 中，主题决定了所有小部件的“外观和感觉”。它是所有 TTK 控件的样式集合。
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+
+root.geometry("300x200+100+100")
+
+# 样式
+style = ttk.Style(root)
+
+# 设置主题
+style.theme_use("xpnative")
+
+# 获取所有的主题
+print(style.theme_names())
+
+ttk.Button(root, text="Click me!").grid(row=0, column=0)
+
+root.mainloop()
+```
+
+### 6.1 主题风格介绍
+
+样式是对小部件类外观的描述。通常，一个主题会伴随一套预设的风格。
+
+ttk 小部件的样式名称以字母 'T' 开头，后跟小部件名称，例如 TLabel 和 TButton
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+
+root.geometry("300x200+100+100")
+
+btn = ttk.Button(root, text="Click me!")
+btn.grid(row=0, column=0)
+
+# 获取按钮的样式类 TButton
+print(btn.winfo_class())
+
+style = ttk.Style(root)
+# 更新TButton的样式
+style.configure("TButton", font=("fire code", 12))
+
+
+root.mainloop()
+```
+
+## 7. value holders 值保持器
+
+- StringVar: 用于存储和管理字符串值。
+- IntVar: 用于存储和管理整数值。
+- DoubleVar: 用于存储和管理浮点数值。
+- BooleanVar: 用于存储和管理布尔值。
+
+StringVar 用于存储和管理字符串值。
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x200+100+100")
+strs = tk.StringVar()
+
+ttk.Label(root, textvariable=strs).pack(fill=tk.X)
+ttk.Entry(root, textvariable=strs).pack(fill=tk.X)
+
+root.mainloop()
+```
+
+## 8. Dynamic TTK Style map 动态 TTK 样式映射
+
+使用 style.map（） 方法，根据控件的特定状态动态改变其外观。
+
+完整例子
+```pythonimport tkinter as tk
+from tkinter import ttk
+
+
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.geometry("300x100")
+
+        button = ttk.Button(self, text="Save")
+        button.pack(expand=True)
+
+        style = ttk.Style(self)
+        style.configure("TButton", font=("Helvetica", 16))
+        style.map("TButton", foreground=[("pressed", "blue"), ("active", "red")])
+
+        print(style.layout("TButton"))
+
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+```
+
+## 9. Threading in Tkinter 线程在 Tkinter 中的应用
+
+#### 9.1 为什么需要线程？
+
+在 Tkinter 应用中，主循环应始终从主线程开始。如果你有需要时间的工作，应该在单独的线程中执行。在 Tkinter 应用中创建和控制多个线程时，使用内置的线程模块。
+
+完整例子
+```python
+import threading
+import time
+import tkinter as tk
+from tkinter import ttk
+
+
+def task():
+    # Simulate a long-running task
+    for i in range(5):
+        print(f"Task running... {i+1}/5")
+        time.sleep(1)
+
+    print("Task completed!")
+
+
+def handler_thread():
+    thread = threading.Thread(target=task)
+    thread.start()
+
+
+root = tk.Tk()
+root.geometry("300x300")
+root.title("Tkinter Thread Example")
+
+button = ttk.Button(root, text="Start no Thread", command=task)
+button.pack(pady=10)
+btn1 = ttk.Button(root, text="Start Thread", command=handler_thread)
+btn1.pack(pady=10)
+btn2 = ttk.Button(root, text="click me", command=lambda: print("click me"))
+btn2.pack(pady=10)
+
+root.mainloop()
+```
+
+#### 9.2 after 方法
+
+所有 Tkinter 控件都有 after（） 方法，语法如下：
+
+`widget.after(delay, callback=None)`
+
+after（） 方法在 Tkinter 主循环的延迟毫秒（ms）后调用回调函数一次。
+
+完整例子
+```python
+import tkinter as tk
+
+root = tk.Tk()
+root.geometry("300x300")
+
+
+root.after(1000, lambda: print("after 1 second"))
+
+root.mainloop()
+```
+
+## 10. Top Level 窗口
+
+在 Tkinter 应用中，Tk 类的实例代表主窗口 。有时候，你需要创建额外的窗口。例如，你可能想创建一个自定义对话框或向导表单。你可以使用顶层窗口，这些窗口是Top Level类的实例。
+
+`window = tk.Toplevel(root)`
+
+add widgets to the top level window like you add widgets to the main window with frames.
+
+调用Top Level窗口实例的 grab_set（） 方法，使其能够接收事件并防止用户与主窗互：
+
+`window.grab_set()`
+
+完整例子
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.geometry("300x300")
+root.title("Tkinter Top Level Example")
+
+
+def open_top_level_window():
+    window = tk.Toplevel(root)
+    window.geometry("200x200")
+    window.title("Top Level Window")
+    # 禁止主窗口接收事件
+    window.grab_set()
+    ttk.Button(window, text="Close", command=window.destroy).pack(pady=10)
+
+
+ttk.Button(root, text="Open Top Level Window", command=open_top_level_window).pack()
+
+root.mainloop()
+```
