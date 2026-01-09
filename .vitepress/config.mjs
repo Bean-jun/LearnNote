@@ -191,7 +191,8 @@ export default defineConfig({
               { text: '1-cookie离谱的生效范围', link: 'BugDocs/cookie离谱的生效范围' },
               { text: '2-go加密库执行慢的bug', link: 'BugDocs/go加密库执行慢的bug' },
               { text: '3-解决文件名冲突的工具函数竟是slow的元凶', link: 'BugDocs/解决文件名冲突的工具函数竟是slow的元凶' },
-              { text: '4-python默认参数使用错误导致的幽灵数据bug', link: 'BugDocs/python默认参数使用错误导致的幽灵数据bug' }
+              { text: '4-python默认参数使用错误导致的幽灵数据bug', link: 'BugDocs/python默认参数使用错误导致的幽灵数据bug' },
+              { text: '5-完整上下文中SQLAlchemy中有关scoped_session不健康使用导致的问题【AI整理文档】', link: 'BugDocs/完整上下文中SQLAlchemy中有关scoped_session不健康使用导致的问题.md' }
             ]
           },
           {

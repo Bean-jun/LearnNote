@@ -19,11 +19,6 @@
    > 多练习, 反复练习, 多看看书
 
 
-3. AI Solution
-
-   👉	[1-后端开发-数据库表内容排序-分数排序-滑动排序解决方案](AISolution/1-后端开发-数据库表内容排序-分数排序-滑动排序解决方案.md)👈
-
-
 ### 二、编程语言那些事
 
 1. Python从入门到入土
@@ -436,6 +431,11 @@
 
       👉 [python默认参数的问题](BugDocs/python默认参数使用错误导致的幽灵数据bug.md)👈
 
+5. 完整上下文中SQLAlchemy中有关scoped_session不规范使用导致的问题【AI整理文档】
+
+      👉 [完整上下文中SQLAlchemy中有关scoped_session不规范使用导致的问题](BugDocs/完整上下文中SQLAlchemy中有关scoped_session不规范使用导致的问题.md)👈
+
+
 ### 十一、其他
 
 1. Jetson Nano B01 环境搭建 
@@ -461,3 +461,8 @@
 5. Lua基础
 
       👉 [Lua基础](TryDocs/Lua基础.md)👈
+
+
+### 十二、AI Solution
+
+   👉	[1-后端开发-数据库表内容排序-分数排序-滑动排序解决方案](AISolution/1-后端开发-数据库表内容排序-分数排序-滑动排序解决方案.md)👈
